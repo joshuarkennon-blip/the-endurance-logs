@@ -213,14 +213,14 @@ export default function Console({ films, registerStopAll }) {
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '124.7°' : '---.-°'}</p>
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '89.2°' : '---.-°'}</p>
             </div>
-            <CaseChat films={films} playUI={playUI} />
+            <CaseChat films={films} playUI={playUI} onLoadFilm={loadFilm} />
           </div>
         </div>
       </div>
 
       {/* ── BOTTOM STATUS BAR ── */}
       <div className="md:hidden">
-        <CaseChat films={films} playUI={playUI} />
+        <CaseChat films={films} playUI={playUI} onLoadFilm={loadFilm} />
       </div>
 
       <div className="panel border-t-0 px-4 md:px-6 py-2 flex items-center justify-between shrink-0">

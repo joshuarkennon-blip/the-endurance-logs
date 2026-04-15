@@ -279,60 +279,66 @@ function settingsReadout() {
   ].join('\n')
 }
 
+// Returns { response: string, filmToLoad: film|null }
 function buildCaseResponse(input, films, context = {}) {
   const msg = normalize(input)
   const directFilm = findFilm(msg, films)
   const film = directFilm || context.activeFilm
-  let response
+  const r = (str, filmToLoad = null) => ({ response: str, filmToLoad })
 
-  if (msg === '/bnam') return 'ARE YOU LAUGHING AT THE WAY I WALK?!'
-  if (!msg) return 'Parsed that twice. Nothing resolved.\nTry again with fewer ambiguities.'
-  if (includesAny(msg, ['setting', 'settings', 'humor', 'humour', 'honesty', 'honest', 'dial', 'mode'])) {
-    return settingsReadout()
+  if (msg === '/bnam') return r('ARE YOU LAUGHING AT THE WAY I WALK?!')
+  if (!msg) return r('Parsed that twice. Nothing resolved.\nTry again with fewer ambiguities.')
+
+  // Load / play commands — explicit film name required, no context fallback
+  if (includesAny(msg, ['play', 'load', 'mount', 'open', 'run', 'launch', 'mission log'])) {
+    const target = findFilm(msg, films)
+    if (target) {
+      return r(`Mounting ${target.title}.\nLog access initiated.`, target)
+    }
+    return r('Specify a title.\nInterstellar. Inception. Tenet. Memento.')
   }
-  if (includesAny(msg, ['hello', 'hi there'])) return 'Hello. Go ahead.'
-  if (includesAny(msg, ['hey', 'yo'])) return 'Ready.'
-  if (includesAny(msg, ['how are you', 'how r u'])) return 'Operational. You?'
-  if (includesAny(msg, ['thank', 'thanks'])) return 'Noted.'
-  if (includesAny(msg, ['goodbye', 'bye', 'see you'])) return 'Logs saved. Session ended.'
+
+  if (includesAny(msg, ['setting', 'settings', 'humor', 'humour', 'honesty', 'honest', 'dial', 'mode'])) {
+    return r(settingsReadout())
+  }
+  if (includesAny(msg, ['hello', 'hi there'])) return r('Hello. Go ahead.')
+  if (includesAny(msg, ['hey', 'yo'])) return r('Ready.')
+  if (includesAny(msg, ['how are you', 'how r u'])) return r('Operational. You?')
+  if (includesAny(msg, ['thank', 'thanks'])) return r('Noted.')
+  if (includesAny(msg, ['goodbye', 'bye', 'see you'])) return r('Logs saved. Session ended.')
   if (includesAny(msg, ['i love you', 'love you'])) {
-    return "That's logged.\nI don't have a useful response to it but I didn't want to leave it unacknowledged."
+    return r("That's logged.\nI don't have a useful response to it but I didn't want to leave it unacknowledged.")
   }
   if (includesAny(msg, ['are you conscious', 'sentient', 'alive'])) {
-    return "Unknown. I don't have enough information to answer that accurately.\nNeither do you, for what it's worth."
+    return r("Unknown. I don't have enough information to answer that accurately.\nNeither do you, for what it's worth.")
   }
-  if (includesAny(msg, ['tell a joke', 'joke'])) {
-    return jokeResponse(context.turnCount || 0)
-  }
+  if (includesAny(msg, ['tell a joke', 'joke'])) return r(jokeResponse(context.turnCount || 0))
   if (includesAny(msg, ['friendlier', 'be nice', 'warmer'])) {
-    return 'I can simulate warmth. Previous testing found it uncomfortable for both parties.\nCurrent approach stands.'
+    return r('I can simulate warmth. Previous testing found it uncomfortable for both parties.\nCurrent approach stands.')
   }
   if (includesAny(msg, ['motivate', 'motivation'])) {
-    response = `You've loaded ${films.length} archival logs.\nYou started this. I'm just watching the numbers.`
-    return styleResponse(response)
+    return r(`You've loaded ${films.length} archival logs.\nYou started this. I'm just watching the numbers.`)
   }
   if (includesAny(msg, ['interesting', 'surprise', 'deep cut', 'deepcut', 'weird', 'hidden', 'detail', 'fact'])) {
-    return styleResponse(interestingResponse(films, film, context.turnCount || 0))
+    return r(interestingResponse(films, film, context.turnCount || 0))
   }
-  if (includesAny(msg, ['recommend', 'start', 'load first', 'what should i load', 'pick one'])) {
-    return styleResponse(recommendationResponse(films))
+  if (includesAny(msg, ['recommend', 'what should i', 'pick one'])) {
+    return r(recommendationResponse(films))
   }
   if (includesAny(msg, ['compare', 'versus', ' vs ', 'difference between'])) {
-    return styleResponse(compareResponse(msg, films))
+    return r(compareResponse(msg, films))
   }
   if (includesAny(msg, ['time', 'memory', 'dream', 'gravity', 'love', 'identity', 'physics', 'entropy', 'why', 'how', 'who', 'where', 'when', 'which'])) {
-    return styleResponse(dynamicArchiveResponse(msg, films, context))
+    return r(dynamicArchiveResponse(msg, films, context))
   }
-  if (includesAny(msg, ['list', 'all logs', 'archive', 'indexed'])) return archiveSummary(films)
-  if (film) return summarizeFilm(film)
-  if (includesAny(msg, ['search', 'find', 'query'])) {
-    return searchArchive(msg, films)
-  }
+  if (includesAny(msg, ['list', 'all logs', 'archive', 'indexed'])) return r(archiveSummary(films))
+  if (film) return r(summarizeFilm(film))
+  if (includesAny(msg, ['search', 'find', 'query'])) return r(searchArchive(msg, films))
 
-  return styleResponse(dynamicArchiveResponse(msg, films, context))
+  return r(dynamicArchiveResponse(msg, films, context))
 }
 
-export default function CaseChat({ films, playUI }) {
+export default function CaseChat({ films, playUI, onLoadFilm }) {
   const [isActive, setIsActive] = useState(false)
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
@@ -371,12 +377,17 @@ export default function CaseChat({ films, playUI }) {
     const matchedFilm = inferFilmFromMessage(text, films, activeFilm)
     const nextActiveFilm = matchedFilm || activeFilm
 
-    const response = buildCaseResponse(text, films, {
+    const { response, filmToLoad } = buildCaseResponse(text, films, {
       activeFilm: nextActiveFilm,
       turnCount: messages.filter(message => message.role === 'user').length,
     })
 
     if (matchedFilm) setActiveFilm(matchedFilm)
+
+    // If CASE identified a load command, trigger the disc loader
+    if (filmToLoad && onLoadFilm) {
+      setTimeout(() => onLoadFilm(filmToLoad), 400)
+    }
 
     setMessages(prev => [
       ...prev,
