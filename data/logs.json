@@ -1,0 +1,138 @@
+[
+  {
+    "id": "interstellar",
+    "title": "INTERSTELLAR",
+    "year": "2014",
+    "code": "INT-2014",
+    "color": "#4a7c9e",
+    "glowColor": "#6ab4dc",
+    "tagline": "Do not go gentle into that good night.",
+    "thumbnail": "🌌",
+    "themes": ["Love as a Dimension", "Time Dilation", "Gravity & Physics", "Survival"],
+    "transmission": "ENDURANCE-LOG-7A",
+    "dossier": {
+      "opening": "This transmission concerns the most radical proposition embedded in Cooper Station's founding narrative: that love is not a sentiment, but a quantifiable force—a vector capable of transcending spacetime.",
+      "sections": [
+        {
+          "heading": "LOVE AS THE FIFTH DIMENSION",
+          "body": "Brand's speech in the second act is often dismissed as emotional compromise in a film otherwise committed to hard science. This reading is superficial. The film's final reveal—that Cooper communicates with Murph across decades via gravitational anomalies—retroactively validates Brand's thesis. Love, here, functions as the only mechanism capable of navigating a tesseract. The beings who constructed the dimensional shortcut did not do so with logic. They did so by following a signal that logic cannot explain. Cooper finds the correct moment in spacetime not through calculation, but through recognition. The watch. The dust. His daughter's room. Love is the index."
+        },
+        {
+          "heading": "TIME DILATION: THE PHYSICS OF GRIEF",
+          "body": "Miller's planet operates under extreme relativistic time dilation. One hour on its surface equals seven years on the Endurance. This is not metaphor—it is general relativity made narrative. When the crew returns to the ship, Romilly has aged 23 years. Cooper receives decades of video messages in minutes. The sequence is Nolan at his most technically precise and emotionally brutal. The physics of grief: loss delivered at the speed of relativity. Nolan uses dilation not as spectacle but as rupture—each skipped year is a wound that cannot be sutured by apology or explanation."
+        },
+        {
+          "heading": "THE GRAVITY EQUATION",
+          "body": "Professor Brand's life work—the gravity equation—is the film's central MacGuffin, and its most honest lie. Brand solves it decades before he tells anyone. He knew. The equation required data from inside a singularity. He knew no one could retrieve it and return. He kept humanity building, kept Cooper flying, on a premise he had already proven false. The gravity equation is therefore not a physics problem—it is a story about how institutions maintain hope through necessary deception. NASA did not send Cooper to save the world. It sent him to save the idea that the world could be saved."
+        },
+        {
+          "heading": "GARGANTUA: ACCURATE DARKNESS",
+          "body": "The black hole Gargantua was rendered in collaboration with physicist Kip Thorne. The visual effects team wrote new ray-tracing software to simulate how light would actually bend around a rotating black hole of that mass. The result was so scientifically accurate it produced publishable physics papers. Nolan insisted on accuracy even where audiences would never know the difference. Gargantua is not a symbol. It is an object. Its silence is its meaning."
+        }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 124.7° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    }
+  },
+  {
+    "id": "inception",
+    "title": "INCEPTION",
+    "year": "2010",
+    "code": "INC-2010",
+    "color": "#7a5c9e",
+    "glowColor": "#b08cdc",
+    "tagline": "Your mind is the scene of the crime.",
+    "thumbnail": "🌀",
+    "themes": ["Dream Logic", "Subconscious Architecture", "Grief", "Shared Dreaming"],
+    "transmission": "ENDURANCE-LOG-4C",
+    "dossier": {
+      "opening": "This log concerns a technology of psychological intrusion—and the man who could not stop dreaming of his wife. The architecture of the subconscious is not metaphor in this world. It is infrastructure.",
+      "sections": [
+        {
+          "heading": "DREAM LOGIC AS GRAMMAR",
+          "body": "The rules of Nolan's dream-world are presented as givens: each dream level runs slower, the dreamer's subconscious populates the space with projections, kicks propagate upward through levels. These rules are consistent but not explained in-universe—they are accepted the way a native speaker accepts grammar without studying it. This is the film's first trick. By the time an audience questions the logic, they are already inside it. The architecture holds not because it is scientifically valid, but because Nolan deploys it with total conviction and zero irony."
+        },
+        {
+          "heading": "THE SUBCONSCIOUS AS DEFENSE SYSTEM",
+          "body": "Fischer's mind has been militarized. This is the film's most overlooked detail. His projections—the trained immune response of a subconscious that has been tampered with before—attack the team not out of malice but out of architecture. The mind, like any compromised system, develops countermeasures. Cobb's team enters not a sleeping mind but a fortified installation. The action sequences are therefore security responses, not antagonism. Fischer is not a villain. He is a system doing exactly what it was designed to do."
+        },
+        {
+          "heading": "MAL: THE GHOST IN THE MACHINE",
+          "body": "Mal Cobb is dead. She is also omnipresent. Her appearances in Cobb's subconscious represent the film's most honest admission: grief does not resolve. It architecturally integrates. Cobb cannot build dreams without Mal appearing because she is now load-bearing—she is part of the foundation of how he thinks. His guilt over convincing her that her world was a dream—and her subsequent suicide to 'wake up'—has collapsed into a permanent subconscious fixture. Mal is not a haunting. She is a structural compromise."
+        },
+        {
+          "heading": "THE SPINNING TOP: DELIBERATE AMBIGUITY",
+          "body": "The final frame cuts before the top falls or wobbles. Nolan has confirmed this was intentional—not because the answer is unknowable, but because the question is wrong. The film's real totem is Cobb's wedding ring, present only in dreams, absent in waking life. Watch his hand in each scene. The top is misdirection. Nolan gives you the answer in plain sight and then points your attention elsewhere. It is, structurally, an inception performed on the audience."
+        }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 89.2° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    }
+  },
+  {
+    "id": "tenet",
+    "title": "TENET",
+    "year": "2020",
+    "code": "TEN-2020",
+    "color": "#9e5c4a",
+    "glowColor": "#dc8c6a",
+    "tagline": "What's happened, happened.",
+    "thumbnail": "⏳",
+    "themes": ["Fatalism", "Temporal Inversion", "Pincer Movements", "Entropy"],
+    "transmission": "ENDURANCE-LOG-9B",
+    "dossier": {
+      "opening": "This log concerns a war fought backwards and forwards simultaneously, and the only unbreakable law in its universe: what has happened cannot be unmade. Only understood differently.",
+      "sections": [
+        {
+          "heading": "INVERSION: ENTROPY AS WEAPON",
+          "body": "Tenet's central conceit—inverting entropy to move backwards through time—is not presented as magic. It is presented as physics taken to its logical extreme. Inverted objects have reversed entropy: a bullet returns to a gun, a car un-crashes. The film's genius is treating this as industrial capacity rather than miracle. Someone built the algorithm. Someone manufactured the turnstiles. The future went to war by mailing weapons to the past. Inversion is logistics, not sorcery."
+        },
+        {
+          "heading": "THE TEMPORAL PINCER MOVEMENT",
+          "body": "The film's climax involves a military operation executed simultaneously forward and backward in time. Two teams at the same location: one moving through the battle chronologically, one experiencing it in reverse. They communicate by pre-arranged signal. The Protagonist does not understand the full operation until he has lived it—because he can only understand the reverse half after he has already completed the forward half. The battle is its own briefing. This is Nolan's most formally rigorous sequence: a narrative structure where comprehension and experience cannot be simultaneous."
+        },
+        {
+          "heading": "FATALISM WITHOUT DESPAIR",
+          "body": "What's happened, happened. This phrase recurs not as resignation but as instruction. The film's characters cannot change the past—they can only understand their role in events that are already fixed. The Protagonist does not prevent Sator from activating the Algorithm. The Protagonist is the reason Sator fails. He was always there. Neil's death at the gate is not tragedy—it is completion. Neil accepted the mission knowing his ending because, from his perspective, the mission was already won. Tenet proposes that foreknowledge of your fate is not a prison. It is a coordinate."
+        },
+        {
+          "heading": "THE PROTAGONIST: DELIBERATE ANONYMITY",
+          "body": "The lead character has no name. This is not oversight. It is architecture. He is a function—the initiating force in a closed loop. Giving him a name would suggest an interior life that exists prior to the mission. But the film reveals that the mission made him: he will found Tenet, which will recruit him, which will complete the loop. He is the organization that built him. The anonymity is the only honest thing to call someone who is, structurally, a self-causing effect."
+        }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 201.4° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    }
+  },
+  {
+    "id": "memento",
+    "title": "MEMENTO",
+    "year": "2000",
+    "code": "MEM-2000",
+    "color": "#4a9e5c",
+    "glowColor": "#6adc8c",
+    "tagline": "How can you heal if you can't feel time?",
+    "thumbnail": "📸",
+    "themes": ["Memory Unreliability", "Non-Linear Chronology", "Identity", "Grief"],
+    "transmission": "ENDURANCE-LOG-1A",
+    "dossier": {
+      "opening": "This is the earliest log in the archive—Nolan's first fully realized demonstration of structure as meaning. The story of Leonard Shelby is inseparable from how it is told. Remove the non-linear chronology and you remove the film's argument.",
+      "sections": [
+        {
+          "heading": "ANTEROGRADE AMNESIA: THE UNRELIABLE NARRATOR AS ARCHITECTURE",
+          "body": "Leonard cannot form new long-term memories. His experience of time is a series of present moments, each beginning without context. Nolan's structural decision—to present the film in reverse-chronological color sequences intercut with forward-chronological black-and-white—replicates this condition for the audience. We are as disoriented as Leonard. We are building our understanding backwards while he builds his forwards. We arrive at the beginning knowing what he does not: that the story is a loop, and he is its prisoner."
+        },
+        {
+          "heading": "TATTOOS AND POLAROIDS: EXTERNALIZING COGNITION",
+          "body": "Leonard's system—Polaroid photographs with annotations, tattoos of facts he trusts completely—is an externalized nervous system. He cannot trust his mind, so he has distributed memory across his body and belongings. This is not adaptation. It is tragedy dressed as methodology. The tattoos are permanent. The photographs are selectable. Leonard has built an architecture that allows him to choose which facts to believe—and to discard evidence that contradicts the narrative he needs. His system is not a workaround. It is a machine for maintaining a useful lie."
+        },
+        {
+          "heading": "NATALIE AND TEDDY: WHO TO TRUST",
+          "body": "The film withholds the information necessary to evaluate Natalie and Teddy until it is too late to change outcomes. Natalie manipulates Leonard by destroying her own notes and waiting for his memory to reset. Teddy—revealed to be the actual John G.—claims to have helped Leonard avenge his wife's real killer years ago. Both characters provide evidence for their reliability. Neither is trustworthy. Nolan places the audience in Leonard's epistemological position: you cannot know who to believe when the infrastructure of trust is your own failing memory."
+        },
+        {
+          "heading": "THE ENDING: THE CHOICE TO FORGET",
+          "body": "The film's most devastating revelation: Leonard knows the system is corrupt. In the final—chronologically first—scene, he acknowledges that he has manipulated his own records before, that he may have been living in a self-sustaining loop of manufactured purpose. He chooses Teddy as his next target not because Teddy is guilty but because Leonard needs someone to be guilty. He then allows himself to forget his own confession. The choice to forget is the film's moral hinge. Memory, Nolan argues, is not a record. It is a story we tell ourselves. And Leonard has decided which story he needs."
+        }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 12.9° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    }
+  }
+]
