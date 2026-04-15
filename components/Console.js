@@ -5,7 +5,7 @@ import DiscShelf from './DiscShelf'
 import LogScreen from './LogScreen'
 import { useAudioEngine } from './AudioEngine'
 
-export default function Console({ films }) {
+export default function Console({ films, registerStopAll }) {
   const [loadedFilm, setLoadedFilm]   = useState(null)
   const [isLoading, setIsLoading]     = useState(false)
   const [isZoomed, setIsZoomed]       = useState(false)
@@ -14,7 +14,12 @@ export default function Console({ films }) {
   const [mobileView, setMobileView]   = useState('shelf') // 'shelf' | 'screen'
   const [audioReady, setAudioReady]   = useState(false)
 
-  const { playLoadTrigger, startAmbient, stopAmbient, playUI } = useAudioEngine()
+  const { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll } = useAudioEngine()
+
+  // Register stopAll with _app so navigation kills audio cleanly
+  useEffect(() => {
+    if (registerStopAll) registerStopAll(stopAll)
+  }, [stopAll, registerStopAll])
 
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
@@ -219,6 +224,9 @@ export default function Console({ films }) {
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>
           <Link href="/info" className="hover:text-console-glow transition-colors tracking-widest">
             SOURCES & INFO
+          </Link>
+          <Link href="/collect" className="hover:text-console-amber transition-colors tracking-widest text-console-amber opacity-60 hover:opacity-100">
+            ACQUIRE ◈
           </Link>
           <span className="text-console-glow">◈ NOMINAL</span>
         </div>
