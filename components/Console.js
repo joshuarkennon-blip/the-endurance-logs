@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import DiscShelf from './DiscShelf'
 import LogScreen from './LogScreen'
+import CaseChat from './CaseChat'
 import { useAudioEngine } from './AudioEngine'
 
 export default function Console({ films, registerStopAll }) {
@@ -206,15 +207,22 @@ export default function Console({ films, registerStopAll }) {
               ))}
             </div>
           </div>
-          <div className="mt-auto">
+          <div className="mt-auto space-y-3">
+            <div>
             <p className="text-[10px] text-console-muted mb-1">COORD</p>
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '124.7°' : '---.-°'}</p>
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '89.2°' : '---.-°'}</p>
+            </div>
+            <CaseChat films={films} playUI={playUI} />
           </div>
         </div>
       </div>
 
       {/* ── BOTTOM STATUS BAR ── */}
+      <div className="md:hidden">
+        <CaseChat films={films} playUI={playUI} />
+      </div>
+
       <div className="panel border-t-0 px-4 md:px-6 py-2 flex items-center justify-between shrink-0">
         <div className="flex gap-3 md:gap-6 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">ENDURANCE // ARCHIVAL TERMINAL</span>

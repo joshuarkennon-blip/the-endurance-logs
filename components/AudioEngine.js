@@ -29,10 +29,10 @@ const PATHS = {
 
 // Volume ceiling — nothing ever exceeds this
 const VOL = {
-  idle:    0.05,
-  ambient: 0.10,
-  load:    0.18,
-  ui:      0.12,
+  idle:    0.035,
+  ambient: 0.065,
+  load:    0.10,
+  ui:      0.075,
 }
 
 const FADE_MS = 1200

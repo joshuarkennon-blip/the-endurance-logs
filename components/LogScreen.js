@@ -1,13 +1,13 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 
-// Play the Inception BRAAM as the dream descent sound
+// Play the dedicated dream descent cue.
 function playDreamDescend() {
   try {
     const a = document.createElement('audio')
     const canOgg = a.canPlayType('audio/ogg')
-    const sfx = new Audio(canOgg ? '/audio/load-inception.ogg' : '/audio/load-inception.mp3')
-    sfx.volume = 0.22
+    const sfx = new Audio(canOgg ? '/audio/dream-descent.ogg' : '/audio/dream-descent.mp3')
+    sfx.volume = 0.11
     sfx.play().catch(() => {})
   } catch (_) {}
 }
@@ -214,7 +214,6 @@ function Layer3View({ film, onSurface }) {
 // ── LAYER 2: PRODUCTION ───────────────────────────────────────────────────────
 function Layer2View({ film, onSurface, onDeeper }) {
   const [visibleSections, setVisibleSections] = useState(0)
-  const [transitioning, setTransitioning]     = useState(false)
   const p = film.production
   const scrollRef = useRef(null)
 
@@ -230,14 +229,12 @@ function Layer2View({ film, onSurface, onDeeper }) {
 
   const handleDeeper = () => {
     playDreamDescend()
-    setTransitioning(true)
+    onDeeper()
   }
 
   return (
     <div className="flex flex-col h-full relative"
       style={{ background: `radial-gradient(ellipse at center top, ${p.dream_color}08 0%, #050508 60%)` }}>
-
-      {transitioning && <DreamTransition onComplete={onDeeper} />}
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -316,7 +313,7 @@ function Layer2View({ film, onSurface, onDeeper }) {
 // ── LAYER 1: DOSSIER ──────────────────────────────────────────────────────────
 function DossierView({ film, onClose, onGoToShelf }) {
   const [visibleSections, setVisibleSections] = useState(0)
-  const [layer, setLayer]                     = useState(1) // 1 | '1to2' | 2 | '2to3' | 3
+  const [layer, setLayer]                     = useState(1) // 1 | '1to2' | 2 | 3
   const scrollRef = useRef(null)
 
   useEffect(() => {
@@ -334,7 +331,11 @@ function DossierView({ film, onClose, onGoToShelf }) {
     setLayer('1to2')
   }
 
-  if (layer === 2 || layer === '2to3' || layer === 3) {
+  if (layer === 3) {
+    return <Layer3View film={film} onSurface={() => setLayer(2)} />
+  }
+
+  if (layer === 2) {
     return (
       <Layer2View
         film={film}
@@ -342,10 +343,6 @@ function DossierView({ film, onClose, onGoToShelf }) {
         onDeeper={() => setLayer(3)}
       />
     )
-  }
-
-  if (layer === 3) {
-    return <Layer3View film={film} onSurface={() => setLayer(2)} />
   }
 
   return (
