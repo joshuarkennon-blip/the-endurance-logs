@@ -3,18 +3,18 @@ import { useState } from 'react'
 
 export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, draggingId }) {
   return (
-    <div className="panel flex flex-col h-full" style={{ minWidth: 180, maxWidth: 180 }}>
+    <div className="panel flex flex-col h-full" style={{ minWidth: 220, maxWidth: 220 }}>
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-console-border">
         <div className="led amber" />
-        <span className="text-[9px] tracking-[0.2em] text-console-amber uppercase">
+        <span className="text-[12px] tracking-[0.2em] text-console-amber uppercase">
           Archive
         </span>
       </div>
 
       {/* Label */}
       <div className="px-3 pt-3 pb-1">
-        <p className="text-[8px] text-console-muted tracking-widest uppercase">
+        <p className="text-[11px] text-console-muted tracking-widest uppercase">
           Film Logs // Drag to Load
         </p>
       </div>
@@ -53,18 +53,17 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
 
               {/* Disc body */}
               <div className="pl-2">
-                {/* Thumbnail emoji as "pixel art" */}
-                <div className="text-xl leading-none mb-1 pixel-art">
+                <div className="text-2xl leading-none mb-1 pixel-art">
                   {film.thumbnail}
                 </div>
 
                 <p
-                  className="text-[8px] font-bold tracking-widest leading-tight"
+                  className="text-[11px] font-bold tracking-widest leading-tight"
                   style={{ color: film.color }}
                 >
                   {film.title}
                 </p>
-                <p className="text-[7px] text-console-muted mt-0.5">
+                <p className="text-[10px] text-console-muted mt-0.5">
                   {film.year} // {film.code}
                 </p>
               </div>
@@ -72,13 +71,13 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
               {/* Loaded indicator */}
               {isLoaded && (
                 <div className="absolute top-1.5 right-1.5">
-                  <div className="led green" style={{ width: 5, height: 5 }} />
+                  <div className="led green" style={{ width: 6, height: 6 }} />
                 </div>
               )}
 
               {/* Drag hint */}
               <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-40 transition-opacity">
-                <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor" className="text-console-text">
+                <svg width="10" height="10" viewBox="0 0 8 8" fill="currentColor" className="text-console-text">
                   <rect x="0" y="0" width="3" height="3" />
                   <rect x="5" y="0" width="3" height="3" />
                   <rect x="0" y="5" width="3" height="3" />
@@ -92,10 +91,10 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
 
       {/* Footer */}
       <div className="border-t border-console-border px-3 py-2">
-        <p className="text-[7px] text-console-muted tracking-wider">
+        <p className="text-[10px] text-console-muted tracking-wider">
           {films.length} LOGS INDEXED
         </p>
-        <p className="text-[7px] text-console-muted">
+        <p className="text-[10px] text-console-muted">
           SYS // READY
         </p>
       </div>

@@ -37,7 +37,6 @@ export default function Console({ films }) {
     const film = films.find(f => f.id === filmId)
     if (!film || film.id === loadedFilm?.id) return
 
-    // Start load sequence with zoom
     setLoadedFilm(film)
     setIsLoading(true)
     setIsZoomed(true)
@@ -72,16 +71,16 @@ export default function Console({ films }) {
             <div className="led green" style={{ animationDelay: '2s' }} />
           </div>
           <div>
-            <p className="text-[11px] tracking-[0.3em] text-console-glow uppercase font-bold">
+            <p className="text-[15px] tracking-[0.3em] text-console-glow uppercase font-bold">
               THE ENDURANCE
             </p>
-            <p className="text-[8px] text-console-muted tracking-widest">
+            <p className="text-[11px] text-console-muted tracking-widest">
               FILM ARCHIVE // DOSSIER TERMINAL
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-6 text-[8px] text-console-muted">
+        <div className="flex items-center gap-6 text-[11px] text-console-muted">
           <div className="text-right">
             <p className="tracking-widest">LOADED: <span className="text-console-text">{loadedFilm?.code || '—'}</span></p>
             <p className="tracking-widest">STATUS: <span className={loadedFilm ? 'text-green-400' : 'text-console-muted'}>
@@ -117,14 +116,13 @@ export default function Console({ films }) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          {/* Drop zone hint (only when dragging and nothing loaded) */}
           {draggingId && !loadedFilm && (
             <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
               <div
                 className="border-2 border-dashed rounded px-8 py-4 text-center transition-all"
                 style={{ borderColor: dropActive ? '#6ab4dc' : '#2a2a3a' }}
               >
-                <p className="text-[11px] tracking-[0.2em] text-console-text">
+                <p className="text-[14px] tracking-[0.2em] text-console-text">
                   LOAD DISC
                 </p>
               </div>
@@ -141,14 +139,14 @@ export default function Console({ films }) {
 
         {/* Right panel: misc instruments */}
         <div className="w-px bg-console-border shrink-0" />
-        <div className="panel flex flex-col gap-3 p-3 shrink-0" style={{ width: 100 }}>
+        <div className="panel flex flex-col gap-3 p-3 shrink-0" style={{ width: 110 }}>
           <div className="border-b border-console-border pb-2">
-            <p className="text-[7px] tracking-widest text-console-muted uppercase">Instruments</p>
+            <p className="text-[10px] tracking-widest text-console-muted uppercase">Instruments</p>
           </div>
 
           {/* Signal meter */}
           <div>
-            <p className="text-[7px] text-console-muted mb-1 tracking-wider">SIG STR</p>
+            <p className="text-[10px] text-console-muted mb-1 tracking-wider">SIG STR</p>
             <div className="space-y-0.5">
               {[...Array(8)].map((_, i) => (
                 <div
@@ -165,7 +163,7 @@ export default function Console({ films }) {
 
           {/* Power cells */}
           <div>
-            <p className="text-[7px] text-console-muted mb-1 tracking-wider">PWR CELL</p>
+            <p className="text-[10px] text-console-muted mb-1 tracking-wider">PWR CELL</p>
             <div className="grid grid-cols-2 gap-0.5">
               {[...Array(6)].map((_, i) => (
                 <div
@@ -179,11 +177,11 @@ export default function Console({ films }) {
 
           {/* Coordinate display */}
           <div className="mt-auto">
-            <p className="text-[7px] text-console-muted mb-1">COORD</p>
-            <p className="text-[8px] text-console-glow font-mono">
+            <p className="text-[10px] text-console-muted mb-1">COORD</p>
+            <p className="text-[11px] text-console-glow font-mono">
               {loadedFilm ? '124.7°' : '---.-°'}
             </p>
-            <p className="text-[8px] text-console-glow font-mono">
+            <p className="text-[11px] text-console-glow font-mono">
               {loadedFilm ? '89.2°' : '---.-°'}
             </p>
           </div>
@@ -192,11 +190,11 @@ export default function Console({ films }) {
 
       {/* Bottom status bar */}
       <div className="panel border-t-0 px-6 py-2 flex items-center justify-between shrink-0">
-        <div className="flex gap-6 text-[8px] text-console-muted">
+        <div className="flex gap-6 text-[11px] text-console-muted">
           <span>ENDURANCE // ARCHIVAL TERMINAL</span>
           <span>NOLAN FILMOGRAPHY // PHASE I</span>
         </div>
-        <div className="flex gap-4 text-[8px] text-console-muted">
+        <div className="flex gap-4 text-[11px] text-console-muted">
           <span>DRAG DISC TO LOAD</span>
           <span className="text-console-glow">◈ SYSTEM NOMINAL</span>
         </div>

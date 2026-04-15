@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Endurance Logs — Project Overview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #8ab8cc;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid #2a2a3a;
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: #445566;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-size: 42px;
+    letter-spacing: 0.12em;
+    color: #6ab4dc;
+    text-shadow: 0 0 24px rgba(106,180,220,0.4);
+    margin-bottom: 8px;
+  }
+
+  .tagline {
+    font-size: 15px;
+    color: #445566;
+    letter-spacing: 0.15em;
+  }
+
+  .links {
+    display: flex;
+    gap: 20px;
+    margin-top: 18px;
+  }
+
+  .links a {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #4a7c9e;
+    text-decoration: none;
+    border-bottom: 1px solid #2a2a3a;
+    padding-bottom: 2px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .links a:hover {
+    color: #6ab4dc;
+    border-color: #4a7c9e;
+  }
+
+  /* Sections */
+  section {
+    margin-bottom: 40px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #4a7c9e;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1e1e2e;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #7aa8bc;
+  }
+
+  /* Stack pills */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .pill {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid #2a2a3a;
+    color: #6ab4dc;
+    background: #111118;
+  }
+
+  /* Function list */
+  .fn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .fn-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #111118;
+    align-items: start;
+  }
+
+  .fn-item:last-child {
+    border-bottom: none;
+  }
+
+  .fn-name {
+    font-size: 14px;
+    color: #6ab4dc;
+    letter-spacing: 0.08em;
+  }
+
+  .fn-file {
+    font-size: 12px;
+    color: #445566;
+    margin-top: 3px;
+    letter-spacing: 0.1em;
+  }
+
+  .fn-desc {
+    font-size: 14px;
+    color: #7aa8bc;
+    line-height: 1.6;
+  }
+
+  /* Data table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .data-table th {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #445566;
+    text-align: left;
+    padding: 10px 14px;
+    background: #0d0d15;
+    border: 1px solid #1e1e2e;
+  }
+
+  .data-table td {
+    font-size: 14px;
+    color: #7aa8bc;
+    padding: 10px 12px;
+    border: 1px solid #1a1a25;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .data-table tr:hover td {
+    background: #0d0d15;
+  }
+
+  .film-code {
+    color: #6ab4dc;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid #1e1e2e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer p {
+    font-size: 12px;
+    color: #2a2a3a;
+    letter-spacing: 0.2em;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4a9e5c;
+    box-shadow: 0 0 6px #4a9e5c;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <p class="eyebrow">Project Overview // April 2026</p>
+    <h1>THE ENDURANCE LOGS</h1>
+    <p class="tagline">An immersive digital archive dedicated to the filmography of Christopher Nolan.</p>
+    <div class="links">
+      <a href="https://endurance-logs.vercel.app" target="_blank">↗ Live Site</a>
+      <a href="https://github.com/joshuarkennon-blip/the-endurance-logs" target="_blank">↗ GitHub</a>
+      <a href="https://vercel.com/joshuarkennon-blips-projects/endurance-logs" target="_blank">↗ Vercel</a>
+    </div>
+  </div>
+
+  <!-- What It Is -->
+  <section>
+    <p class="section-label">What It Is</p>
+    <p>A high-end fan site styled as an analog-future spacecraft console — the Endurance from <em>Interstellar</em>. Users load film "discs" via drag-and-drop, triggering a boot sequence before revealing richly written dossiers on each film's philosophical themes and technical craft. Built for atmosphere first: CRT scanlines, film grain, LED indicators, and a brushed-metal panel aesthetic throughout.</p>
+  </section>
+
+  <!-- Stack -->
+  <section>
+    <p class="section-label">Stack</p>
+    <div class="pills">
+      <span class="pill">Next.js 14</span>
+      <span class="pill">React 18</span>
+      <span class="pill">Tailwind CSS</span>
+      <span class="pill">Framer Motion</span>
+      <span class="pill">HTML5 Drag & Drop API</span>
+      <span class="pill">Vercel</span>
+    </div>
+  </section>
+
+  <!-- Functions -->
+  <section>
+    <p class="section-label">Components & Functions</p>
+    <div class="fn-list">
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">Console</div>
+          <div class="fn-file">components/Console.js</div>
+        </div>
+        <div class="fn-desc">Root layout component. Owns all state (loaded film, loading phase, zoom, drag). Renders the outer frame — header bar, instrument panel, status strip — and coordinates DiscShelf, LogScreen, and the drop zone.</div>
+      </div>
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">DiscShelf</div>
+          <div class="fn-file">components/DiscShelf.js</div>
+        </div>
+        <div class="fn-desc">Left-side archive panel. Renders each film as a draggable disc card with color-coded spine, pixel thumbnail, film code, and active/loaded state indicator. Fires drag events up to Console.</div>
+      </div>
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">LogScreen</div>
+          <div class="fn-file">components/LogScreen.js</div>
+        </div>
+        <div class="fn-desc">Main display area. Three internal states: idle (no disc), loading (boot sequence), and active (dossier view). Houses both sub-components below.</div>
+      </div>
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">LoadingSequence</div>
+          <div class="fn-file">components/LogScreen.js</div>
+        </div>
+        <div class="fn-desc">Animated boot screen that plays on disc drop. Streams filesystem-swap log lines one by one, advances a progress bar, then fires onComplete to transition into the dossier view.</div>
+      </div>
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">DossierView</div>
+          <div class="fn-file">components/LogScreen.js</div>
+        </div>
+        <div class="fn-desc">Renders the full film dossier — title, tagline, transmission metadata, thematic sections — with staggered section-by-section reveal on mount. Includes EJECT button to unload the disc.</div>
+      </div>
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">Drag & Drop Handler</div>
+          <div class="fn-file">components/Console.js</div>
+        </div>
+        <div class="fn-desc">Native HTML5 drag API wired across Console. handleDragStart sets dragging state, handleDrop reads the filmId from dataTransfer, looks up the film object, and triggers the load sequence + zoom.</div>
+      </div>
+
+      <div class="fn-item">
+        <div>
+          <div class="fn-name">CRT / Grain Overlay</div>
+          <div class="fn-file">styles/globals.css</div>
+        </div>
+        <div class="fn-desc">::before and ::after pseudo-elements on .crt create a repeating scanline grid and an animated sweep line. A separate .grain div uses an SVG feTurbulence filter animated across random offsets to simulate analog film grain.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section>
+    <p class="section-label">Film Archive // Phase I</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Film</th>
+          <th>Code</th>
+          <th>Core Themes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Interstellar (2014)</td>
+          <td class="film-code">INT-2014</td>
+          <td>Love as a dimension, time dilation, the gravity equation, Gargantua's physics</td>
+        </tr>
+        <tr>
+          <td>Inception (2010)</td>
+          <td class="film-code">INC-2010</td>
+          <td>Dream logic as grammar, the subconscious as defense system, grief as architecture</td>
+        </tr>
+        <tr>
+          <td>Tenet (2020)</td>
+          <td class="film-code">TEN-2020</td>
+          <td>Entropy inversion, temporal pincer movements, fatalism without despair</td>
+        </tr>
+        <tr>
+          <td>Memento (2000)</td>
+          <td class="film-code">MEM-2000</td>
+          <td>Memory unreliability, externalized cognition, the choice to forget</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>ENDURANCE // ARCHIVAL TERMINAL // PHASE I</p>
+    <p><span class="status-dot"></span>DEPLOYED // VERCEL // NOMINAL</p>
+  </div>
+
+</div>
+</body>
+</html>
