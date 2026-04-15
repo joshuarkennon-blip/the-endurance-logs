@@ -289,13 +289,10 @@ function buildCaseResponse(input, films, context = {}) {
   if (msg === '/bnam') return r('ARE YOU LAUGHING AT THE WAY I WALK?!')
   if (!msg) return r('Parsed that twice. Nothing resolved.\nTry again with fewer ambiguities.')
 
-  // Load / play commands — explicit film name required, no context fallback
+  // Load / play commands
   if (includesAny(msg, ['play', 'load', 'mount', 'open', 'run', 'launch', 'mission log'])) {
-    const target = findFilm(msg, films)
-    if (target) {
-      return r(`Mounting ${target.title}.\nLog access initiated.`, target)
-    }
-    return r('Specify a title.\nInterstellar. Inception. Tenet. Memento.')
+    const target = findFilm(msg, films) || context.activeFilm || films[0]
+    return r(`Mounting ${target.title}.\nLog access initiated.`, target)
   }
 
   if (includesAny(msg, ['setting', 'settings', 'humor', 'humour', 'honesty', 'honest', 'dial', 'mode'])) {
