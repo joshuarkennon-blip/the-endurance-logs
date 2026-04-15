@@ -384,7 +384,6 @@ export default function CaseChat({ films, playUI, onLoadFilm }) {
 
     if (matchedFilm) setActiveFilm(matchedFilm)
 
-    // If CASE identified a load command, trigger the disc loader
     if (filmToLoad && onLoadFilm) {
       setTimeout(() => onLoadFilm(filmToLoad), 400)
     }
