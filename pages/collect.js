@@ -66,7 +66,7 @@ export default function CollectPage() {
     <>
       <Head>
         <title>Acquire the Archive // The Endurance Logs</title>
-        <meta name="robots" content="noindex, nofollow" />
+        <meta name="description" content="Own the Nolan archive in the highest quality available. Physical and digital editions of Interstellar, Inception, Tenet, and Memento." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
