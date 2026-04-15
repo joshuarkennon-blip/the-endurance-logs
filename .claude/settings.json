@@ -9,7 +9,8 @@
       "Bash(gh repo *)",
       "Bash(npx vercel *)",
       "Read(//c/Users/joshu/Downloads/nexus-audio-assets/**)",
-      "Read(//c/Users/joshu/Downloads/nexus-audio-v2/**)"
+      "Read(//c/Users/joshu/Downloads/nexus-audio-v2/**)",
+      "WebSearch"
     ],
     "additionalDirectories": [
       "C:\\Users\\joshu\\Downloads\\nexus-audio-assets"

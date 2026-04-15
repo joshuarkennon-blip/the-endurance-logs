@@ -218,7 +218,8 @@ export default function Console({ films, registerStopAll }) {
       <div className="panel border-t-0 px-4 md:px-6 py-2 flex items-center justify-between shrink-0">
         <div className="flex gap-3 md:gap-6 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">ENDURANCE // ARCHIVAL TERMINAL</span>
-          <span>NOLAN // PHASE I</span>
+          <span className="hidden md:inline italic text-console-muted opacity-60">for RK — my reason for existence</span>
+          <span className="md:hidden">NOLAN // PHASE I</span>
         </div>
         <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>

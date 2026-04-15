@@ -131,11 +131,31 @@ export default function InfoPage() {
             </div>
           </section>
 
-          {/* Footer */}
-          <div className="border-t border-console-border pt-5 flex items-center justify-between">
-            <p className="text-[10px] text-console-muted tracking-widest">
-              ENDURANCE LOGS // {new Date().getFullYear()}
+          {/* Contact */}
+          <section className="mb-10">
+            <p className="text-[10px] tracking-[0.35em] text-console-muted uppercase mb-4 flex items-center gap-3">
+              CONTACT
+              <span className="flex-1 h-px bg-console-border" />
             </p>
+            <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
+              Questions, corrections, or transmissions:{' '}
+              <a href="mailto:theendurancelogs@gmail.com"
+                className="text-console-glow hover:underline tracking-wide">
+                theendurancelogs@gmail.com
+              </a>
+            </p>
+          </section>
+
+          {/* Footer */}
+          <div className="border-t border-console-border pt-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <p className="text-[10px] text-console-muted tracking-widest">
+                ENDURANCE LOGS // {new Date().getFullYear()}
+              </p>
+              <p className="text-[10px] text-console-muted italic mt-1 opacity-60">
+                for RK — my reason for existence
+              </p>
+            </div>
             <Link href="/"
               className="text-[10px] tracking-[0.2em] text-console-muted uppercase hover:text-console-glow transition-colors">
               RETURN TO ARCHIVE →
