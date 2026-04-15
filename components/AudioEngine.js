@@ -52,15 +52,16 @@ export function useAudioEngine() {
     timersRef.current = []
   }, [])
 
-  // Hard-stop a node immediately
-  function kill(node) {
+  // Destroy a node completely (for ambient / one-shots — never call on idle)
+  function killNode(node) {
     if (!node) return
     try { node.pause() } catch (_) {}
     node.src = ''
   }
 
-  // Smooth fade — returns interval id
-  function fadeTo(node, target, durationMs) {
+  // Fade to target. When target===0: pause only (keep src intact for idle resurrection).
+  // Pass destroy:true for nodes that will be garbage-collected at 0.
+  function fadeTo(node, target, durationMs, { destroy = false } = {}) {
     if (!node) return
     const steps    = 40
     const interval = durationMs / steps
@@ -72,14 +73,17 @@ export function useAudioEngine() {
       node.volume = Math.max(0, Math.min(1, start + delta * step))
       if (step >= steps) {
         clearInterval(id)
-        if (target === 0) kill(node)
+        if (target === 0) {
+          try { node.pause() } catch (_) {}
+          if (destroy) node.src = ''
+        }
       }
     }, interval)
     fadersRef.current.push(id)
     return id
   }
 
-  // Initialise idle loop on mount
+  // Initialise idle loop on mount — never destroyed, only paused/resumed
   useEffect(() => {
     const idle = new Audio(pickSrc(PATHS.idle))
     idle.loop   = true
@@ -88,19 +92,18 @@ export function useAudioEngine() {
     idleRef.current = idle
     fadeTo(idle, VOL.idle, 2500)
 
-    // Full teardown on unmount / navigation
     return () => {
       clearAll()
-      kill(idleRef.current)
-      kill(ambientRef.current)
-      kill(loadSfxRef.current)
+      killNode(idleRef.current)
+      killNode(ambientRef.current)
+      killNode(loadSfxRef.current)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Disc load trigger — stop previous SFX immediately, cap duration to 4 s
   const playLoadTrigger = useCallback((filmId) => {
-    // Kill any still-playing load SFX
-    kill(loadSfxRef.current)
+    killNode(loadSfxRef.current)
+    loadSfxRef.current = null
 
     const path = PATHS.load[filmId]
     if (!path) return
@@ -109,8 +112,7 @@ export function useAudioEngine() {
     sfx.play().catch(() => {})
     loadSfxRef.current = sfx
 
-    // Auto-fade out after 4 s so it never runs into the ambient loop
-    const t = setTimeout(() => fadeTo(sfx, 0, 800), 4000)
+    const t = setTimeout(() => fadeTo(sfx, 0, 800, { destroy: true }), 4000)
     timersRef.current.push(t)
   }, [])
 
@@ -118,19 +120,18 @@ export function useAudioEngine() {
   const startAmbient = useCallback((filmId) => {
     clearAll()
 
-    // Fade idle down
+    // Fade idle down — just pause, keep node alive for resurrection on eject
     if (idleRef.current) fadeTo(idleRef.current, 0, FADE_MS)
 
-    // Fade out previous ambient and kill it
+    // Fade out and destroy previous ambient
     if (ambientRef.current) {
       const prev = ambientRef.current
       ambientRef.current = null
-      fadeTo(prev, 0, 600)
+      fadeTo(prev, 0, 600, { destroy: true })
     }
 
     const path = PATHS.ambient[filmId]
     if (!path) return
-
     const amb  = new Audio(pickSrc(path))
     amb.loop   = true
     amb.volume = 0
@@ -142,18 +143,21 @@ export function useAudioEngine() {
   // Stop ambient and return to idle
   const stopAmbient = useCallback(() => {
     clearAll()
-    kill(loadSfxRef.current)
+    killNode(loadSfxRef.current)
+    loadSfxRef.current = null
 
     if (ambientRef.current) {
       const prev = ambientRef.current
       ambientRef.current = null
-      fadeTo(prev, 0, FADE_MS)
+      fadeTo(prev, 0, FADE_MS, { destroy: true })
     }
 
-    // Bring idle back
-    if (idleRef.current) {
-      idleRef.current.play().catch(() => {})
-      fadeTo(idleRef.current, VOL.idle, FADE_MS)
+    // Resurrect idle — node still exists, just paused at vol 0
+    const idle = idleRef.current
+    if (idle) {
+      idle.volume = 0
+      idle.play().catch(() => {})
+      fadeTo(idle, VOL.idle, FADE_MS)
     }
   }, [clearAll])
 
@@ -169,9 +173,9 @@ export function useAudioEngine() {
   // Stop everything — called on page navigation
   const stopAll = useCallback(() => {
     clearAll()
-    kill(idleRef.current)
-    kill(ambientRef.current)
-    kill(loadSfxRef.current)
+    killNode(idleRef.current)
+    killNode(ambientRef.current)
+    killNode(loadSfxRef.current)
   }, [clearAll])
 
   return { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll }
