@@ -12,8 +12,11 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: #0a0a0f;
-  color: #8ab8cc;
+  color: #9ecad8;
   font-family: 'Courier New', Courier, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* CRT scanline overlay */
@@ -189,7 +192,7 @@ html, body {
 .console-btn {
   background: #1a1a25;
   border: 1px solid #2a2a3a;
-  color: #8ab8cc;
+  color: #9ecad8;
   font-family: 'Courier New', monospace;
   font-size: 10px;
   letter-spacing: 0.15em;
@@ -253,4 +256,32 @@ html, body {
 
 .section-reveal {
   animation: section-reveal 0.5s ease forwards;
+}
+
+/* ── MOBILE LEGIBILITY ── */
+@media (max-width: 767px) {
+  /* Reduce grain intensity on mobile — it muddies small text */
+  .grain { opacity: 0.18; }
+
+  /* Slightly reduce scanline contrast so text reads cleaner */
+  .crt::before {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.04) 2px,
+      rgba(0,0,0,0.04) 4px
+    );
+  }
+
+  /* Tighten letter-spacing on mobile — wide tracking hurts readability at small sizes */
+  p, span, a { letter-spacing: 0.02em; }
+}
+
+/* Higher contrast text utilities */
+.text-readable {
+  color: #b8d8e8;
+}
+.text-readable-dim {
+  color: #7a9aaa;
 }

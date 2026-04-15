@@ -1,5 +1,6 @@
 'use client'
 import { useState, useCallback, useEffect } from 'react'
+import Link from 'next/link'
 import DiscShelf from './DiscShelf'
 import LogScreen from './LogScreen'
 import { useAudioEngine } from './AudioEngine'
@@ -214,8 +215,11 @@ export default function Console({ films }) {
           <span className="hidden md:inline">ENDURANCE // ARCHIVAL TERMINAL</span>
           <span>NOLAN // PHASE I</span>
         </div>
-        <div className="flex gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
+        <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>
+          <Link href="/info" className="hover:text-console-glow transition-colors tracking-widest">
+            SOURCES & INFO
+          </Link>
           <span className="text-console-glow">◈ NOMINAL</span>
         </div>
       </div>

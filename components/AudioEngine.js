@@ -47,8 +47,8 @@ export function useAudioEngine() {
     idle.play().catch(() => {}) // browsers require user gesture; will start after first interaction
     idleRef.current = idle
 
-    // Fade idle in
-    fadeTo(idle, 0.18, 2000)
+    // Fade idle in — max 8% so it sits well under any content
+    fadeTo(idle, 0.08, 2000)
 
     return () => {
       idle.pause()
@@ -76,7 +76,7 @@ export function useAudioEngine() {
     const getter = AUDIO.load[filmId]
     if (!getter) return
     const sfx = new Audio(getter())
-    sfx.volume = 0.7
+    sfx.volume = 0.3
     sfx.play().catch(() => {})
   }, [])
 
@@ -95,7 +95,7 @@ export function useAudioEngine() {
     amb.loop = true
     amb.volume = 0
     amb.play().catch(() => {})
-    fadeTo(amb, 0.28, FADE_DURATION)
+    fadeTo(amb, 0.15, FADE_DURATION)
     ambientRef.current = amb
   }, [])
 
@@ -109,7 +109,7 @@ export function useAudioEngine() {
     // Fade idle back in
     if (idleRef.current) {
       idleRef.current.play().catch(() => {})
-      fadeTo(idleRef.current, 0.18, FADE_DURATION)
+      fadeTo(idleRef.current, 0.08, FADE_DURATION)
     }
   }, [])
 
@@ -117,7 +117,7 @@ export function useAudioEngine() {
     const getter = AUDIO.ui[name]
     if (!getter) return
     const sfx = new Audio(getter())
-    sfx.volume = 0.4
+    sfx.volume = 0.2
     sfx.play().catch(() => {})
   }, [])
 

@@ -16,8 +16,8 @@ module.exports = {
           accent: '#4a7c9e',
           glow: '#6ab4dc',
           amber: '#c8922a',
-          text: '#8ab8cc',
-          muted: '#445566',
+          text: '#b8d8e8',   // was #8ab8cc — brighter for legibility
+          muted: '#5a7888',  // was #445566 — more readable on dark bg
         }
       },
       fontFamily: {
