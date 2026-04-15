@@ -1,9 +1,21 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 
+// Play the Inception BRAAM as the dream descent sound
+function playDreamDescend() {
+  try {
+    const a = document.createElement('audio')
+    const canOgg = a.canPlayType('audio/ogg')
+    const sfx = new Audio(canOgg ? '/audio/load-inception.ogg' : '/audio/load-inception.mp3')
+    sfx.volume = 0.22
+    sfx.play().catch(() => {})
+  } catch (_) {}
+}
+
+// ── LOADING SEQUENCE ──────────────────────────────────────────────────────────
 function LoadingSequence({ film, onComplete, playUI }) {
   const [progress, setProgress] = useState(0)
-  const [lines, setLines] = useState([])
+  const [lines, setLines]       = useState([])
 
   const bootLines = [
     `> DISC DETECTED: ${film.code}`,
@@ -16,29 +28,18 @@ function LoadingSequence({ film, onComplete, playUI }) {
   ]
 
   useEffect(() => {
-    let lineIdx = 0
-    const lineInterval = setInterval(() => {
-      if (lineIdx < bootLines.length) {
-        setLines(prev => [...prev, bootLines[lineIdx]])
-        playUI?.('tick')
-        lineIdx++
-      } else {
-        clearInterval(lineInterval)
-      }
+    let idx = 0
+    const li = setInterval(() => {
+      if (idx < bootLines.length) { setLines(p => [...p, bootLines[idx]]); playUI?.('tick'); idx++ }
+      else clearInterval(li)
     }, 220)
-
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval)
-          setTimeout(onComplete, 300)
-          return 100
-        }
-        return prev + 2
+    const pi = setInterval(() => {
+      setProgress(p => {
+        if (p >= 100) { clearInterval(pi); setTimeout(onComplete, 300); return 100 }
+        return p + 2
       })
     }, 36)
-
-    return () => { clearInterval(lineInterval); clearInterval(progressInterval) }
+    return () => { clearInterval(li); clearInterval(pi) }
   }, [])
 
   return (
@@ -53,9 +54,7 @@ function LoadingSequence({ film, onComplete, playUI }) {
         </p>
       </div>
       <div className="w-full space-y-1.5 font-mono text-[12px] md:text-[13px] text-console-muted">
-        {lines.map((line, i) => (
-          <p key={i} className="section-reveal" style={{ animationDelay: `${i * 0.05}s` }}>{line}</p>
-        ))}
+        {lines.map((line, i) => <p key={i} className="section-reveal" style={{ animationDelay: `${i * 0.05}s` }}>{line}</p>)}
       </div>
       <div className="w-full mt-4">
         <div className="flex justify-between text-[10px] md:text-[11px] text-console-muted mb-1">
@@ -70,74 +69,180 @@ function LoadingSequence({ film, onComplete, playUI }) {
   )
 }
 
-// ── DREAM TRANSITION OVERLAY ──────────────────────────────────────────────────
-function DreamTransition({ film, onComplete }) {
+// ── DREAM TRANSITION ──────────────────────────────────────────────────────────
+function DreamTransition({ onComplete }) {
   const [phase, setPhase] = useState(0)
-  // phase 0: zoom+blur in, phase 1: white flash, phase 2: done
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 600)
-    const t2 = setTimeout(() => setPhase(2), 950)
-    const t3 = setTimeout(onComplete, 1100)
+    const t1 = setTimeout(() => setPhase(1), 500)
+    const t2 = setTimeout(() => setPhase(2), 850)
+    const t3 = setTimeout(onComplete, 1050)
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
   }, [])
 
   return (
-    <div className="absolute inset-0 z-50 pointer-events-none overflow-hidden">
-      {/* Zoom blur layer */}
-      <div
-        className="absolute inset-0 transition-all"
+    <div className="absolute inset-0 z-50 pointer-events-none">
+      <div className="absolute inset-0 transition-all"
         style={{
-          transform: phase >= 1 ? 'scale(1.12)' : 'scale(1)',
-          filter: phase === 1 ? 'blur(12px) brightness(3)' : phase === 2 ? 'blur(0px) brightness(1)' : 'blur(0px)',
-          opacity: phase === 2 ? 0 : 1,
-          transitionDuration: phase === 1 ? '350ms' : '200ms',
-          background: phase === 1 ? 'rgba(255,255,255,0.9)' : 'transparent',
-        }}
-      />
-      {/* White flash */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: 'white',
-          opacity: phase === 1 ? 0.95 : 0,
-          transition: 'opacity 250ms ease',
-        }}
-      />
+          transform: phase >= 1 ? 'scale(1.10)' : 'scale(1)',
+          filter: phase === 1 ? 'blur(10px) brightness(2.5)' : 'blur(0px)',
+          transitionDuration: phase === 1 ? '350ms' : '150ms',
+        }} />
+      <div className="absolute inset-0 transition-opacity"
+        style={{ backgroundColor: 'white', opacity: phase === 1 ? 0.92 : 0, transitionDuration: '200ms' }} />
     </div>
   )
 }
 
-// ── DREAM LAYER VIEW ─────────────────────────────────────────────────────────
-function DreamLayerView({ film, onSurface }) {
+// ── DEEPER BUTTON (reused at bottom of L2 and L1) ────────────────────────────
+function DeeperButton({ color, glowColor, label, sublabel, onClick }) {
+  return (
+    <div className="section-reveal pt-2 pb-4">
+      <button
+        onClick={onClick}
+        className="w-full group relative overflow-hidden border py-4 px-6 transition-all duration-300"
+        style={{
+          borderColor: `${color}60`,
+          background: `linear-gradient(135deg, ${color}08 0%, transparent 60%)`,
+        }}
+      >
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ background: `radial-gradient(ellipse at center, ${color}15 0%, transparent 70%)` }} />
+        <div className="relative flex flex-col items-center gap-1">
+          <span className="text-[9px] tracking-[0.4em] text-console-muted uppercase mb-1">{sublabel}</span>
+          <span className="text-[13px] md:text-[15px] font-bold tracking-[0.15em] uppercase group-hover:tracking-[0.2em] transition-all duration-300"
+            style={{ color: glowColor, textShadow: `0 0 16px ${glowColor}60` }}>
+            {label}
+          </span>
+          <div className="flex gap-1.5 mt-1">
+            {[0,1,2,3,4].map(i => (
+              <div key={i} className="w-1 h-1 rounded-full"
+                style={{ backgroundColor: color, opacity: 0.3 + i * 0.15 }} />
+            ))}
+          </div>
+        </div>
+      </button>
+    </div>
+  )
+}
+
+// ── LAYER 3: DEEP CUTS ────────────────────────────────────────────────────────
+function Layer3View({ film, onSurface }) {
   const [visibleSections, setVisibleSections] = useState(0)
+  const d = film.deepcuts
+  const scrollRef = useRef(null)
+
+  useEffect(() => {
+    const iv = setInterval(() => {
+      setVisibleSections(prev => {
+        if (prev >= d.sections.length + 2) { clearInterval(iv); return prev }
+        return prev + 1
+      })
+    }, 320)
+    return () => clearInterval(iv)
+  }, [film])
+
+  return (
+    <div className="flex flex-col h-full" style={{
+      background: `radial-gradient(ellipse at center top, ${d.dream_color}18 0%, #020205 70%)`,
+    }}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
+        style={{ borderColor: `${d.dream_color}60`, borderStyle: 'dashed' }}>
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Triple pulse = layer 3 */}
+          <div className="flex gap-0.5">
+            {[0,1,2,3,4,5].map(i => (
+              <div key={i} className="w-1 h-3 rounded-sm animate-pulse"
+                style={{ backgroundColor: d.dream_glow, opacity: 0.4 + (i % 3) * 0.2, animationDelay: `${i * 0.15}s` }} />
+            ))}
+          </div>
+          <span className="text-[9px] md:text-[10px] tracking-[0.3em] uppercase font-bold"
+            style={{ color: d.dream_glow, textShadow: `0 0 16px ${d.dream_glow}` }}>
+            {d.layer_label}
+          </span>
+        </div>
+        <button onClick={onSurface} className="console-btn text-[9px] md:text-[10px] px-2 py-1"
+          style={{ borderColor: `${d.dream_color}60`, color: d.dream_glow }}>
+          ↑↑ SURFACE
+        </button>
+      </div>
+
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 md:px-6 py-5 space-y-6">
+        {visibleSections >= 1 && (
+          <div className="section-reveal pb-4 border-b border-dashed" style={{ borderColor: `${d.dream_color}30` }}>
+            <p className="text-[9px] md:text-[10px] tracking-widest uppercase mb-2" style={{ color: d.dream_color }}>
+              // LAYER 3 — CLASSIFIED SIGNAL
+            </p>
+            <p className="text-[13px] md:text-[14px] leading-relaxed italic" style={{ color: `${d.dream_glow}bb` }}>
+              {d.opening}
+            </p>
+          </div>
+        )}
+
+        {d.sections.map((s, i) => (
+          visibleSections >= i + 2 && (
+            <div key={i} className="section-reveal">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-px h-5 shrink-0" style={{ backgroundColor: d.dream_glow, boxShadow: `0 0 8px ${d.dream_glow}` }} />
+                <div className="w-px h-3 shrink-0 ml-0.5" style={{ backgroundColor: d.dream_glow, opacity: 0.5 }} />
+                <h2 className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] uppercase ml-1"
+                  style={{ color: d.dream_glow }}>
+                  {s.heading}
+                </h2>
+              </div>
+              <p className="text-[12px] md:text-[14px] leading-relaxed pl-4" style={{ color: '#c0d0d8' }}>
+                {s.body}
+              </p>
+            </div>
+          )
+        ))}
+
+        {visibleSections >= d.sections.length + 2 && (
+          <div className="section-reveal pt-4 border-t border-dashed" style={{ borderColor: `${d.dream_color}30` }}>
+            <p className="text-[9px] md:text-[10px] tracking-widest" style={{ color: `${d.dream_color}70` }}>
+              {d.closing_note}
+            </p>
+          </div>
+        )}
+        <div className="h-8" />
+      </div>
+    </div>
+  )
+}
+
+// ── LAYER 2: PRODUCTION ───────────────────────────────────────────────────────
+function Layer2View({ film, onSurface, onDeeper }) {
+  const [visibleSections, setVisibleSections] = useState(0)
+  const [transitioning, setTransitioning]     = useState(false)
   const p = film.production
   const scrollRef = useRef(null)
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const iv = setInterval(() => {
       setVisibleSections(prev => {
-        if (prev >= p.sections.length + 2) { clearInterval(interval); return prev }
+        if (prev >= p.sections.length + 3) { clearInterval(iv); return prev }
         return prev + 1
       })
     }, 350)
-    return () => clearInterval(interval)
+    return () => clearInterval(iv)
   }, [film])
 
+  const handleDeeper = () => {
+    playDreamDescend()
+    setTransitioning(true)
+  }
+
   return (
-    <div
-      className="flex flex-col h-full"
-      style={{
-        background: `radial-gradient(ellipse at center top, ${p.dream_color}08 0%, #050508 60%)`,
-      }}
-    >
-      {/* Dream layer top bar */}
-      <div
-        className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
-        style={{ borderColor: `${p.dream_color}50` }}
-      >
+    <div className="flex flex-col h-full relative"
+      style={{ background: `radial-gradient(ellipse at center top, ${p.dream_color}08 0%, #050508 60%)` }}>
+
+      {transitioning && <DreamTransition onComplete={onDeeper} />}
+
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
+        style={{ borderColor: `${p.dream_color}50` }}>
         <div className="flex items-center gap-2 md:gap-3">
-          {/* Pulsing dream indicator */}
           <div className="flex gap-1">
             {[0,1,2].map(i => (
               <div key={i} className="w-1.5 h-1.5 rounded-full animate-pulse"
@@ -149,53 +254,40 @@ function DreamLayerView({ film, onSurface }) {
             {p.layer_label}
           </span>
         </div>
-        <button
-          onClick={onSurface}
-          className="console-btn text-[10px] md:text-[11px] px-2 md:px-3 py-1 md:py-1.5"
-          style={{ borderColor: `${p.dream_color}60`, color: p.dream_glow }}
-        >
+        <button onClick={onSurface} className="console-btn text-[10px] md:text-[11px] px-2 md:px-3 py-1"
+          style={{ borderColor: `${p.dream_color}60`, color: p.dream_glow }}>
           ↑ SURFACE
         </button>
       </div>
 
-      {/* Dream layer content */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 md:px-6 py-5 space-y-6">
-
-        {/* Opening */}
         {visibleSections >= 1 && (
           <div className="section-reveal pb-4 border-b" style={{ borderColor: `${p.dream_color}25` }}>
-            <p className="text-[10px] md:text-[11px] tracking-widest uppercase mb-2"
-              style={{ color: p.dream_color }}>
+            <p className="text-[10px] md:text-[11px] tracking-widest uppercase mb-2" style={{ color: p.dream_color }}>
               // PRODUCTION ARCHIVE
             </p>
-            <p className="text-[13px] md:text-[15px] leading-relaxed italic"
-              style={{ color: `${p.dream_glow}cc` }}>
+            <p className="text-[13px] md:text-[15px] leading-relaxed italic" style={{ color: `${p.dream_glow}cc` }}>
               {p.opening}
             </p>
           </div>
         )}
 
-        {/* Sections */}
-        {p.sections.map((section, i) => (
+        {p.sections.map((s, i) => (
           visibleSections >= i + 2 && (
             <div key={i} className="section-reveal">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <div className="w-1 h-5 shrink-0 rounded-sm"
                   style={{ backgroundColor: p.dream_glow, boxShadow: `0 0 6px ${p.dream_glow}` }} />
-                <h2 className="text-[11px] md:text-[13px] font-bold tracking-[0.15em] md:tracking-[0.2em] uppercase"
-                  style={{ color: p.dream_glow }}>
-                  {section.heading}
-                </h2>
+                <h2 className="text-[11px] md:text-[13px] font-bold tracking-[0.15em] uppercase"
+                  style={{ color: p.dream_glow }}>{s.heading}</h2>
               </div>
-              <p className="text-[13px] md:text-[14px] leading-relaxed pl-3 md:pl-4"
-                style={{ color: '#c8d8e0' }}>
-                {section.body}
+              <p className="text-[13px] md:text-[14px] leading-relaxed pl-3 md:pl-4" style={{ color: '#c8d8e0' }}>
+                {s.body}
               </p>
             </div>
           )
         ))}
 
-        {/* Closing note */}
         {visibleSections >= p.sections.length + 2 && (
           <div className="section-reveal pt-4 border-t" style={{ borderColor: `${p.dream_color}25` }}>
             <p className="text-[9px] md:text-[10px] tracking-widest" style={{ color: `${p.dream_color}80` }}>
@@ -204,46 +296,61 @@ function DreamLayerView({ film, onSurface }) {
           </div>
         )}
 
-        <div className="h-8" />
+        {/* Layer 3 button */}
+        {visibleSections >= p.sections.length + 3 && film.deepcuts && (
+          <DeeperButton
+            color={film.deepcuts.dream_color}
+            glowColor={film.deepcuts.dream_glow}
+            label="We need to go deeper..."
+            sublabel="LAYER 3 // DEEP SIGNAL ARCHIVE"
+            onClick={handleDeeper}
+          />
+        )}
+
+        <div className="h-4" />
       </div>
     </div>
   )
 }
 
-// ── DOSSIER VIEW (LAYER 1) ────────────────────────────────────────────────────
+// ── LAYER 1: DOSSIER ──────────────────────────────────────────────────────────
 function DossierView({ film, onClose, onGoToShelf }) {
   const [visibleSections, setVisibleSections] = useState(0)
-  const [dreamPhase, setDreamPhase]           = useState('idle') // 'idle' | 'transitioning' | 'dream'
+  const [layer, setLayer]                     = useState(1) // 1 | '1to2' | 2 | '2to3' | 3
   const scrollRef = useRef(null)
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const iv = setInterval(() => {
       setVisibleSections(prev => {
-        if (prev >= film.dossier.sections.length + 3) { clearInterval(interval); return prev }
+        if (prev >= film.dossier.sections.length + 3) { clearInterval(iv); return prev }
         return prev + 1
       })
     }, 400)
-    return () => clearInterval(interval)
+    return () => clearInterval(iv)
   }, [film])
 
-  const enterDream = () => setDreamPhase('transitioning')
+  const handleGoDeeper = () => {
+    playDreamDescend()
+    setLayer('1to2')
+  }
 
-  if (dreamPhase === 'dream') {
+  if (layer === 2 || layer === '2to3' || layer === 3) {
     return (
-      <DreamLayerView
+      <Layer2View
         film={film}
-        onSurface={() => setDreamPhase('idle')}
+        onSurface={() => setLayer(1)}
+        onDeeper={() => setLayer(3)}
       />
     )
   }
 
+  if (layer === 3) {
+    return <Layer3View film={film} onSurface={() => setLayer(2)} />
+  }
+
   return (
     <div className="flex flex-col h-full relative">
-
-      {/* Dream transition overlay */}
-      {dreamPhase === 'transitioning' && (
-        <DreamTransition film={film} onComplete={() => setDreamPhase('dream')} />
-      )}
+      {layer === '1to2' && <DreamTransition onComplete={() => setLayer(2)} />}
 
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -270,7 +377,6 @@ function DossierView({ film, onClose, onGoToShelf }) {
         </div>
       </div>
 
-      {/* Title block */}
       {visibleSections >= 1 && (
         <div className="px-4 md:px-6 pt-4 md:pt-5 pb-3 border-b border-console-border shrink-0 section-reveal">
           <div className="flex items-baseline gap-3 md:gap-4">
@@ -294,7 +400,6 @@ function DossierView({ film, onClose, onGoToShelf }) {
         </div>
       )}
 
-      {/* Opening */}
       {visibleSections >= 2 && (
         <div className="px-4 md:px-6 pt-3 md:pt-4 pb-3 border-b border-console-border shrink-0 section-reveal">
           <p className="text-[10px] md:text-[11px] text-console-muted tracking-widest uppercase mb-2">
@@ -306,19 +411,17 @@ function DossierView({ film, onClose, onGoToShelf }) {
         </div>
       )}
 
-      {/* Dossier sections */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 md:px-6 py-4 space-y-5 md:space-y-6">
-        {film.dossier.sections.map((section, i) => (
+        {film.dossier.sections.map((s, i) => (
           visibleSections >= i + 3 && (
             <div key={i} className="section-reveal">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <div className="w-1 h-4 md:h-5 shrink-0" style={{ backgroundColor: film.color }} />
-                <h2 className="text-[11px] md:text-[13px] font-bold tracking-[0.15em] uppercase" style={{ color: film.color }}>
-                  {section.heading}
-                </h2>
+                <h2 className="text-[11px] md:text-[13px] font-bold tracking-[0.15em] uppercase"
+                  style={{ color: film.color }}>{s.heading}</h2>
               </div>
               <p className="text-[13px] md:text-[14px] text-console-text leading-relaxed pl-3 md:pl-4">
-                {section.body}
+                {s.body}
               </p>
             </div>
           )
@@ -332,41 +435,14 @@ function DossierView({ film, onClose, onGoToShelf }) {
           </div>
         )}
 
-        {/* WE NEED TO GO DEEPER button */}
         {visibleSections >= film.dossier.sections.length + 3 && film.production && (
-          <div className="section-reveal pt-2 pb-4">
-            <button
-              onClick={enterDream}
-              className="w-full group relative overflow-hidden border py-4 px-6 transition-all duration-300"
-              style={{
-                borderColor: `${film.color}60`,
-                background: `linear-gradient(135deg, ${film.color}08 0%, transparent 60%)`,
-              }}
-            >
-              {/* Animated background on hover */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{ background: `radial-gradient(ellipse at center, ${film.color}15 0%, transparent 70%)` }}
-              />
-              <div className="relative flex flex-col items-center gap-1">
-                <span className="text-[9px] tracking-[0.4em] text-console-muted uppercase mb-1">
-                  LAYER 2 // PRODUCTION ARCHIVE
-                </span>
-                <span
-                  className="text-[13px] md:text-[15px] font-bold tracking-[0.15em] uppercase group-hover:tracking-[0.2em] transition-all duration-300"
-                  style={{ color: film.glowColor, textShadow: `0 0 16px ${film.glowColor}60` }}
-                >
-                  We need to go deeper...
-                </span>
-                <div className="flex gap-1.5 mt-1">
-                  {[0,1,2,3,4].map(i => (
-                    <div key={i} className="w-1 h-1 rounded-full"
-                      style={{ backgroundColor: film.color, opacity: 0.3 + i * 0.15 }} />
-                  ))}
-                </div>
-              </div>
-            </button>
-          </div>
+          <DeeperButton
+            color={film.color}
+            glowColor={film.glowColor}
+            label="We need to go deeper..."
+            sublabel="LAYER 2 // PRODUCTION ARCHIVE"
+            onClick={handleGoDeeper}
+          />
         )}
 
         <div className="h-4" />
@@ -375,7 +451,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
   )
 }
 
-// ── ROOT EXPORT ───────────────────────────────────────────────────────────────
+// ── ROOT ──────────────────────────────────────────────────────────────────────
 export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf }) {
   return (
     <div className="console-screen flex-1 h-full relative">
