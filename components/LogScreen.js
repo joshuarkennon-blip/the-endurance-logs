@@ -219,7 +219,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setVisibleSections(prev => {
-        if (prev >= film.dossier.sections.length + 2) { clearInterval(interval); return prev }
+        if (prev >= film.dossier.sections.length + 3) { clearInterval(interval); return prev }
         return prev + 1
       })
     }, 400)
