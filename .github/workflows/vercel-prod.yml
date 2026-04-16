@@ -10,7 +10,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      # Vercel CLI expects VERCEL_ORG_ID (team / scope id). Some dashboards label this "Team ID".
+      # Accept either repository secret name so a misnamed secret still works.
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || secrets.VERCEL_TEAM_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - name: Checkout
