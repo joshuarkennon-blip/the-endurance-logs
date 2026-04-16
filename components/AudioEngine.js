@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 
 function pickSrc(base) {
   if (typeof Audio === 'undefined') return `${base}.mp3`
@@ -38,11 +38,14 @@ const VOL = {
 const FADE_MS = 1200
 
 export function useAudioEngine() {
+  const [isMuted, setIsMuted] = useState(false)
   const idleRef      = useRef(null)
   const ambientRef   = useRef(null)
   const loadSfxRef   = useRef(null)   // track the current one-shot so we can kill it
   const timersRef    = useRef([])     // setTimeout handles
   const fadersRef    = useRef([])     // setInterval handles
+
+  const targetVolume = useCallback((value) => (isMuted ? 0 : value), [isMuted])
 
   // Safely clear all pending fades and timers
   const clearAll = useCallback(() => {
@@ -90,7 +93,7 @@ export function useAudioEngine() {
     idle.volume = 0
     idle.play().catch(() => {})
     idleRef.current = idle
-    fadeTo(idle, VOL.idle, 2500)
+    fadeTo(idle, targetVolume(VOL.idle), 2500)
 
     return () => {
       clearAll()
@@ -98,7 +101,7 @@ export function useAudioEngine() {
       killNode(ambientRef.current)
       killNode(loadSfxRef.current)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [targetVolume]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Disc load trigger — stop previous SFX immediately, cap duration to 4 s
   const playLoadTrigger = useCallback((filmId) => {
@@ -108,13 +111,13 @@ export function useAudioEngine() {
     const path = PATHS.load[filmId]
     if (!path) return
     const sfx   = new Audio(pickSrc(path))
-    sfx.volume  = VOL.load
+    sfx.volume  = targetVolume(VOL.load)
     sfx.play().catch(() => {})
     loadSfxRef.current = sfx
 
     const t = setTimeout(() => fadeTo(sfx, 0, 800, { destroy: true }), 4000)
     timersRef.current.push(t)
-  }, [])
+  }, [targetVolume])
 
   // Start film ambient — crossfade cleanly
   const startAmbient = useCallback((filmId) => {
@@ -137,8 +140,8 @@ export function useAudioEngine() {
     amb.volume = 0
     amb.play().catch(() => {})
     ambientRef.current = amb
-    fadeTo(amb, VOL.ambient, FADE_MS)
-  }, [clearAll])
+    fadeTo(amb, targetVolume(VOL.ambient), FADE_MS)
+  }, [clearAll, targetVolume])
 
   // Stop ambient and return to idle
   const stopAmbient = useCallback(() => {
@@ -157,18 +160,18 @@ export function useAudioEngine() {
     if (idle) {
       idle.volume = 0
       idle.play().catch(() => {})
-      fadeTo(idle, VOL.idle, FADE_MS)
+      fadeTo(idle, targetVolume(VOL.idle), FADE_MS)
     }
-  }, [clearAll])
+  }, [clearAll, targetVolume])
 
   // One-shot UI sound
   const playUI = useCallback((name) => {
     const path = PATHS.ui[name]
     if (!path) return
     const sfx  = new Audio(pickSrc(path))
-    sfx.volume = VOL.ui
+    sfx.volume = targetVolume(VOL.ui)
     sfx.play().catch(() => {})
-  }, [])
+  }, [targetVolume])
 
   // Stop everything — called on page navigation
   const stopAll = useCallback(() => {
@@ -178,5 +181,32 @@ export function useAudioEngine() {
     killNode(loadSfxRef.current)
   }, [clearAll])
 
-  return { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll }
+  const toggleMute = useCallback(() => {
+    setIsMuted(prev => !prev)
+  }, [])
+
+  useEffect(() => {
+    if (isMuted) {
+      if (idleRef.current) fadeTo(idleRef.current, 0, 180)
+      if (ambientRef.current) fadeTo(ambientRef.current, 0, 180)
+      if (loadSfxRef.current) fadeTo(loadSfxRef.current, 0, 180, { destroy: true })
+      return
+    }
+
+    const ambient = ambientRef.current
+    const idle = idleRef.current
+    if (ambient && ambient.src) {
+      ambient.play().catch(() => {})
+      fadeTo(ambient, VOL.ambient, 260)
+      if (idle) fadeTo(idle, 0, 220)
+      return
+    }
+
+    if (idle && idle.src) {
+      idle.play().catch(() => {})
+      fadeTo(idle, VOL.idle, 260)
+    }
+  }, [isMuted])
+
+  return { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll, isMuted, toggleMute }
 }

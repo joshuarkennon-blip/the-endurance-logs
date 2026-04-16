@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import DiscShelf from './DiscShelf'
 import LogScreen from './LogScreen'
@@ -12,15 +12,51 @@ export default function Console({ films, registerStopAll }) {
   const [isZoomed, setIsZoomed]       = useState(false)
   const [draggingId, setDraggingId]   = useState(null)
   const [dropActive, setDropActive]   = useState(false)
+  const [trayClosing, setTrayClosing] = useState(false)
   const [mobileView, setMobileView]   = useState('shelf') // 'shelf' | 'screen'
   const [audioReady, setAudioReady]   = useState(false)
+  const [settings, setSettings]       = useState({
+    fxMode: 'full',       // full | lite | off
+    motionMode: 'full',   // full | reduced
+    contrastMode: 'normal', // normal | high
+  })
 
-  const { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll } = useAudioEngine()
+  const { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll, isMuted, toggleMute } = useAudioEngine()
+  const trayCloseTimer = useRef(null)
 
   // Register stopAll with _app so navigation kills audio cleanly
   useEffect(() => {
     if (registerStopAll) registerStopAll(stopAll)
   }, [stopAll, registerStopAll])
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('endurance-console-settings')
+      if (!raw) return
+      const parsed = JSON.parse(raw)
+      setSettings(prev => ({
+        fxMode: parsed.fxMode || prev.fxMode,
+        motionMode: parsed.motionMode || prev.motionMode,
+        contrastMode: parsed.contrastMode || prev.contrastMode,
+      }))
+    } catch (_) {}
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('endurance-console-settings', JSON.stringify(settings))
+    } catch (_) {}
+
+    document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high')
+    if (settings.fxMode === 'lite') document.body.classList.add('fx-lite')
+    if (settings.fxMode === 'off') document.body.classList.add('fx-off')
+    if (settings.motionMode === 'reduced') document.body.classList.add('motion-min')
+    if (settings.contrastMode === 'high') document.body.classList.add('contrast-high')
+
+    return () => {
+      document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high')
+    }
+  }, [settings])
 
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
@@ -28,10 +64,21 @@ export default function Console({ films, registerStopAll }) {
   }, [audioReady])
 
   const handleDragStart = useCallback((filmId) => {
+    if (trayCloseTimer.current) {
+      clearTimeout(trayCloseTimer.current)
+      trayCloseTimer.current = null
+    }
+    setTrayClosing(false)
     setDraggingId(filmId)
   }, [])
 
   const handleDragEnd = useCallback(() => {
+    setTrayClosing(true)
+    if (trayCloseTimer.current) clearTimeout(trayCloseTimer.current)
+    trayCloseTimer.current = setTimeout(() => {
+      setTrayClosing(false)
+      trayCloseTimer.current = null
+    }, 260)
     setDraggingId(null)
     setDropActive(false)
   }, [])
@@ -42,12 +89,16 @@ export default function Console({ films, registerStopAll }) {
     setDropActive(true)
   }, [])
 
-  const handleDragLeave = useCallback(() => {
+  const handleDragLeave = useCallback((e) => {
+    const next = e.relatedTarget
+    if (next instanceof Node && e.currentTarget.contains(next)) return
     setDropActive(false)
   }, [])
 
-  const loadFilm = useCallback((film) => {
-    if (!film || film.id === loadedFilm?.id) return
+  const loadFilm = useCallback((film, options = {}) => {
+    if (!film) return
+    const forceReload = Boolean(options.forceReload)
+    if (!forceReload && film.id === loadedFilm?.id) return
     setLoadedFilm(film)
     setIsLoading(true)
     setIsZoomed(true)
@@ -59,10 +110,22 @@ export default function Console({ films, registerStopAll }) {
     e.preventDefault()
     setDropActive(false)
     setDraggingId(null)
+    setTrayClosing(true)
+    if (trayCloseTimer.current) clearTimeout(trayCloseTimer.current)
+    trayCloseTimer.current = setTimeout(() => {
+      setTrayClosing(false)
+      trayCloseTimer.current = null
+    }, 260)
     const filmId = e.dataTransfer.getData('filmId')
     const film = films.find(f => f.id === filmId)
     loadFilm(film)
   }, [films, loadFilm])
+
+  useEffect(() => {
+    return () => {
+      if (trayCloseTimer.current) clearTimeout(trayCloseTimer.current)
+    }
+  }, [])
 
   const handleLoadComplete = useCallback(() => {
     setIsLoading(false)
@@ -80,8 +143,17 @@ export default function Console({ films, registerStopAll }) {
     }, 600)
   }, [playUI, stopAmbient])
 
+  const handleEggOpen = useCallback(() => {
+    stopAmbient()
+  }, [stopAmbient])
+
+  const handleEggClose = useCallback(() => {
+    if (loadedFilm && !isLoading) startAmbient(loadedFilm.id)
+  }, [loadedFilm, isLoading, startAmbient])
+
   return (
     <div className="relative w-full h-full flex flex-col" onClick={unlockAudio}>
+      <div id="case-easter-egg" />
 
       {/* ── TOP BAR ── */}
       <div className="panel border-b-0 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shrink-0">
@@ -140,7 +212,7 @@ export default function Console({ films, registerStopAll }) {
         }}
       >
         {/* ── DISC SHELF — hidden on mobile when viewing screen ── */}
-        <div className={`${mobileView === 'screen' ? 'hidden' : 'flex'} md:flex shrink-0`}>
+        <div className={`${mobileView === 'screen' ? 'hidden' : 'flex'} md:flex shrink-0 flex-col`}>
           <DiscShelf
             films={films}
             loadedFilm={loadedFilm}
@@ -149,6 +221,23 @@ export default function Console({ films, registerStopAll }) {
             draggingId={draggingId}
             onTap={loadFilm}
           />
+          <div
+            className="shelf-disc-dropzone"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <div
+              className={`disc-tray shelf-disc-tray ${draggingId ? 'open' : ''} ${dropActive ? 'disc-tray-ready' : ''} ${trayClosing ? 'closing' : ''}`}
+            >
+              <div className="disc-tray-slot">
+                <div className="disc-tray-groove" />
+              </div>
+              <p className="disc-tray-label">
+                {trayClosing ? 'LOCKING TRAY' : dropActive ? 'RELEASE TO LOAD' : draggingId ? 'TRAY OPEN' : 'DISC TRAY STANDBY'}
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="hidden md:block w-px bg-console-border shrink-0" />
@@ -161,16 +250,6 @@ export default function Console({ films, registerStopAll }) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          {draggingId && !loadedFilm && (
-            <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-              <div
-                className="border-2 border-dashed px-8 py-4 text-center transition-all"
-                style={{ borderColor: dropActive ? '#6ab4dc' : '#2a2a3a' }}
-              >
-                <p className="text-[14px] tracking-[0.2em] text-console-text">LOAD DISC</p>
-              </div>
-            </div>
-          )}
           <LogScreen
             film={loadedFilm}
             isLoading={isLoading}
@@ -213,14 +292,91 @@ export default function Console({ films, registerStopAll }) {
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '124.7°' : '---.-°'}</p>
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '89.2°' : '---.-°'}</p>
             </div>
-            <CaseChat films={films} playUI={playUI} onLoadFilm={loadFilm} />
+            <button
+              type="button"
+              onClick={() => {
+                playUI('tick')
+                toggleMute()
+              }}
+              className="console-btn w-full px-2 py-1 text-[9px]"
+              style={{ borderColor: isMuted ? '#9e5c4a' : '#4a7c9e', color: isMuted ? '#dc8c6a' : '#9ecad8' }}
+            >
+              AUDIO: {isMuted ? 'MUTED' : 'LIVE'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playUI('tick')
+                setSettings(prev => ({
+                  ...prev,
+                  fxMode: prev.fxMode === 'full' ? 'lite' : prev.fxMode === 'lite' ? 'off' : 'full',
+                }))
+              }}
+              className="console-btn w-full px-2 py-1 text-[9px]"
+            >
+              FX: {settings.fxMode.toUpperCase()}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playUI('tick')
+                setSettings(prev => ({
+                  ...prev,
+                  motionMode: prev.motionMode === 'full' ? 'reduced' : 'full',
+                }))
+              }}
+              className="console-btn w-full px-2 py-1 text-[9px]"
+            >
+              MOTION: {settings.motionMode === 'full' ? 'FULL' : 'REDUCED'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playUI('tick')
+                setSettings(prev => ({
+                  ...prev,
+                  contrastMode: prev.contrastMode === 'normal' ? 'high' : 'normal',
+                }))
+              }}
+              className="console-btn w-full px-2 py-1 text-[9px]"
+            >
+              CONTRAST: {settings.contrastMode === 'high' ? 'HIGH' : 'NORMAL'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playUI('tick')
+                setSettings({
+                  fxMode: 'full',
+                  motionMode: 'full',
+                  contrastMode: 'normal',
+                })
+              }}
+              className="console-btn w-full px-2 py-1 text-[9px]"
+              style={{ borderColor: '#6e5b4a', color: '#c9a27f' }}
+            >
+              RESET SETTINGS
+            </button>
+            <CaseChat
+              films={films}
+              playUI={playUI}
+              onLoadFilm={loadFilm}
+              onEggOpen={handleEggOpen}
+              onEggClose={handleEggClose}
+            />
           </div>
         </div>
       </div>
 
       {/* ── BOTTOM STATUS BAR ── */}
       <div className="md:hidden">
-        <CaseChat films={films} playUI={playUI} onLoadFilm={loadFilm} />
+        <CaseChat
+          films={films}
+          playUI={playUI}
+          onLoadFilm={loadFilm}
+          onEggOpen={handleEggOpen}
+          onEggClose={handleEggClose}
+        />
       </div>
 
       <div className="panel border-t-0 px-4 md:px-6 py-2 flex items-center justify-between shrink-0">
@@ -231,6 +387,7 @@ export default function Console({ films, registerStopAll }) {
         </div>
         <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>
+          <span className="md:hidden">TAP DISC TO LOAD</span>
           <Link href="/info" className="hover:text-console-glow transition-colors tracking-widest">
             SOURCES & INFO
           </Link>

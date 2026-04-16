@@ -36,6 +36,33 @@ const sources = [
       { label: 'Sacks, O. (1985). The Man Who Mistook His Wife for a Hat.', detail: 'Summit Books. Referenced for background on anterograde amnesia and clinical memory disorders.' },
     ]
   },
+  {
+    film: 'BATMAN BEGINS (2005)',
+    color: '#6b6f78',
+    refs: [
+      { label: 'Nolan, C. (Director). (2005). Batman Begins.', detail: 'Warner Bros. Pictures. Primary reference for thematic and structural analysis.' },
+      { label: 'Goyer, D. S., & Nolan, C. (2005). Batman Begins screenplay.', detail: 'Screenplay references used for dialogue intent and character architecture.' },
+      { label: 'American Cinematographer (2005). Batman Begins coverage.', detail: 'Technical production context for practical effects, city capture, and suit/vehicle implementation.' },
+    ]
+  },
+  {
+    film: 'THE DARK KNIGHT (2008)',
+    color: '#4a5a74',
+    refs: [
+      { label: 'Nolan, C. (Director). (2008). The Dark Knight.', detail: 'Warner Bros. Pictures. Primary reference for thematic and structural analysis.' },
+      { label: 'The Art and Making of The Dark Knight.', detail: 'Production documentation for IMAX usage, practical stunt planning, and design process.' },
+      { label: 'American Cinematographer (2008). The Dark Knight coverage.', detail: 'Reference for camera strategy, large-format workflow, and action-sequence execution.' },
+    ]
+  },
+  {
+    film: 'THE DARK KNIGHT RISES (2012)',
+    color: '#6e5b4a',
+    refs: [
+      { label: 'Nolan, C. (Director). (2012). The Dark Knight Rises.', detail: 'Warner Bros. Pictures. Primary reference for thematic and structural analysis.' },
+      { label: 'The Art and Making of The Dark Knight Trilogy.', detail: 'Reference for trilogy-level production continuity and finale design decisions.' },
+      { label: 'Warner Bros. production notes (2012).', detail: 'Background source for practical sequence planning, location strategy, and final-act staging.' },
+    ]
+  },
 ]
 
 export default function InfoPage() {
@@ -75,7 +102,10 @@ export default function InfoPage() {
               SOURCES & INFO
             </h1>
             <p className="text-[13px] md:text-[14px] text-console-text leading-relaxed">
-              The Endurance Logs is an independent fan project. All film analysis is original editorial work. Referenced texts and sources are listed below per film.
+              The Endurance Logs is an independent fan site. All film analysis is original editorial work. Referenced texts and sources are listed below per film.
+            </p>
+            <p className="text-[12px] md:text-[13px] text-console-muted leading-relaxed mt-3">
+              Please support filmmakers by purchasing their work from your favorite retailers.
             </p>
           </div>
 
@@ -114,8 +144,20 @@ export default function InfoPage() {
               DISCLAIMER
             </p>
             <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
-              The Endurance Logs is an unofficial fan project with no affiliation to Warner Bros. Pictures, Syncopy, Christopher Nolan, or any associated rights holders. Film titles, character names, and all intellectual property remain the property of their respective owners. No copyright infringement is intended. All written analysis is original commentary protected under fair use.
+              The Endurance Logs is an unofficial fan site with no affiliation to Warner Bros. Pictures, Syncopy, Christopher Nolan, or any associated rights holders. Film titles, character names, and all intellectual property remain the property of their respective owners. No copyright infringement is intended. All written analysis is original commentary protected under fair use.
             </p>
+          </section>
+
+          {/* Fair Use Method */}
+          <section className="mb-12 border border-console-border p-4 md:p-5">
+            <p className="text-[10px] tracking-[0.35em] text-console-muted uppercase mb-3">
+              FAIR USE METHOD
+            </p>
+            <div className="space-y-3 text-[12px] md:text-[13px] text-console-text leading-relaxed">
+              <p>This project is commentary and criticism. Each film entry is substantially transformative analysis, not a substitute for viewing the original work.</p>
+              <p>No screenplay dumps, no full-scene transcripts, and no hosted full-length audiovisual copies are provided. Excerpts are minimal and used only to support analysis.</p>
+              <p>Sources are listed per film so claims remain attributable and reviewable. If any rights holder raises a concern, content can be revised or removed promptly.</p>
+            </div>
           </section>
 
           {/* Privacy */}

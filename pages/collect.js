@@ -56,6 +56,42 @@ const films = [
     ]
   },
   {
+    id: 'batman-begins',
+    title: 'BATMAN BEGINS',
+    year: '2005',
+    color: '#6b6f78',
+    glowColor: '#9ca3b0',
+    thumbnail: '🦇',
+    formats: [
+      { label: '4K UHD + Blu-ray — Standard', ref: amz('B07G2CJNHD'), note: null },
+      { label: 'Blu-ray', ref: amz('B001DD4B32'), note: 'Included in multiple trilogy box sets' },
+    ]
+  },
+  {
+    id: 'the-dark-knight',
+    title: 'THE DARK KNIGHT',
+    year: '2008',
+    color: '#4a5a74',
+    glowColor: '#88a9d6',
+    thumbnail: '🃏',
+    formats: [
+      { label: '4K UHD + Blu-ray — Standard', ref: amz('B07G2CFY4P'), note: null },
+      { label: 'Blu-ray', ref: amz('B0016F9KQQ'), note: 'Best known for IMAX-expanded sequences' },
+    ]
+  },
+  {
+    id: 'the-dark-knight-rises',
+    title: 'THE DARK KNIGHT RISES',
+    year: '2012',
+    color: '#6e5b4a',
+    glowColor: '#c9a27f',
+    thumbnail: '🔥',
+    formats: [
+      { label: '4K UHD + Blu-ray — Standard', ref: amz('B07G2CS4GL'), note: null },
+      { label: 'Blu-ray', ref: amz('B008R9J5OC'), note: null },
+    ]
+  },
+  {
     id: 'collection',
     title: 'FULL NOLAN COLLECTION',
     year: 'All Films',
@@ -74,7 +110,7 @@ export default function CollectPage() {
     <>
       <Head>
         <title>Acquire the Archive // The Endurance Logs</title>
-        <meta name="description" content="Own the Nolan archive in the highest quality available. Physical editions of Interstellar, Inception, Tenet, and Memento." />
+        <meta name="description" content="Own the Nolan archive in the highest quality available. Physical editions including Interstellar, Inception, Tenet, Memento, and The Dark Knight trilogy." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
@@ -98,6 +134,9 @@ export default function CollectPage() {
             </h1>
             <p className="text-[13px] md:text-[14px] text-console-text leading-relaxed">
               Own these films in the highest quality available. Physical media preserves the full theatrical experience. Amazon links below support this archive at no extra cost to you.
+            </p>
+            <p className="text-[12px] md:text-[13px] text-console-muted leading-relaxed mt-3">
+              Please support filmmakers by purchasing their work from your favorite retailers.
             </p>
             <p className="text-[11px] text-console-muted mt-3 tracking-wide">
               ◈ Affiliate disclosure — links earn a small commission via the Amazon Associates program.

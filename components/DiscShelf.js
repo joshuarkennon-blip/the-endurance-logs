@@ -2,7 +2,7 @@
 
 export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, draggingId, onTap }) {
   return (
-    <div className="panel flex flex-col h-full" style={{ minWidth: 'clamp(160px, 25vw, 220px)', maxWidth: 'clamp(160px, 25vw, 220px)' }}>
+    <div className="panel archive-bay-panel flex flex-col flex-1 min-h-0" style={{ minWidth: 'clamp(260px, 36vw, 360px)', maxWidth: 'clamp(260px, 36vw, 360px)' }}>
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-console-border">
         <div className="led amber" />
@@ -14,13 +14,13 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
       {/* Label */}
       <div className="px-3 pt-3 pb-1">
         <p className="text-[10px] md:text-[11px] text-console-muted tracking-widest uppercase">
-          <span className="hidden md:inline">Film Logs // Drag to Load</span>
+          <span className="hidden md:inline">Film Logs // Drag to Tray</span>
           <span className="md:hidden">Tap to Load</span>
         </p>
       </div>
 
       {/* Disc list */}
-      <div className="flex flex-col gap-2 px-3 py-2 overflow-y-auto flex-1">
+      <div className="archive-bay-grid px-3 py-2 overflow-y-auto flex-1">
         {films.map((film) => {
           const isLoaded = loadedFilm?.id === film.id
           const isDragging = draggingId === film.id
@@ -36,7 +36,7 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
               }}
               onDragEnd={onDragEnd}
               onClick={() => onTap(film)}
-              className={`disc group relative flex flex-col gap-1 p-2 border transition-all duration-200 ${
+              className={`disc archive-bay-cell group relative flex items-center justify-center p-2 border transition-all duration-200 ${
                 isLoaded ? 'border-opacity-80 bg-opacity-20' : 'border-console-border bg-console-dim hover:border-opacity-60'
               } ${isDragging ? 'disc-dragging' : ''}`}
               style={{
@@ -49,14 +49,24 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
                 style={{ backgroundColor: film.color, opacity: isLoaded ? 1 : 0.4 }} />
 
               {/* Body */}
-              <div className="pl-2">
-                <div className="text-2xl leading-none mb-1">{film.thumbnail}</div>
-                <p className="text-[10px] md:text-[11px] font-bold tracking-widest leading-tight" style={{ color: film.color }}>
-                  {film.title}
-                </p>
-                <p className="text-[9px] md:text-[10px] text-console-muted mt-0.5">
-                  {film.year} // {film.code}
-                </p>
+              <div className="relative flex items-center justify-center">
+                <div className={`glass-floppy ${isLoaded ? 'glass-floppy-loaded' : ''}`} style={{ '--film-color': film.color }}>
+                  <div className="glass-floppy-notch" />
+                  <div className="glass-floppy-media" aria-hidden="true">
+                    <div className="glass-floppy-media-core" />
+                  </div>
+                  <div className="glass-floppy-label">
+                    <p className="glass-floppy-label-top">NOLAN LOG ARCHIVE</p>
+                    <p className="glass-floppy-label-film">{film.title}</p>
+                    <p className="glass-floppy-label-bottom">{film.code}</p>
+                  </div>
+                  <div className="glass-floppy-shutter">
+                    <div className="glass-floppy-shutter-window" />
+                    <div className="glass-floppy-shutter-mark" />
+                    <span className="glass-floppy-shutter-emoji" aria-hidden="true">{film.thumbnail || '◈'}</span>
+                  </div>
+                  <div className="glass-floppy-gloss" />
+                </div>
               </div>
 
               {/* Active indicator */}
