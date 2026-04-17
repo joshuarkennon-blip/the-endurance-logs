@@ -153,10 +153,27 @@ function DreamTransition({ onComplete, pulseMs = 1450 }) {
   )
 }
 
-function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2' }) {
+const TERMINAL_GLITCH_FRAGMENTS = [
+  'CHK:ERR',
+  '0x7F_BAD',
+  'SIG_LOST',
+  'CRC..??',
+  'MEM:LEAK?',
+  'IRQ:??',
+  'SYNC_FAIL',
+  'BAD_SECT',
+  'READ_ERR',
+  'TIMEOUT',
+]
+
+function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '' }) {
   const [lineGlitch, setLineGlitch] = useState(null)
   const [staticFlash, setStaticFlash] = useState(false)
   const [shiftBand, setShiftBand] = useState(null)
+  const [smileGlitch, setSmileGlitch] = useState(false)
+  const [terminalFlash, setTerminalFlash] = useState(null)
+  const [cursorBlink, setCursorBlink] = useState(null)
+  const [phosphorTick, setPhosphorTick] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -164,56 +181,89 @@ function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2' }) {
     let loopId = null
     const transientIds = []
 
-    const minDelay = Math.max(560, 2500 - level * 420)
-    const maxDelay = Math.max(980, 3600 - level * 520)
+    const tdk = filmId === 'the-dark-knight'
+    const minDelay = Math.max(720, 2800 - level * 380)
+    const maxDelay = Math.max(1100, 4200 - level * 480)
 
     const trigger = () => {
       if (!active) return
       const roll = Math.random()
-      const lineChance = 0.16 + level * 0.07
-      const staticChance = 0.05 + level * 0.035
-      const shiftChance = 0.04 + level * 0.03
+      const lineChance = 0.12 + level * 0.055
+      const staticChance = 0.04 + level * 0.028
+      const shiftChance = 0.03 + level * 0.025
+      const terminalChance = 0.05 + level * 0.02 + (tdk ? 0.04 : 0)
+      const cursorChance = 0.035 + level * 0.015 + (tdk ? 0.03 : 0)
+      const phosphorChance = 0.06 + level * 0.02
 
       if (roll < lineChance) {
         setLineGlitch({
           top: `${8 + Math.random() * 84}%`,
-          height: `${1 + Math.random() * 2.6}px`,
-          drift: `${(Math.random() * 14 - 7).toFixed(1)}px`,
-          opacity: 0.11 + level * 0.045,
+          height: `${1 + Math.random() * 2.2}px`,
+          drift: `${(Math.random() * 10 - 5).toFixed(1)}px`,
+          opacity: 0.09 + level * 0.038,
         })
-        transientIds.push(window.setTimeout(() => setLineGlitch(null), 70 + Math.random() * 95))
+        transientIds.push(window.setTimeout(() => setLineGlitch(null), 80 + Math.random() * 100))
       }
 
       if (Math.random() < staticChance) {
         setStaticFlash(true)
-        transientIds.push(window.setTimeout(() => setStaticFlash(false), 55 + Math.random() * 85))
+        transientIds.push(window.setTimeout(() => setStaticFlash(false), 48 + Math.random() * 72))
       }
 
       if (Math.random() < shiftChance) {
         setShiftBand({
           top: `${12 + Math.random() * 70}%`,
-          height: `${6 + Math.random() * 12}px`,
-          offset: `${(Math.random() * 10 - 5).toFixed(1)}px`,
-          opacity: 0.08 + level * 0.03,
+          height: `${5 + Math.random() * 10}px`,
+          offset: `${(Math.random() * 8 - 4).toFixed(1)}px`,
+          opacity: 0.06 + level * 0.025,
         })
-        transientIds.push(window.setTimeout(() => setShiftBand(null), 65 + Math.random() * 95))
+        transientIds.push(window.setTimeout(() => setShiftBand(null), 72 + Math.random() * 88))
+      }
+
+      if (tdk && Math.random() < (0.028 + level * 0.012)) {
+        setSmileGlitch(true)
+        transientIds.push(window.setTimeout(() => setSmileGlitch(false), 120 + Math.random() * 160))
+      }
+
+      if (Math.random() < terminalChance) {
+        const text = TERMINAL_GLITCH_FRAGMENTS[Math.floor(Math.random() * TERMINAL_GLITCH_FRAGMENTS.length)]
+        setTerminalFlash({
+          text,
+          left: `${6 + Math.random() * 58}%`,
+          top: `${10 + Math.random() * 72}%`,
+        })
+        transientIds.push(window.setTimeout(() => setTerminalFlash(null), 95 + Math.random() * 140))
+      }
+
+      if (Math.random() < cursorChance) {
+        setCursorBlink({
+          left: `${4 + Math.random() * 88}%`,
+          top: `${14 + Math.random() * 68}%`,
+        })
+        transientIds.push(window.setTimeout(() => setCursorBlink(null), 55 + Math.random() * 85))
+      }
+
+      if (Math.random() < phosphorChance) {
+        setPhosphorTick(true)
+        transientIds.push(window.setTimeout(() => setPhosphorTick(false), 38 + Math.random() * 55))
       }
 
       const nextDelay = minDelay + Math.random() * (maxDelay - minDelay)
       loopId = window.setTimeout(trigger, nextDelay)
     }
 
-    loopId = window.setTimeout(trigger, minDelay + Math.random() * 600)
+    loopId = window.setTimeout(trigger, minDelay + Math.random() * 800)
 
     return () => {
       active = false
       if (loopId) window.clearTimeout(loopId)
       transientIds.forEach((id) => window.clearTimeout(id))
     }
-  }, [level])
+  }, [level, filmId])
 
   return (
     <div className="dream-layer-glitch-shell" aria-hidden style={{ '--dream-glitch-color': glowColor }}>
+      {phosphorTick && <span className="dream-layer-glitch-phosphor" />}
       {lineGlitch && (
         <span
           className="dream-layer-glitch-line"
@@ -237,6 +287,21 @@ function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2' }) {
           }}
         />
       )}
+      {terminalFlash && (
+        <span
+          className="dream-layer-glitch-terminal"
+          style={{ left: terminalFlash.left, top: terminalFlash.top }}
+        >
+          {terminalFlash.text}
+        </span>
+      )}
+      {cursorBlink && (
+        <span
+          className="dream-layer-glitch-cursor"
+          style={{ left: cursorBlink.left, top: cursorBlink.top }}
+        />
+      )}
+      {smileGlitch && <span className="dream-layer-glitch-smile">:)</span>}
     </div>
   )
 }
@@ -283,12 +348,76 @@ const FINAL_DREAM_MOTIFS = {
   'the-dark-knight-rises': ['🔥', '🕳️', '💣', '🦇'],
 }
 
+const TDK_FINALE_PALETTE = {
+  '.': null,
+  H: '#15803d',
+  h: '#22c55e',
+  f: '#d1fae5',
+  e: '#0f172a',
+  p: '#4c1d95',
+  P: '#7c3aed',
+  M: '#991b1b',
+  m: '#fca5a5',
+}
+
+const TDK_FINALE_PIXEL_ROWS = [
+  '....hhhhhh....',
+  '...hhhhhhhh...',
+  '..hhhhhhhhhh..',
+  '.hhffffffffhh.',
+  '.hffeeeeeeffh.',
+  '.hfePPPPeeefh.',
+  '.hfePMMMpeefh.',
+  '.hfePMMMpeefh.',
+  '.hfeemmmmeeefh.',
+  '.hffeeeeeeffh.',
+  '..hhppPPpphh..',
+  '...hhhhhhhh...',
+  '....hhhhhh....',
+]
+
+function TdkFinalePixelJoker() {
+  const w = TDK_FINALE_PIXEL_ROWS[0].length
+  const h = TDK_FINALE_PIXEL_ROWS.length
+  const scale = 10
+  return (
+    <svg
+      className="tdk-pixel-joker-svg pixel-art"
+      viewBox={`0 0 ${w} ${h}`}
+      width={w * scale}
+      height={h * scale}
+      aria-hidden
+    >
+      {TDK_FINALE_PIXEL_ROWS.flatMap((row, y) =>
+        [...row].map((ch, x) => {
+          const fill = TDK_FINALE_PALETTE[ch]
+          if (!fill) return null
+          return <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={fill} />
+        })
+      )}
+    </svg>
+  )
+}
+
+function TdkLayer4Finale() {
+  return (
+    <div className="tdk-layer4-finale">
+      <div className="tdk-pixel-joker-wrap" style={{ '--tdk-laugh-dur': '4.6s' }}>
+        <div className="tdk-pixel-joker-glow">
+          <TdkFinalePixelJoker />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Layer4View({ film, onSurface }) {
   const motifs = FINAL_DREAM_MOTIFS[film.id] || ['◈', '✦', '▦', '⌁']
   const dreamColor = film.deepcuts?.dream_color || film.color
   const dreamGlow = film.deepcuts?.dream_glow || film.glowColor
   const creditLines = getFilmCreditLines(film)
   const rollingCredits = [...creditLines, ...creditLines, ...creditLines]
+  const isTdk = film.id === 'the-dark-knight'
 
   return (
     <div
@@ -297,7 +426,7 @@ function Layer4View({ film, onSurface }) {
         background: `radial-gradient(ellipse at center, ${dreamGlow}24 0%, ${dreamColor}45 35%, #020304 82%)`,
       }}
     >
-      <DreamLayerGlitches level={4} glowColor={dreamGlow} />
+      <DreamLayerGlitches level={4} glowColor={dreamGlow} filmId={film.id} />
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${dreamGlow}70`, borderStyle: 'dashed' }}>
         <div className="flex items-center gap-2 md:gap-3">
@@ -327,20 +456,24 @@ function Layer4View({ film, onSurface }) {
         </div>
 
         <div className="relative z-20 flex h-full flex-col items-center justify-center gap-4">
-          <div className="pixel-core-shell">
-            <div className="pixel-core-grid pixel-art" />
-            <div className="pixel-core-vignette" />
-            <div className="pixel-core-scan" />
-            {motifs.map((motif, index) => (
-              <span
-                key={`${film.id}-motif-${index}`}
-                className={`pixel-core-motif motif-${index + 1}`}
-                style={{ color: index % 2 ? dreamGlow : '#d5edf4' }}
-              >
-                {motif}
-              </span>
-            ))}
-          </div>
+          {isTdk ? (
+            <TdkLayer4Finale />
+          ) : (
+            <div className="pixel-core-shell">
+              <div className="pixel-core-grid pixel-art" />
+              <div className="pixel-core-vignette" />
+              <div className="pixel-core-scan" />
+              {motifs.map((motif, index) => (
+                <span
+                  key={`${film.id}-motif-${index}`}
+                  className={`pixel-core-motif motif-${index + 1}`}
+                  style={{ color: index % 2 ? dreamGlow : '#d5edf4' }}
+                >
+                  {motif}
+                </span>
+              ))}
+            </div>
+          )}
           <p className="text-[10px] md:text-[11px] tracking-[0.22em] uppercase text-console-muted text-center">
             {film.title} // recursive memory fragment // live loop
           </p>
@@ -373,7 +506,7 @@ function Layer3View({ film, onSurface, onDeeper }) {
         background: `radial-gradient(ellipse at 60% 10%, ${d.dream_glow}1f 0%, transparent 42%), radial-gradient(ellipse at 20% 20%, ${d.dream_color}38 0%, #020206 68%)`,
       }}
     >
-      <DreamLayerGlitches level={3} glowColor={d.dream_glow} />
+      <DreamLayerGlitches level={3} glowColor={d.dream_glow} filmId={film.id} />
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${d.dream_color}60`, borderStyle: 'dashed' }}>
@@ -477,7 +610,7 @@ function Layer2View({ film, onSurface, onDeeper }) {
       className="flex flex-col h-full relative dream-layer-mid"
       style={{ background: `radial-gradient(ellipse at 70% 0%, ${p.dream_glow}18 0%, transparent 44%), radial-gradient(ellipse at 30% 15%, ${p.dream_color}24 0%, #050509 66%)` }}
     >
-      <DreamLayerGlitches level={2} glowColor={p.dream_glow} />
+      <DreamLayerGlitches level={2} glowColor={p.dream_glow} filmId={film.id} />
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -616,7 +749,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
 
   return (
     <div className="flex flex-col h-full relative">
-      <DreamLayerGlitches level={1} glowColor={film.glowColor} />
+      <DreamLayerGlitches level={1} glowColor={film.glowColor} filmId={film.id} />
       {layer === '1to2' && (
         <DreamTransition
           pulseMs={1540}

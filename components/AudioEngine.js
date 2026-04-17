@@ -44,9 +44,7 @@ const VOL = {
   ui:      0.11,
 }
 
-const AMBIENT_LEVEL_BY_FILM = {
-  'the-dark-knight': 0.42,
-}
+const AMBIENT_LEVEL_BY_FILM = {}
 
 const LOAD_LEVEL_BY_FILM = {
   'the-dark-knight': 0.72,
@@ -56,14 +54,20 @@ const FADE_MS = 1200
 
 export function useAudioEngine() {
   const [isMuted, setIsMuted] = useState(false)
+  const isMutedRef = useRef(isMuted)
   const idleRef      = useRef(null)
   const ambientRef   = useRef(null)
   const loadSfxRef   = useRef(null)   // track the current one-shot so we can kill it
   const ambientSynthRef = useRef(null)
   const loadSynthRef = useRef(null)
+  const currentAmbientFilmIdRef = useRef(null)
   const ambientTargetRef = useRef(VOL.ambient)
   const timersRef    = useRef([])     // setTimeout handles
   const fadersRef    = useRef([])     // setInterval handles
+
+  useEffect(() => {
+    isMutedRef.current = isMuted
+  }, [isMuted])
 
   const targetVolume = useCallback((value) => (isMuted ? 0 : value), [isMuted])
 
@@ -77,7 +81,6 @@ export function useAudioEngine() {
     }
   }
 
-  // Safely clear all pending fades and timers
   const clearAll = useCallback(() => {
     fadersRef.current.forEach(clearInterval)
     fadersRef.current = []
@@ -200,7 +203,6 @@ export function useAudioEngine() {
       const nodes = []
       const timers = []
       const currentGain = muted ? 0 : VOL.ambient
-      const env = { ctx, master, currentGain }
       ensureCtxRunning(ctx)
 
       const addDrone = (freq, type, gain, detune = 0) => {
@@ -249,7 +251,7 @@ export function useAudioEngine() {
         addDrone(82, 'sawtooth', 0.04)
         addDrone(83.6, 'sawtooth', 0.03)
         addDrone(620, 'sine', 0.008)
-        timers.push(window.setInterval(() => pulse(176 + Math.random() * 60, 0.32, 0.025), 3800))
+        timers.push(window.setInterval(() => pulse(176 + Math.random() * 60, 0.28, 0.005), 8800))
       } else {
         addDrone(55, 'square', 0.048)
         addDrone(110, 'triangle', 0.026)
@@ -377,6 +379,7 @@ export function useAudioEngine() {
 
     if (BATMAN_FILMS.has(filmId)) {
       ambientSynthRef.current = createBatmanAmbient(filmId, isMuted)
+      currentAmbientFilmIdRef.current = filmId
       return
     }
 
@@ -384,6 +387,7 @@ export function useAudioEngine() {
     if (!path) return
     const ambientTarget = VOL.ambient * ambientLevelFor(filmId)
     ambientTargetRef.current = ambientTarget
+    currentAmbientFilmIdRef.current = filmId
     const amb  = new Audio(pickSrc(path))
     amb.loop   = true
     amb.volume = 0
@@ -397,6 +401,7 @@ export function useAudioEngine() {
     clearAll()
     killNode(loadSfxRef.current)
     loadSfxRef.current = null
+    currentAmbientFilmIdRef.current = null
 
     if (ambientRef.current) {
       const prev = ambientRef.current
@@ -426,6 +431,7 @@ export function useAudioEngine() {
   // Stop everything — called on page navigation
   const stopAll = useCallback(() => {
     clearAll()
+    currentAmbientFilmIdRef.current = null
     killNode(idleRef.current)
     killNode(ambientRef.current)
     killNode(loadSfxRef.current)

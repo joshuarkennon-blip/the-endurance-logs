@@ -650,6 +650,63 @@ html, body {
   animation: dream-shift-jitter 90ms steps(2, end) 1;
 }
 
+.dream-layer-glitch-phosphor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(120, 200, 255, 0.12) 2px,
+    rgba(120, 200, 255, 0.12) 3px
+  );
+  animation: dream-phosphor-tick 45ms steps(2, end) 1;
+}
+
+.dream-layer-glitch-terminal {
+  position: absolute;
+  font-family: 'Courier New', monospace;
+  font-size: clamp(9px, 1.1vw, 11px);
+  letter-spacing: 0.12em;
+  color: rgba(180, 220, 200, 0.55);
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.9),
+    0 0 8px rgba(60, 140, 100, 0.35);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: dream-terminal-flicker 110ms steps(2, end) 1;
+}
+
+.dream-layer-glitch-cursor {
+  position: absolute;
+  width: 2px;
+  height: 0.85em;
+  background: rgba(160, 210, 190, 0.45);
+  box-shadow: 0 0 6px rgba(100, 180, 140, 0.25);
+  pointer-events: none;
+  animation: dream-cursor-blink 70ms steps(2, end) 1;
+}
+
+.dream-layer-glitch-smile {
+  position: absolute;
+  right: clamp(6%, 9vw, 14%);
+  top: clamp(12%, 18vh, 28%);
+  font-family: 'Courier New', monospace;
+  font-size: clamp(28px, 5.2vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(74, 222, 128, 0.72);
+  text-shadow:
+    0 0 8px rgba(34, 197, 94, 0.45),
+    0 0 20px rgba(22, 163, 74, 0.35),
+    -1px 0 rgba(0, 0, 0, 0.5);
+  mix-blend-mode: screen;
+  animation: dream-smile-flicker 200ms steps(2, end) 1;
+}
+
 
 .dream-credits-bg {
   position: absolute;
@@ -724,10 +781,17 @@ html, body {
       0deg,
       rgba(0, 0, 0, 0) 0px,
       rgba(0, 0, 0, 0) 2px,
-      rgba(150, 255, 190, 0.07) 2px,
-      rgba(150, 255, 190, 0.07) 3px
+      rgba(120, 200, 255, 0.05) 2px,
+      rgba(120, 200, 255, 0.05) 3px
     ),
-    radial-gradient(ellipse at 50% 40%, rgba(140, 255, 188, 0.18) 0%, rgba(0, 0, 0, 0) 62%);
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(255, 255, 255, 0.03) 1px,
+      rgba(255, 255, 255, 0.03) 2px
+    ),
+    radial-gradient(ellipse at 50% 40%, rgba(74, 222, 128, 0.12) 0%, rgba(0, 0, 0, 0) 62%);
   animation: joker-glitch-flash 220ms steps(2, end) 1;
 }
 
@@ -736,13 +800,13 @@ html, body {
   top: 18%;
   right: 12%;
   font-family: 'Courier New', monospace;
-  font-size: clamp(18px, 2.8vw, 30px);
+  font-size: clamp(20px, 3.2vw, 34px);
   letter-spacing: 0.16em;
-  color: rgba(170, 255, 205, 0.88);
+  color: rgba(74, 222, 128, 0.85);
   text-shadow:
-    -1px 0 rgba(255, 0, 102, 0.35),
-    1px 0 rgba(95, 220, 255, 0.5),
-    0 0 10px rgba(140, 255, 188, 0.4);
+    -1px 0 rgba(0, 0, 0, 0.55),
+    1px 0 rgba(34, 197, 94, 0.4),
+    0 0 12px rgba(22, 163, 74, 0.45);
 }
 
 @keyframes joker-glitch-flash {
@@ -803,6 +867,74 @@ html, body {
   100% { opacity: 0; filter: hue-rotate(0deg); }
 }
 
+@keyframes dream-smile-flicker {
+  0% { opacity: 0; transform: translateX(-2px); }
+  40% { opacity: 0.92; transform: translateX(1px); }
+  80% { opacity: 0.45; transform: translateX(-1px); }
+  100% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes dream-phosphor-tick {
+  0% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 0.09; transform: translateY(1px); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+@keyframes dream-terminal-flicker {
+  0% { opacity: 0; filter: blur(0); }
+  35% { opacity: 0.85; filter: blur(0.2px); }
+  100% { opacity: 0; filter: blur(0); }
+}
+
+@keyframes dream-cursor-blink {
+  0% { opacity: 0; }
+  45% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* TDK dream layer 4 — pixel Joker + laugh loop glow (duration synced from audio metadata) */
+.tdk-layer4-finale {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tdk-pixel-joker-wrap {
+  --tdk-laugh-dur: 14s;
+  position: relative;
+  padding: 12px 16px 18px;
+}
+
+.tdk-pixel-joker-glow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  animation: tdk-joker-glow-breathe var(--tdk-laugh-dur, 14s) ease-in-out infinite;
+  will-change: filter, opacity;
+}
+
+.tdk-pixel-joker-svg {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@keyframes tdk-joker-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.35)) drop-shadow(0 0 18px rgba(34, 197, 94, 0.22));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 14px rgba(74, 222, 128, 0.55)) drop-shadow(0 0 36px rgba(34, 197, 94, 0.38));
+  }
+}
+
 /* User settings — right rail control deck */
 body.fx-lite .grain {
   opacity: 0.12 !important;
@@ -830,6 +962,11 @@ body.motion-min .dream-layer-deep::after,
 body.motion-min .dream-layer-glitch-line,
 body.motion-min .dream-layer-glitch-static,
 body.motion-min .dream-layer-glitch-shift,
+body.motion-min .dream-layer-glitch-phosphor,
+body.motion-min .dream-layer-glitch-terminal,
+body.motion-min .dream-layer-glitch-cursor,
+body.motion-min .dream-layer-glitch-smile,
+body.motion-min .tdk-pixel-joker-glow,
 body.motion-min .dream-credits-roll-inner,
 body.motion-min .joker-glitch-overlay,
 body.motion-min .case-orb,
