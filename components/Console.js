@@ -15,6 +15,7 @@ export default function Console({ films, registerStopAll }) {
   const [trayClosing, setTrayClosing] = useState(false)
   const [mobileView, setMobileView]   = useState('shelf') // 'shelf' | 'screen'
   const [audioReady, setAudioReady]   = useState(false)
+  const [jokerGlitchTick, setJokerGlitchTick] = useState(0)
   const [settings, setSettings]       = useState({
     fxMode: 'full',       // full | lite | off
     motionMode: 'full',   // full | reduced
@@ -23,6 +24,7 @@ export default function Console({ films, registerStopAll }) {
 
   const { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll, isMuted, toggleMute } = useAudioEngine()
   const trayCloseTimer = useRef(null)
+  const lastJokerGlitchAt = useRef(0)
 
   // Register stopAll with _app so navigation kills audio cleanly
   useEffect(() => {
@@ -61,7 +63,14 @@ export default function Console({ films, registerStopAll }) {
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
     if (!audioReady) setAudioReady(true)
-  }, [audioReady])
+    if (loadedFilm?.id === 'the-dark-knight') {
+      const now = Date.now()
+      if (now - lastJokerGlitchAt.current > 2800 && Math.random() < 0.18) {
+        lastJokerGlitchAt.current = now
+        setJokerGlitchTick(now)
+      }
+    }
+  }, [audioReady, loadedFilm?.id])
 
   const handleDragStart = useCallback((filmId) => {
     if (trayCloseTimer.current) {
@@ -257,6 +266,7 @@ export default function Console({ films, registerStopAll }) {
             onEject={handleEject}
             playUI={playUI}
             onGoToShelf={() => setMobileView('shelf')}
+            jokerGlitchTick={jokerGlitchTick}
           />
         </div>
 

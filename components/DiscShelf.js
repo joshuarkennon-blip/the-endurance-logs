@@ -20,7 +20,7 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
       </div>
 
       {/* Disc list */}
-      <div className="archive-bay-grid px-3 py-2 overflow-y-auto flex-1">
+      <div className="archive-bay-grid px-2 py-2 overflow-hidden flex-1">
         {films.map((film) => {
           const isLoaded = loadedFilm?.id === film.id
           const isDragging = draggingId === film.id
@@ -56,9 +56,7 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
                     <div className="glass-floppy-media-core" />
                   </div>
                   <div className="glass-floppy-label">
-                    <p className="glass-floppy-label-top">NOLAN LOG ARCHIVE</p>
                     <p className="glass-floppy-label-film">{film.title}</p>
-                    <p className="glass-floppy-label-bottom">{film.code}</p>
                   </div>
                   <div className="glass-floppy-shutter">
                     <div className="glass-floppy-shutter-window" />
@@ -89,11 +87,44 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
             </div>
           )
         })}
+
+        {/* Teaser slot */}
+        <div
+          aria-label="Locked archive slot teaser"
+          className="disc archive-bay-cell group relative flex cursor-not-allowed items-center justify-center border border-dashed border-console-amber/50 bg-console-dim/70 p-2 opacity-85"
+        >
+          <div
+            className="absolute left-0 top-0 bottom-0 w-[2px]"
+            style={{ backgroundColor: '#c8922a', opacity: 0.55 }}
+          />
+
+          <div className="relative flex items-center justify-center">
+            <div className="glass-floppy" style={{ '--film-color': '#c8922a' }}>
+              <div className="glass-floppy-notch" />
+              <div className="glass-floppy-media" aria-hidden="true">
+                <div className="glass-floppy-media-core" />
+              </div>
+              <div className="glass-floppy-label">
+                <p className="glass-floppy-label-film text-[24px] leading-none">?</p>
+              </div>
+              <div className="glass-floppy-shutter">
+                <div className="glass-floppy-shutter-window" />
+                <div className="glass-floppy-shutter-mark" />
+                <span className="glass-floppy-shutter-emoji" aria-hidden="true">?</span>
+              </div>
+              <div className="glass-floppy-gloss" />
+            </div>
+          </div>
+
+          <div className="absolute top-1.5 right-1.5 text-[8px] tracking-[0.14em] text-console-amber">
+            LOCK
+          </div>
+        </div>
       </div>
 
       {/* Footer */}
       <div className="border-t border-console-border px-3 py-2">
-        <p className="text-[10px] text-console-muted tracking-wider">{films.length} LOGS INDEXED</p>
+        <p className="text-[10px] text-console-muted tracking-wider">{films.length} LOGS INDEXED // 1 SLOT LOCKED</p>
         <p className="text-[10px] text-console-muted">SYS // READY</p>
       </div>
     </div>

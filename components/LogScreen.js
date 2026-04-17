@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { getFilmCreditLines } from '../lib/filmCredits'
 
 // Play the dedicated dream descent cue.
 function playDreamDescend() {
@@ -152,6 +153,94 @@ function DreamTransition({ onComplete, pulseMs = 1450 }) {
   )
 }
 
+function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2' }) {
+  const [lineGlitch, setLineGlitch] = useState(null)
+  const [staticFlash, setStaticFlash] = useState(false)
+  const [shiftBand, setShiftBand] = useState(null)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    let active = true
+    let loopId = null
+    const transientIds = []
+
+    const minDelay = Math.max(560, 2500 - level * 420)
+    const maxDelay = Math.max(980, 3600 - level * 520)
+
+    const trigger = () => {
+      if (!active) return
+      const roll = Math.random()
+      const lineChance = 0.16 + level * 0.07
+      const staticChance = 0.05 + level * 0.035
+      const shiftChance = 0.04 + level * 0.03
+
+      if (roll < lineChance) {
+        setLineGlitch({
+          top: `${8 + Math.random() * 84}%`,
+          height: `${1 + Math.random() * 2.6}px`,
+          drift: `${(Math.random() * 14 - 7).toFixed(1)}px`,
+          opacity: 0.11 + level * 0.045,
+        })
+        transientIds.push(window.setTimeout(() => setLineGlitch(null), 70 + Math.random() * 95))
+      }
+
+      if (Math.random() < staticChance) {
+        setStaticFlash(true)
+        transientIds.push(window.setTimeout(() => setStaticFlash(false), 55 + Math.random() * 85))
+      }
+
+      if (Math.random() < shiftChance) {
+        setShiftBand({
+          top: `${12 + Math.random() * 70}%`,
+          height: `${6 + Math.random() * 12}px`,
+          offset: `${(Math.random() * 10 - 5).toFixed(1)}px`,
+          opacity: 0.08 + level * 0.03,
+        })
+        transientIds.push(window.setTimeout(() => setShiftBand(null), 65 + Math.random() * 95))
+      }
+
+      const nextDelay = minDelay + Math.random() * (maxDelay - minDelay)
+      loopId = window.setTimeout(trigger, nextDelay)
+    }
+
+    loopId = window.setTimeout(trigger, minDelay + Math.random() * 600)
+
+    return () => {
+      active = false
+      if (loopId) window.clearTimeout(loopId)
+      transientIds.forEach((id) => window.clearTimeout(id))
+    }
+  }, [level])
+
+  return (
+    <div className="dream-layer-glitch-shell" aria-hidden style={{ '--dream-glitch-color': glowColor }}>
+      {lineGlitch && (
+        <span
+          className="dream-layer-glitch-line"
+          style={{
+            top: lineGlitch.top,
+            height: lineGlitch.height,
+            opacity: lineGlitch.opacity,
+            transform: `translateX(${lineGlitch.drift})`,
+          }}
+        />
+      )}
+      {staticFlash && <span className="dream-layer-glitch-static" />}
+      {shiftBand && (
+        <span
+          className="dream-layer-glitch-shift"
+          style={{
+            top: shiftBand.top,
+            height: shiftBand.height,
+            transform: `translateX(${shiftBand.offset})`,
+            opacity: shiftBand.opacity,
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
 // ── DEEPER BUTTON (reused at bottom of L2 and L1) ────────────────────────────
 function DeeperButton({ color, glowColor, label, sublabel, onClick }) {
   return (
@@ -198,14 +287,17 @@ function Layer4View({ film, onSurface }) {
   const motifs = FINAL_DREAM_MOTIFS[film.id] || ['◈', '✦', '▦', '⌁']
   const dreamColor = film.deepcuts?.dream_color || film.color
   const dreamGlow = film.deepcuts?.dream_glow || film.glowColor
+  const creditLines = getFilmCreditLines(film)
+  const rollingCredits = [...creditLines, ...creditLines, ...creditLines]
 
   return (
     <div
-      className="flex flex-col h-full dream-layer-final"
+      className="flex flex-col h-full relative dream-layer-final"
       style={{
         background: `radial-gradient(ellipse at center, ${dreamGlow}24 0%, ${dreamColor}45 35%, #020304 82%)`,
       }}
     >
+      <DreamLayerGlitches level={4} glowColor={dreamGlow} />
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${dreamGlow}70`, borderStyle: 'dashed' }}>
         <div className="flex items-center gap-2 md:gap-3">
@@ -221,24 +313,38 @@ function Layer4View({ film, onSurface }) {
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 gap-4">
-        <div className="pixel-core-shell">
-          <div className="pixel-core-grid pixel-art" />
-          <div className="pixel-core-vignette" />
-          <div className="pixel-core-scan" />
-          {motifs.map((motif, index) => (
-            <span
-              key={`${film.id}-motif-${index}`}
-              className={`pixel-core-motif motif-${index + 1}`}
-              style={{ color: index % 2 ? dreamGlow : '#d5edf4' }}
-            >
-              {motif}
-            </span>
-          ))}
+      <div className="flex-1 relative px-4 py-6">
+        <div className="dream-credits-bg" aria-hidden>
+          <div className="dream-credits-roll dream-credits-roll--bg">
+            <div className="dream-credits-roll-inner">
+              {rollingCredits.map((line, idx) => (
+                <p key={`${film.id}-credit-bg-${idx}`} className="dream-credits-line dream-credits-line--bg">
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
-        <p className="text-[10px] md:text-[11px] tracking-[0.22em] uppercase text-console-muted text-center">
-          {film.title} // recursive memory fragment // live loop
-        </p>
+
+        <div className="relative z-20 flex h-full flex-col items-center justify-center gap-4">
+          <div className="pixel-core-shell">
+            <div className="pixel-core-grid pixel-art" />
+            <div className="pixel-core-vignette" />
+            <div className="pixel-core-scan" />
+            {motifs.map((motif, index) => (
+              <span
+                key={`${film.id}-motif-${index}`}
+                className={`pixel-core-motif motif-${index + 1}`}
+                style={{ color: index % 2 ? dreamGlow : '#d5edf4' }}
+              >
+                {motif}
+              </span>
+            ))}
+          </div>
+          <p className="text-[10px] md:text-[11px] tracking-[0.22em] uppercase text-console-muted text-center">
+            {film.title} // recursive memory fragment // live loop
+          </p>
+        </div>
       </div>
     </div>
   )
@@ -262,11 +368,12 @@ function Layer3View({ film, onSurface, onDeeper }) {
 
   return (
     <div
-      className="flex flex-col h-full dream-layer-deep"
+      className="flex flex-col h-full relative dream-layer-deep"
       style={{
         background: `radial-gradient(ellipse at 60% 10%, ${d.dream_glow}1f 0%, transparent 42%), radial-gradient(ellipse at 20% 20%, ${d.dream_color}38 0%, #020206 68%)`,
       }}
     >
+      <DreamLayerGlitches level={3} glowColor={d.dream_glow} />
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${d.dream_color}60`, borderStyle: 'dashed' }}>
@@ -370,6 +477,7 @@ function Layer2View({ film, onSurface, onDeeper }) {
       className="flex flex-col h-full relative dream-layer-mid"
       style={{ background: `radial-gradient(ellipse at 70% 0%, ${p.dream_glow}18 0%, transparent 44%), radial-gradient(ellipse at 30% 15%, ${p.dream_color}24 0%, #050509 66%)` }}
     >
+      <DreamLayerGlitches level={2} glowColor={p.dream_glow} />
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -508,6 +616,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
 
   return (
     <div className="flex flex-col h-full relative">
+      <DreamLayerGlitches level={1} glowColor={film.glowColor} />
       {layer === '1to2' && (
         <DreamTransition
           pulseMs={1540}
@@ -615,11 +724,25 @@ function DossierView({ film, onClose, onGoToShelf }) {
 }
 
 // ── ROOT ──────────────────────────────────────────────────────────────────────
-export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf }) {
+export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf, jokerGlitchTick = 0 }) {
+  const [showJokerGlitch, setShowJokerGlitch] = useState(false)
+
+  useEffect(() => {
+    if (!film || film.id !== 'the-dark-knight' || !jokerGlitchTick) return
+    setShowJokerGlitch(true)
+    const id = window.setTimeout(() => setShowJokerGlitch(false), 220)
+    return () => window.clearTimeout(id)
+  }, [film, jokerGlitchTick])
+
   return (
     <div className="console-screen flex-1 h-full relative">
       <div className="absolute inset-0 pointer-events-none z-10"
         style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%)' }} />
+      {showJokerGlitch && (
+        <div className="joker-glitch-overlay" aria-hidden>
+          <span className="joker-glitch-text">HA</span>
+        </div>
+      )}
 
       {!film ? (
         <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
