@@ -151,217 +151,219 @@ html, body {
   min-height: 142px;
 }
 
-/* Circular glass-cased archive disc + tape label + metal hub */
+/* Archive disc: strict circle, geometric center hub, tape sticker in upper band */
 .archive-disc {
   --film-color: #6ab4dc;
   position: relative;
-  width: min(100%, 118px);
-  aspect-ratio: 1;
-  max-width: 118px;
-  border-radius: 50%;
+  width: 108px;
+  height: 108px;
+  max-width: min(100%, 108px);
+  margin-inline: auto;
   flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
   isolation: isolate;
-  filter: saturate(1.12) contrast(1.03);
+  box-shadow:
+    0 0 0 1px rgba(188, 202, 224, 0.38),
+    0 0 0 2px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 8px 20px rgba(0, 0, 0, 0.42);
+  filter: contrast(1.03);
 }
 
-.archive-disc-glass {
+.archive-disc-platter {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  pointer-events: none;
   z-index: 0;
-}
-
-.archive-disc-glass-inner {
-  position: absolute;
-  inset: 3px;
-  border-radius: 50%;
+  pointer-events: none;
   background:
-    radial-gradient(ellipse 120% 90% at 30% 22%, rgba(255, 255, 255, 0.38) 0%, transparent 48%),
-    radial-gradient(circle at 72% 78%, rgba(255, 255, 255, 0.1) 0%, transparent 42%),
+    radial-gradient(circle at 50% 32%, rgba(255, 255, 255, 0.28) 0%, transparent 42%),
+    radial-gradient(circle at 50% 112%, rgba(0, 0, 0, 0.45) 0%, transparent 52%),
+    radial-gradient(ellipse 88% 55% at 50% 48%, rgba(255, 255, 255, 0.06) 0%, transparent 62%),
     linear-gradient(
       168deg,
-      var(--disc-glass-a, rgba(120, 170, 220, 0.35)) 0%,
-      var(--disc-glass-b, rgba(10, 14, 22, 0.96)) 52%,
-      rgba(4, 6, 10, 0.98) 100%
+      var(--disc-glass-a, rgba(120, 170, 220, 0.38)) 0%,
+      var(--disc-glass-b, rgba(10, 14, 22, 0.96)) 55%,
+      rgba(3, 5, 9, 0.99) 100%
     );
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-    inset 0 -18px 32px rgba(0, 0, 0, 0.42);
-}
-
-.archive-disc-glass-rim {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 1px rgba(200, 220, 240, 0.28),
-    0 0 0 2px rgba(0, 0, 0, 0.35),
     inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 2px 6px rgba(255, 255, 255, 0.14),
-    inset 0 -10px 22px rgba(0, 0, 0, 0.5);
+    inset 0 -14px 28px rgba(0, 0, 0, 0.38);
 }
 
-.archive-disc-tape {
-  position: absolute;
-  left: 50%;
-  top: 7%;
-  width: 92%;
-  max-width: 108px;
-  transform: translateX(-50%) rotate(-1.25deg);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.1em;
-  padding: 0.35em 0.45em 0.42em;
-  border-radius: 5px 4px 6px 5px;
-  border: 1px solid color-mix(in srgb, var(--disc-ink, #0a0c12) 18%, rgba(255, 255, 255, 0.35));
-  background:
-    repeating-linear-gradient(
-      95deg,
-      var(--disc-label-stripe, rgba(255, 255, 255, 0.22)) 0 1px,
-      transparent 1px 7px
-    ),
-    linear-gradient(
-      168deg,
-      var(--disc-label-a, #8ec4e8) 0%,
-      var(--disc-label-b, #6aa8d4) 42%,
-      var(--disc-label-c, #3a6a8a) 100%
-    );
-  box-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.22),
-    0 6px 12px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
-}
-
-.archive-disc-tape-code {
-  font-size: clamp(0.62rem, 2.8cqi + 0.35rem, 0.78rem);
-  line-height: 1.05;
-  letter-spacing: 0.12em;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--disc-ink-soft, #1a1f28);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
-  opacity: 0.92;
-}
-
-.archive-disc-tape-title {
-  font-size: clamp(0.95rem, 5.5cqi + 0.45rem, 1.35rem);
-  line-height: 1.05;
-  font-weight: 700;
-  text-align: center;
-  text-transform: none;
-  letter-spacing: 0.02em;
-  color: var(--disc-ink, #06080c);
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.42),
-    0 2px 6px color-mix(in srgb, var(--film-color) 25%, transparent);
-  max-width: 100%;
-  word-break: break-word;
-  hyphens: auto;
-  padding: 0 0.05em;
-}
-
+/* Hub: exact center of disc (not offset toward bottom) */
 .archive-disc-metal {
   position: absolute;
   left: 50%;
-  top: 58%;
+  top: 50%;
+  width: 38%;
+  height: 38%;
   transform: translate(-50%, -50%);
-  width: 46%;
-  max-width: 52px;
-  aspect-ratio: 1;
-  z-index: 1;
+  z-index: 2;
   border-radius: 50%;
+  pointer-events: none;
   background:
     conic-gradient(
-      from 200deg,
-      #3d424a 0deg,
-      #c8ccd4 36deg,
-      #6a7078 72deg,
-      #eceef3 108deg,
-      #525860 144deg,
-      #aeb4be 180deg,
-      #454a52 216deg,
-      #d8dce4 252deg,
-      #5c626a 288deg,
-      #9ea4ae 324deg,
-      #3d424a 360deg
+      from 198deg,
+      #3a3f47 0deg,
+      #c4c8d0 34deg,
+      #656b74 68deg,
+      #eef0f4 102deg,
+      #4d525a 136deg,
+      #b4bac4 170deg,
+      #434850 204deg,
+      #dcdfe6 238deg,
+      #585e66 272deg,
+      #9ea5ae 306deg,
+      #3a3f47 360deg
     );
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-    inset 0 -8px 16px rgba(0, 0, 0, 0.5),
-    0 5px 10px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(0, 0, 0, 0.35);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.24),
+    inset 0 -7px 14px rgba(0, 0, 0, 0.52),
+    0 4px 9px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.4);
 }
 
 .archive-disc-metal-hub {
   position: absolute;
   left: 50%;
   top: 50%;
+  width: 36%;
+  height: 36%;
   transform: translate(-50%, -50%);
-  width: 34%;
-  height: 34%;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 32%, #2a3038 0%, #0a0c10 72%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.75);
+  background: radial-gradient(circle at 38% 34%, #323842 0%, #07090e 78%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 7px rgba(0, 0, 0, 0.82);
 }
 
+/* Tape: horizontal sticker inside circle, centered, above hub — no clip-path drift */
+.archive-disc-tape {
+  position: absolute;
+  left: 50%;
+  top: 9%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 78%;
+  max-width: 82px;
+  box-sizing: border-box;
+  padding: 0.32em 0.42em 0.36em;
+  border-radius: 3px;
+  background-color: var(--disc-tape-face, #5ab0e8);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 45%, rgba(0, 0, 0, 0.06) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.45),
+    0 3px 6px rgba(0, 0, 0, 0.35),
+    inset 0 -1px 0 var(--disc-tape-edge, rgba(0, 0, 0, 0.22));
+}
+
+.archive-disc-tape-line-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 1.05em;
+  overflow: hidden;
+}
+
+.archive-disc-tape-line {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25em;
+  white-space: nowrap;
+  line-height: 1;
+  max-width: 100%;
+  transform-origin: center center;
+  font-size: clamp(0.62rem, 4.2cqi + 0.32rem, 0.88rem);
+  letter-spacing: 0.02em;
+  color: var(--disc-ink, #0c0614);
+  text-shadow: var(--disc-line-shadow, 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.archive-disc-tape-code {
+  flex-shrink: 0;
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--disc-ink-muted, #1a1424);
+  opacity: 0.95;
+}
+
+.archive-disc-tape-sep {
+  flex-shrink: 0;
+  width: 0.22em;
+  opacity: 0.35;
+}
+
+.archive-disc-tape-title {
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  text-transform: uppercase;
+}
+
+.archive-disc-tape-locked-char {
+  font-size: clamp(1.05rem, 7cqi + 0.35rem, 1.45rem);
+  line-height: 1;
+  color: var(--disc-ink, #0c0614);
+  text-shadow: var(--disc-line-shadow, 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* Motif: centered in lower half so it does not fight the hub */
 .archive-disc-emoji {
   position: absolute;
-  right: 9%;
-  bottom: 10%;
-  z-index: 3;
-  font-size: clamp(0.72rem, 3.2cqi + 0.35rem, 0.95rem);
+  left: 50%;
+  bottom: 11%;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-size: clamp(0.68rem, 3.4cqi + 0.3rem, 0.88rem);
   line-height: 1;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
   pointer-events: none;
 }
 
 .archive-disc-shine {
   position: absolute;
-  inset: 5%;
+  inset: 0;
   border-radius: 50%;
-  z-index: 4;
+  z-index: 5;
   pointer-events: none;
   background: linear-gradient(
-    128deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(255, 255, 255, 0.06) 28%,
-    transparent 46%,
+    125deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 26%,
+    transparent 44%,
     transparent 58%,
-    rgba(255, 255, 255, 0.04) 100%
+    rgba(255, 255, 255, 0.03) 100%
   );
   mix-blend-mode: soft-light;
 }
 
-.archive-disc--loaded .archive-disc-glass-rim {
+.archive-disc--loaded {
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--disc-rim-lit) 70%, rgba(200, 220, 255, 0.5)),
-    0 0 0 2px rgba(0, 0, 0, 0.32),
-    0 0 18px 2px var(--disc-glow),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    inset 0 2px 6px rgba(255, 255, 255, 0.16),
-    inset 0 -10px 22px rgba(0, 0, 0, 0.48);
+    0 0 0 1px color-mix(in srgb, var(--disc-rim-lit) 75%, rgba(220, 235, 255, 0.55)),
+    0 0 0 2px rgba(0, 0, 0, 0.48),
+    0 0 18px 3px var(--disc-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 22px rgba(0, 0, 0, 0.4);
 }
 
 .archive-disc--loaded .archive-disc-tape {
   box-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.28),
-    0 6px 14px rgba(0, 0, 0, 0.38),
-    0 0 0 1px color-mix(in srgb, var(--disc-accent) 55%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.32),
+    0 0 0 1px color-mix(in srgb, var(--disc-accent) 50%, transparent),
+    inset 0 -1px 0 var(--disc-tape-edge, rgba(0, 0, 0, 0.22));
 }
 
 .archive-disc--locked {
-  filter: saturate(0.85) brightness(0.92);
-}
-
-.archive-disc--locked .archive-disc-tape-title {
-  font-size: clamp(1.35rem, 7cqi + 0.5rem, 1.85rem);
-  line-height: 1;
+  filter: saturate(0.92) brightness(0.95);
 }
 
 @media (max-width: 900px) {
@@ -377,12 +379,17 @@ html, body {
   }
 
   .archive-disc {
-    width: min(100%, 128px);
-    max-width: 128px;
+    width: 118px;
+    height: 118px;
+    max-width: min(100%, 118px);
   }
 
-  .archive-disc-tape-title {
-    font-size: clamp(1rem, 6cqi + 0.55rem, 1.42rem);
+  .archive-disc-tape {
+    max-width: 90px;
+  }
+
+  .archive-disc-tape-line {
+    font-size: clamp(0.66rem, 4.8cqi + 0.38rem, 0.95rem);
   }
 }
 
@@ -1115,6 +1122,71 @@ body.contrast-high .panel {
 
 .disc-tray-ready .disc-tray-label {
   color: #d0edf2;
+}
+
+/* Disc flight into tray / reader (Console drop) */
+.disc-insert-flight-anchor {
+  contain: layout style paint;
+}
+
+.disc-insert-flight-disc {
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+.disc-tray-slot[data-ingest] {
+  animation: disc-tray-slot-ingest 0.48s cubic-bezier(0.25, 0.85, 0.35, 1) forwards;
+}
+
+.disc-tray-slot[data-ingest] .disc-tray-groove {
+  animation: disc-tray-groove-ingest 0.48s cubic-bezier(0.25, 0.85, 0.35, 1) forwards;
+}
+
+@keyframes disc-tray-slot-ingest {
+  0% {
+    border-color: #2f4659;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.68), 0 0 12px rgba(74, 124, 158, 0.16);
+  }
+  45% {
+    border-color: #8ec8e8;
+    box-shadow:
+      inset 0 2px 10px rgba(0, 0, 0, 0.55),
+      0 0 28px rgba(120, 200, 255, 0.55),
+      0 0 0 1px rgba(180, 230, 255, 0.35);
+  }
+  100% {
+    border-color: #2f4659;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.68), 0 0 12px rgba(74, 124, 158, 0.16);
+  }
+}
+
+@keyframes disc-tray-groove-ingest {
+  0% {
+    transform: scaleY(1);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+  }
+  40% {
+    transform: scaleY(1.85);
+    box-shadow:
+      inset 0 0 12px rgba(0, 0, 0, 0.45),
+      0 0 18px rgba(106, 180, 220, 0.65);
+  }
+  100% {
+    transform: scaleY(1);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+  }
+}
+
+body.motion-min .disc-tray-slot[data-ingest],
+body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disc-tray-slot[data-ingest],
+  .disc-tray-slot[data-ingest] .disc-tray-groove {
+    animation: none !important;
+  }
 }
 
 @keyframes tray-open {

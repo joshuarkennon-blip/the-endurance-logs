@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import DiscShelf from './DiscShelf'
+import DiscInsertFlight from './DiscInsertFlight'
 import LogScreen from './LogScreen'
 import CaseChat from './CaseChat'
 import { useAudioEngine } from './AudioEngine'
@@ -16,6 +17,8 @@ export default function Console({ films, registerStopAll }) {
   const [mobileView, setMobileView]   = useState('shelf') // 'shelf' | 'screen'
   const [audioReady, setAudioReady]   = useState(false)
   const [jokerGlitchTick, setJokerGlitchTick] = useState(0)
+  const [insertFlight, setInsertFlight] = useState(null)
+  const [trayIngest, setTrayIngest]     = useState(false)
   const [settings, setSettings]       = useState({
     fxMode: 'full',       // full | lite | off
     motionMode: 'full',   // full | reduced
@@ -115,20 +118,60 @@ export default function Console({ films, registerStopAll }) {
     playLoadTrigger(film.id)
   }, [loadedFilm, playLoadTrigger])
 
-  const handleDrop = useCallback((e) => {
-    e.preventDefault()
-    setDropActive(false)
-    setDraggingId(null)
-    setTrayClosing(true)
-    if (trayCloseTimer.current) clearTimeout(trayCloseTimer.current)
-    trayCloseTimer.current = setTimeout(() => {
-      setTrayClosing(false)
-      trayCloseTimer.current = null
-    }, 260)
-    const filmId = e.dataTransfer.getData('filmId')
-    const film = films.find(f => f.id === filmId)
-    loadFilm(film)
-  }, [films, loadFilm])
+  const handleDrop = useCallback(
+    (e) => {
+      e.preventDefault()
+      setDropActive(false)
+      setDraggingId(null)
+      setTrayClosing(true)
+      if (trayCloseTimer.current) clearTimeout(trayCloseTimer.current)
+      trayCloseTimer.current = setTimeout(() => {
+        setTrayClosing(false)
+        trayCloseTimer.current = null
+      }, 260)
+
+      const filmId = e.dataTransfer.getData('filmId')
+      const film = films.find((f) => f.id === filmId)
+      if (!film) return
+
+      if (film.id === loadedFilm?.id) return
+
+      const reduceMotion =
+        typeof window !== 'undefined' &&
+        (document.body.classList.contains('motion-min') ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+
+      if (reduceMotion) {
+        loadFilm(film)
+        return
+      }
+
+      const dropEl = e.currentTarget
+      const groove = dropEl.querySelector?.('.disc-tray-groove')
+      let endX
+      let endY
+      if (groove) {
+        const r = groove.getBoundingClientRect()
+        endX = r.left + r.width / 2
+        endY = r.top + r.height / 2
+      } else {
+        const r = dropEl.getBoundingClientRect()
+        endX = r.left + r.width / 2
+        endY = r.top + r.height * 0.38
+      }
+
+      playUI('tick')
+      setInsertFlight({
+        key: Date.now(),
+        film,
+        startX: e.clientX,
+        startY: e.clientY,
+        endX,
+        endY,
+      })
+    },
+    [films, loadedFilm?.id, loadFilm, playUI],
+  )
 
   useEffect(() => {
     return () => {
@@ -162,6 +205,24 @@ export default function Console({ films, registerStopAll }) {
 
   return (
     <div className="relative w-full h-full flex flex-col" onClick={unlockAudio}>
+      {insertFlight ? (
+        <DiscInsertFlight
+          key={insertFlight.key}
+          film={insertFlight.film}
+          startX={insertFlight.startX}
+          startY={insertFlight.startY}
+          endX={insertFlight.endX}
+          endY={insertFlight.endY}
+          onDone={() => {
+            const f = insertFlight.film
+            setInsertFlight(null)
+            setTrayIngest(true)
+            window.setTimeout(() => setTrayIngest(false), 480)
+            loadFilm(f)
+          }}
+        />
+      ) : null}
+
       <div id="case-easter-egg" />
 
       {/* ── TOP BAR ── */}
@@ -239,7 +300,7 @@ export default function Console({ films, registerStopAll }) {
             <div
               className={`disc-tray shelf-disc-tray ${draggingId ? 'open' : ''} ${dropActive ? 'disc-tray-ready' : ''} ${trayClosing ? 'closing' : ''}`}
             >
-              <div className="disc-tray-slot">
+              <div className="disc-tray-slot" data-ingest={trayIngest ? '1' : undefined}>
                 <div className="disc-tray-groove" />
               </div>
               <p className="disc-tray-label">
