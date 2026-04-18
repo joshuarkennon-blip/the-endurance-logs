@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { Permanent_Marker } from 'next/font/google'
 
 const tapeMarker = Permanent_Marker({
@@ -21,30 +21,44 @@ function discHoverMotionOff() {
 /** Pointer tilt + lift; pauses while dragging or when motion/FX reduced. */
 function HoverReactiveDisc({ children, interactionActive, locked = false }) {
   const [tilt, setTilt] = useState({ rx: 0, ry: 0, lift: 0, s: 1 })
+  const pendingRaf = useRef(null)
 
   const apply = useCallback((clientX, clientY, el) => {
     if (discHoverMotionOff() || !interactionActive || !el) return
-    const r = el.getBoundingClientRect()
-    const px = (clientX - r.left) / Math.max(1, r.width) - 0.5
-    const py = (clientY - r.top) / Math.max(1, r.height) - 0.5
-    const cap = locked ? 0.38 : 1
-    const maxRx = 12 * cap
-    const maxRy = 14 * cap
-    setTilt({
-      rx: Math.max(-maxRx, Math.min(maxRx, -py * 2.2 * maxRx)),
-      ry: Math.max(-maxRy, Math.min(maxRy, px * 2.2 * maxRy)),
-      lift: locked ? -3 : -6,
-      s: locked ? 1.03 : 1.05,
+    if (pendingRaf.current !== null) return
+    pendingRaf.current = requestAnimationFrame(() => {
+      pendingRaf.current = null
+      if (!el.isConnected) return
+      const r = el.getBoundingClientRect()
+      const px = (clientX - r.left) / Math.max(1, r.width) - 0.5
+      const py = (clientY - r.top) / Math.max(1, r.height) - 0.5
+      const cap = locked ? 0.38 : 1
+      const maxRx = 12 * cap
+      const maxRy = 14 * cap
+      setTilt({
+        rx: Math.max(-maxRx, Math.min(maxRx, -py * 2.2 * maxRx)),
+        ry: Math.max(-maxRy, Math.min(maxRy, px * 2.2 * maxRy)),
+        lift: locked ? -3 : -6,
+        s: locked ? 1.03 : 1.05,
+      })
     })
   }, [interactionActive, locked])
 
   const reset = useCallback(() => {
+    if (pendingRaf.current !== null) {
+      cancelAnimationFrame(pendingRaf.current)
+      pendingRaf.current = null
+    }
     setTilt({ rx: 0, ry: 0, lift: 0, s: 1 })
   }, [])
 
   useEffect(() => {
     if (!interactionActive) reset()
   }, [interactionActive, reset])
+
+  useEffect(() => () => {
+    if (pendingRaf.current !== null) cancelAnimationFrame(pendingRaf.current)
+  }, [])
 
   const off = discHoverMotionOff() || !interactionActive
   const popped = tilt.lift !== 0 || tilt.rx !== 0 || tilt.ry !== 0

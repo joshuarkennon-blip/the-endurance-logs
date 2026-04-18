@@ -3,6 +3,11 @@
 import { useEffect, useRef } from 'react'
 import { hexToRgb } from '../lib/cursorFilm'
 
+function isTouchOnlyDevice() {
+  if (typeof window === 'undefined') return true
+  return window.matchMedia('(hover: none) and (pointer: coarse)').matches
+}
+
 function trailDisabled() {
   if (typeof document === 'undefined') return true
   return (
@@ -11,9 +16,6 @@ function trailDisabled() {
   )
 }
 
-/**
- * Soft glow trail following the cursor. Tint follows `accentHex` when a film is active.
- */
 export default function CursorGlowTrail({ accentHex = null }) {
   const canvasRef = useRef(null)
   const ptsRef = useRef([])
@@ -22,12 +24,15 @@ export default function CursorGlowTrail({ accentHex = null }) {
   accentRef.current = accentHex
 
   useEffect(() => {
+    if (isTouchOnlyDevice()) return
+
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     let raf = 0
+    let rafScheduled = false
     const MAX_POINTS = 36
     const LIFETIME_MS = 380
     const MIN_DIST = 3
@@ -43,7 +48,13 @@ export default function CursorGlowTrail({ accentHex = null }) {
       canvas.style.height = `${h}px`
     }
     resize()
-    window.addEventListener('resize', resize)
+
+    let resizeTimer = 0
+    const onResize = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(resize, 100)
+    }
+    window.addEventListener('resize', onResize, { passive: true })
 
     const onMove = (e) => {
       if (trailDisabled()) {
@@ -55,28 +66,39 @@ export default function CursorGlowTrail({ accentHex = null }) {
       if (last && Math.hypot(e.clientX - last.x, e.clientY - last.y) < MIN_DIST) return
       pts.push({ x: e.clientX, y: e.clientY, t: performance.now() })
       while (pts.length > MAX_POINTS) pts.shift()
+
+      if (!rafScheduled) {
+        rafScheduled = true
+        raf = requestAnimationFrame(tick)
+      }
     }
 
     window.addEventListener('mousemove', onMove, { passive: true })
 
     const tick = () => {
+      rafScheduled = false
       const now = performance.now()
       const { w, h, dpr } = sizeRef.current
+      const disabled = trailDisabled()
 
-      if (trailDisabled()) {
+      if (disabled) {
         ptsRef.current = []
       } else {
         ptsRef.current = ptsRef.current.filter((p) => now - p.t < LIFETIME_MS)
       }
 
+      const pts = ptsRef.current
+
+      if (pts.length === 0 && disabled) return
+
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.clearRect(0, 0, w, h)
 
-      if (!trailDisabled()) {
+      if (!disabled && pts.length > 0) {
         const hex = accentRef.current
         const [r, g, b] = hex ? hexToRgb(hex) : [255, 255, 255]
 
-        for (const p of ptsRef.current) {
+        for (const p of pts) {
           const age = now - p.t
           const a = 1 - age / LIFETIME_MS
           if (a <= 0) continue
@@ -95,16 +117,19 @@ export default function CursorGlowTrail({ accentHex = null }) {
           ctx.arc(p.x, p.y, rad, 0, Math.PI * 2)
           ctx.fill()
         }
-      }
 
-      raf = requestAnimationFrame(tick)
+        if (pts.length > 0) {
+          rafScheduled = true
+          raf = requestAnimationFrame(tick)
+        }
+      }
     }
-    raf = requestAnimationFrame(tick)
 
     return () => {
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', onResize)
       window.removeEventListener('mousemove', onMove)
       cancelAnimationFrame(raf)
+      clearTimeout(resizeTimer)
     }
   }, [])
 
