@@ -19,9 +19,32 @@ const EASTER_EGG_TRIGGERS = [
   'log playback',
 ]
 
+const SESSION_KEY = 'case-session'
+const SESSION_CAP = 15
+const SESSION_WINDOW_MS = 30 * 60 * 1000
+
+function getCount() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY)
+    if (!raw) return 0
+    const { count, expires } = JSON.parse(raw)
+    if (Date.now() > expires) { localStorage.removeItem(SESSION_KEY); return 0 }
+    return count ?? 0
+  } catch { return 0 }
+}
+
+function bump() {
+  const next = getCount() + 1
+  localStorage.setItem(SESSION_KEY, JSON.stringify({
+    count: next,
+    expires: Date.now() + SESSION_WINDOW_MS,
+  }))
+  return next
+}
+
 function isEasterEggTrigger(text) {
   const lower = text.toLowerCase()
-  return EASTER_EGG_TRIGGERS.some(trigger => lower.includes(trigger))
+  return EASTER_EGG_TRIGGERS.some((trigger) => lower.includes(trigger))
 }
 
 export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggClose }) {
@@ -29,87 +52,114 @@ export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggCl
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
   const [activeFilm, setActiveFilm] = useState(null)
+  const [isStreaming, setIsStreaming] = useState(false)
+  const [streamText, setStreamText] = useState('')
   const scrollRef = useRef(null)
   const inputRef = useRef(null)
+  const apiMessages = useRef([])
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [messages, isActive])
+  }, [messages, isActive, streamText])
 
   useEffect(() => {
-    if (isActive && inputRef.current) inputRef.current.focus()
-  }, [isActive, messages])
+    if (isActive && !isStreaming && inputRef.current) inputRef.current.focus()
+  }, [isActive, isStreaming, messages])
 
   const toggleCase = () => {
     playUI?.('tick')
-    if (isActive) {
-      setIsActive(false)
-      return
-    }
-
+    if (isActive) { setIsActive(false); return }
     setIsActive(true)
-    setMessages(prev => prev.length ? prev : CASE_BOOT_LINES.map(text => ({ role: 'system', text })))
+    setMessages((prev) =>
+      prev.length ? prev : CASE_BOOT_LINES.map((text) => ({ role: 'system', text }))
+    )
     setTimeout(() => inputRef.current?.focus(), 150)
   }
 
   const submitPrompt = async (rawText) => {
     const text = rawText.trim()
-    if (!text) return
+    if (!text || isStreaming) return
+
+    if (getCount() >= SESSION_CAP) {
+      setMessages((prev) => [
+        ...prev,
+        { role: 'case', text: '> C.A.S.E.:\n> SIGNAL LIMIT REACHED.\n> Session threshold at capacity. Reset window: 30 minutes.' },
+      ])
+      return
+    }
 
     playUI?.('tick')
     setInput('')
-    const turnCount = messages.filter(message => message.role === 'user').length
-    let matchedFilm = null
-    let filmToLoad = null
-    let response = ''
+    setIsStreaming(true)
+    setStreamText('')
 
-    try {
-      const apiResponse = await fetch('/api/case', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          input: text,
-          films,
-          activeFilmId: activeFilm?.id || null,
-          turnCount,
-        }),
-      })
+    const turnCount = messages.filter((m) => m.role === 'user').length
+    setMessages((prev) => [...prev, { role: 'user', text: `> user.query: "${text}"` }])
 
-      if (!apiResponse.ok) throw new Error('CASE API failed')
-      const payload = await apiResponse.json()
-      response = payload.response || 'No response generated.'
-      matchedFilm = films.find(film => film.id === payload.matchedFilmId) || null
-      filmToLoad = films.find(film => film.id === payload.filmToLoadId) || null
-    } catch {
-      matchedFilm = inferFilmFromMessage(text, films, activeFilm)
-      const nextActiveFilm = matchedFilm || activeFilm
-      const local = buildCaseResponse(text, films, { activeFilm: nextActiveFilm, turnCount })
-      response = local.response
-      filmToLoad = local.filmToLoad
-    }
-
+    const matchedFilm = inferFilmFromMessage(text, films, activeFilm)
     if (matchedFilm) setActiveFilm(matchedFilm)
 
-    if (filmToLoad && onLoadFilm) {
-      setTimeout(() => onLoadFilm(filmToLoad, { forceReload: true }), 400)
-    }
+    apiMessages.current.push({ role: 'user', content: text })
 
-    setMessages(prev => [
-      ...prev,
-      { role: 'user', text: `> user.query: "${text}"` },
-      { role: 'case', text: `> C.A.S.E.:\n${response.split('\n').map(line => `> ${line}`).join('\n')}` },
-    ])
-    setIsActive(true)
+    let finalText = ''
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: apiMessages.current }),
+      })
+      if (!res.ok || !res.body) throw new Error('API failed')
+
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        finalText += dec.decode(value, { stream: true })
+        setStreamText(finalText)
+      }
+
+      apiMessages.current.push({ role: 'assistant', content: finalText })
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'case',
+          text: `> C.A.S.E.:\n${finalText.split('\n').map((l) => `> ${l}`).join('\n')}`,
+        },
+      ])
+      bump()
+
+      const nextActiveFilm = matchedFilm || activeFilm
+      const local = buildCaseResponse(text, films, { activeFilm: nextActiveFilm, turnCount })
+      if (local.filmToLoad && onLoadFilm) {
+        setTimeout(() => onLoadFilm(local.filmToLoad, { forceReload: true }), 400)
+      }
+    } catch {
+      const nextActiveFilm = matchedFilm || activeFilm
+      const local = buildCaseResponse(text, films, { activeFilm: nextActiveFilm, turnCount })
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'case',
+          text: `> C.A.S.E.:\n${local.response.split('\n').map((l) => `> ${l}`).join('\n')}`,
+        },
+      ])
+      if (local.filmToLoad && onLoadFilm) {
+        setTimeout(() => onLoadFilm(local.filmToLoad, { forceReload: true }), 400)
+      }
+    } finally {
+      setIsStreaming(false)
+      setStreamText('')
+    }
 
     if (isEasterEggTrigger(text)) {
       setTimeout(() => {
         setIsActive(false)
-        mountInterstellarEgg('case-easter-egg', {
-          onOpen: onEggOpen,
-          onClose: onEggClose,
-        })
+        mountInterstellarEgg('case-easter-egg', { onOpen: onEggOpen, onClose: onEggClose })
       }, 900)
     }
   }
@@ -124,10 +174,7 @@ export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggCl
       <button
         type="button"
         className="case-toggle"
-        onClick={(event) => {
-          event.stopPropagation()
-          toggleCase()
-        }}
+        onClick={(event) => { event.stopPropagation(); toggleCase() }}
         aria-expanded={isActive}
         aria-label="Ask C.A.S.E."
       >
@@ -145,6 +192,18 @@ export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggCl
                 ))}
               </div>
             ))}
+
+            {isStreaming && (
+              <div className="case-msg case">
+                {(streamText
+                  ? `> C.A.S.E.:\n${streamText.split('\n').map((l) => `> ${l}`).join('\n')}`
+                  : '> C.A.S.E.: [processing...]'
+                ).split('\n').map((line, i, arr) => (
+                  <p key={i}>{line}{i === arr.length - 1 ? '▋' : ''}</p>
+                ))}
+              </div>
+            )}
+
             <form className="case-input" onSubmit={handleSubmit}>
               <label>&gt; Ask C.A.S.E. ::</label>
               <input
@@ -154,6 +213,7 @@ export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggCl
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="input.stream"
                 aria-label="Ask C.A.S.E. something"
+                disabled={isStreaming}
               />
             </form>
           </div>
