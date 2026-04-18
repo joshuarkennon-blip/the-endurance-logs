@@ -53,20 +53,20 @@ const LOAD_LEVEL_BY_FILM = {
 const FADE_MS = 1200
 
 function readStoredMasterVolume() {
-  if (typeof window === 'undefined') return 1
+  if (typeof window === 'undefined') return 0.35
   try {
     const raw = localStorage.getItem('endurance-master-volume')
     const p = parseFloat(raw)
     if (Number.isFinite(p) && p >= 0 && p <= 1) return p
   } catch (_) {}
-  return 1
+  return 0.35
 }
 
 export function useAudioEngine() {
   const [isMuted, setIsMuted] = useState(false)
-  const [masterVolume, setMasterVolumeState] = useState(1)
+  const [masterVolume, setMasterVolumeState] = useState(0.35)
   const isMutedRef = useRef(isMuted)
-  const masterVolumeRef = useRef(1)
+  const masterVolumeRef = useRef(0.35)
   const idleRef      = useRef(null)
   const ambientRef   = useRef(null)
   const loadSfxRef   = useRef(null)   // track the current one-shot so we can kill it
