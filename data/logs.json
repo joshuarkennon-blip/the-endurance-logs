@@ -6,7 +6,7 @@
     "code": "INT-2014",
     "color": "#4a7c9e",
     "glowColor": "#6ab4dc",
-    "tagline": "Do not go gentle into that good night.",
+    "tagline": "Refuse the fade. Push deeper.",
     "thumbnail": "🌌",
     "themes": ["Love as a Dimension", "Time Dilation", "Gravity & Physics", "Survival"],
     "transmission": "ENDURANCE-LOG-7A",
@@ -58,7 +58,7 @@
     "code": "INC-2010",
     "color": "#7a5c9e",
     "glowColor": "#b08cdc",
-    "tagline": "Your mind is the scene of the crime.",
+    "tagline": "The battlefield is cognitive architecture.",
     "thumbnail": "🌀",
     "themes": ["Dream Logic", "Subconscious Architecture", "Grief", "Shared Dreaming"],
     "transmission": "ENDURANCE-LOG-4C",
@@ -110,7 +110,7 @@
     "code": "TEN-2020",
     "color": "#9e5c4a",
     "glowColor": "#dc8c6a",
-    "tagline": "What's happened, happened.",
+    "tagline": "Causality locks first. Understanding arrives later.",
     "thumbnail": "⏳",
     "themes": ["Fatalism", "Temporal Inversion", "Pincer Movements", "Entropy"],
     "transmission": "ENDURANCE-LOG-9B",
@@ -119,7 +119,7 @@
       "sections": [
         { "heading": "INVERSION: ENTROPY AS WEAPON", "body": "Tenet's central conceit—inverting entropy to move backwards through time—is not presented as magic. It is presented as physics taken to its logical extreme. Inverted objects have reversed entropy: a bullet returns to a gun, a car un-crashes. The film's genius is treating this as industrial capacity rather than miracle. Someone built the algorithm. Someone manufactured the turnstiles. The future went to war by mailing weapons to the past. Inversion is logistics, not sorcery." },
         { "heading": "THE TEMPORAL PINCER MOVEMENT", "body": "The film's climax involves a military operation executed simultaneously forward and backward in time. Two teams at the same location: one moving through the battle chronologically, one experiencing it in reverse. They communicate by pre-arranged signal. The Protagonist does not understand the full operation until he has lived it—because he can only understand the reverse half after he has already completed the forward half. The battle is its own briefing. This is Nolan's most formally rigorous sequence: a narrative structure where comprehension and experience cannot be simultaneous." },
-        { "heading": "FATALISM WITHOUT DESPAIR", "body": "What's happened, happened. This phrase recurs not as resignation but as instruction. The film's characters cannot change the past—they can only understand their role in events that are already fixed. The Protagonist does not prevent Sator from activating the Algorithm. The Protagonist is the reason Sator fails. He was always there. Neil's death at the gate is not tragedy—it is completion. Neil accepted the mission knowing his ending because, from his perspective, the mission was already won. Tenet proposes that foreknowledge of your fate is not a prison. It is a coordinate." },
+        { "heading": "FATALISM WITHOUT DESPAIR", "body": "The film repeats a hard rule: events are fixed, interpretation is not. Characters cannot rewrite the past; they can only locate themselves correctly inside it. The Protagonist doesn't fail to stop Sator so much as complete the loop that defeats him. Neil's final gate decision lands as completion, not melodrama. Tenet frames foreknowledge as burdened clarity rather than hopelessness." },
         { "heading": "THE PROTAGONIST: DELIBERATE ANONYMITY", "body": "The lead character has no name. This is not oversight. It is architecture. He is a function—the initiating force in a closed loop. Giving him a name would suggest an interior life that exists prior to the mission. But the film reveals that the mission made him: he will found Tenet, which will recruit him, which will complete the loop. He is the organization that built him. The anonymity is the only honest thing to call someone who is, structurally, a self-causing effect." }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 201.4° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
@@ -161,7 +161,7 @@
     "code": "MEM-2000",
     "color": "#4a9e5c",
     "glowColor": "#6adc8c",
-    "tagline": "How can you heal if you can't feel time?",
+    "tagline": "Memory fractures first. Identity follows.",
     "thumbnail": "📸",
     "themes": ["Memory Unreliability", "Non-Linear Chronology", "Identity", "Grief"],
     "transmission": "ENDURANCE-LOG-1A",
@@ -202,6 +202,162 @@
         { "heading": "EMMA'S TATTOOS & NOLAN'S OWN CAR", "body": "The tattoo parlor Leonard frequents throughout the film is named Emma's Tattoos — a reference to Nolan's wife, producer Emma Thomas, who has produced every Nolan film since Following. Nolan also parked his own personal white Honda Civic in the lot beside Leonard's Jaguar. Both are on screen for multiple scenes. Nolan hid his marriage and his car inside the background of the film he was making about a man who cannot make new memories." },
         { "heading": "THE FIRST SHOT IS AN EASTER EGG FOR TENET", "body": "Memento opens on an image of a Polaroid photograph being shaken — but the image is fading, not developing. The film is running backwards. In the same sequence, a bullet flies out of a dead man's skull and back into a gun. This shot — entropy reversed, causality inverted — is a direct preview of the central mechanic of Tenet, a film Nolan would not make for another 20 years. He embedded the concept of temporal inversion into the opening frames of Memento in 2000. Nolan has confirmed this was intentional." },
         { "heading": "THE FILM THAT SUNDANCE REJECTED IS IN MoMA'S PERMANENT COLLECTION", "body": "After being passed over by Sundance, Memento was eventually selected for the permanent film collection of the Museum of Modern Art in New York — one of the most selective film archives in the world. MoMA cited the film's formal innovation and its status as a landmark of non-linear narrative cinema. The same film that festival gatekeepers dismissed in 2000 is now preserved alongside Citizen Kane and Vertigo as a defining work of the medium. Sundance's rejection slip is effectively a certificate of distinction." }
+      ],
+      "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
+    }
+  },
+  {
+    "id": "batman-begins",
+    "title": "BATMAN BEGINS",
+    "year": "2005",
+    "code": "BB-2005",
+    "color": "#6b6f78",
+    "glowColor": "#9ca3b0",
+    "tagline": "Identity is built in action, not declared in private.",
+    "thumbnail": "🦇",
+    "themes": ["Fear as Control", "Moral Discipline", "Institutional Rot", "Identity Construction"],
+    "transmission": "ENDURANCE-LOG-2B",
+    "dossier": {
+      "opening": "This transmission tracks the origin of Batman as architecture, not accident. Bruce Wayne does not discover a self; he engineers one with obsessive intent.",
+      "sections": [
+        { "heading": "FEAR AS INFRASTRUCTURE", "body": "The film's central system is fear. Crane weaponizes it chemically, Ra's al Ghul weaponizes it politically, and Bruce weaponizes it theatrically. Gotham's ruling class governs by fear of collapse; Batman interrupts that equilibrium by becoming a fear event the criminal ecosystem cannot price in. The Bat symbol is less emblem than delivery mechanism." },
+        { "heading": "THE LEAGUE'S LOGIC", "body": "The League of Shadows frames destruction as sanitation: when a city becomes irredeemably corrupt, it is to be reset by force. Begins takes this doctrine seriously enough to make it temporarily persuasive. Bruce's rejection matters because he does not deny Gotham's rot; he denies that annihilation is justice. The ethical hinge is method, not diagnosis." },
+        { "heading": "BATMAN AS PERFORMANCE", "body": "Christian Bale's Bruce calibrates three personae: private grief, public incompetence, and nocturnal myth. Nolan emphasizes process over destiny: armor prototypes, memory-cloth cowl, sonar planning, surveillance routes. Batman exists because Bruce treats identity like an iterative engineering problem and keeps shipping versions until one works." },
+        { "heading": "THE TRAIN THROUGH THE CITY", "body": "The elevated rail line is both plot engine and thesis image: a rusted civic system repurposed into a delivery channel for panic. Gotham's infrastructure carries its own undoing. Nolan repeatedly frames the city as a machine no one fully controls, then inserts Batman as a manual override in a failing control room." }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 43.1° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    },
+    "production": {
+      "layer_label": "DREAM LAYER 2 — PRODUCTION ARCHIVE",
+      "dream_color": "#7a7f8a",
+      "dream_glow": "#b4bac5",
+      "opening": "Post-Batman & Robin reset protocol: practical builds, grounded crime texture, and a city assembled from multiple geographies to feel real and unstable at once.",
+      "sections": [
+        { "heading": "THE REBOOT MANDATE", "body": "Warner tasked Nolan with rebuilding the franchise from first principles after the tonal collapse of the 1990s cycle. Nolan and David S. Goyer re-centered the story on causality: where tools come from, why tactics work, how myth is manufactured. Begins is designed as a systems reboot rather than sequel continuity." },
+        { "heading": "CHICAGO AS GOTHAM CORE", "body": "Principal photography used Chicago as Gotham's structural spine, with additional plates and set work blending Iceland and UK stages. The result is a city that feels lived-in and historically layered rather than expressionist fantasy. Street-level realism is part of the persuasion strategy: Batman must appear to occupy the same physics as everyone else." },
+        { "heading": "THE TUMBLER AS MILITARY HARDWARE", "body": "Production built functioning Tumbler vehicles, each weighing roughly 2.5 tons, to execute practical stunts including rooftop jumps. Framing Batman's vehicle as applied Wayne Enterprises R&D grounds spectacle in industrial plausibility. The car is ugly by design: an unfinished war machine repurposed by one man with a vendetta." },
+        { "heading": "BATSUIT ENGINEERING", "body": "Costume and stunt teams optimized mobility, cape behavior, and silhouette readability under low light. Nolan's rule set prioritized weight and friction over comic-book elasticity, making every movement feel constrained and expensive. Physical limitations become character language: Batman appears formidable because each action seems to cost effort." },
+        { "heading": "SCORE DUALITY: ZIMMER + HOWARD", "body": "Hans Zimmer and James Newton Howard split thematic labor between propulsion and emotional architecture. Rather than a single heroic melody, the score builds Batman from texture and pulse. This avoids triumphant certainty; the music sounds like an idea still stabilizing, which matches Bruce's incomplete identity state by film's end." },
+        { "heading": "PRACTICAL EFFECTS FIRST", "body": "Nolan favored in-camera action, miniature integration, and limited digital intervention to preserve impact. The Narrows climax combines large-scale set pieces with restrained CG extension so the fear-toxin chaos feels physically anchored. Begins established the trilogy's production doctrine: practical base layer, digital augmentation only where necessary." }
+      ],
+      "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AFI CATALOG, AMERICAN CINEMATOGRAPHER, EMPIRE INTERVIEWS, WB PRODUCTION NOTES"
+    },
+    "deepcuts": {
+      "layer_label": "DREAM LAYER 3 — SIGNAL DEPTH: CRITICAL",
+      "dream_color": "#3d424d",
+      "dream_glow": "#9aa2af",
+      "opening": "Beneath the origin beats, Begins hides recurring Nolan obsessions: systems collapse, procedural improvisation, and identity as a designed artifact.",
+      "sections": [
+        { "heading": "THE BAT SWARM IS A MEMORY ENGINE", "body": "Bruce's childhood fall through the well is replayed as trauma data, then recompiled into tactical language. Nolan turns a phobia into operating software. The swarm is not symbolic mood dressing; it is the moment fear becomes a reusable interface." },
+        { "heading": "GOTHAM'S WATER GRID AS ATTACK SURFACE", "body": "Ra's plan depends on infrastructure mapping and delayed deployment, not brute force. The microwave emitter and toxin distribution read like a city-scale exploit chain. Begins quietly anticipates modern cybersecurity logic: compromise plumbing, weaponize normal service pathways." },
+        { "heading": "BRUCE'S PUBLIC IDIOT ROUTINE", "body": "The playboy facade is not comic relief; it is counterintelligence. By signaling frivolity, Bruce lowers adversary scrutiny and widens operational freedom. The film repeatedly shows him spending reputation as a resource, which is one of the trilogy's most consistent strategic behaviors." },
+        { "heading": "ALFRED AS ETHICS FAILSAFE", "body": "Alfred functions as Bruce's human redundancy system. When mission logic drifts toward absolutism, Alfred reasserts human cost. Nolan gives Batman technical escalation tools but installs an interpersonal brake to keep the project from collapsing into League doctrine." },
+        { "heading": "THE FINAL TRAIN DECISION", "body": "Bruce's refusal to execute Ra's directly while engineering conditions for his death is ethically unresolved by design. The line 'I won't kill you, but I don't have to save you' is a policy statement, not a victory quote. Begins ends by codifying Batman's moral loophole." },
+        { "heading": "JOKER CARD AS SYSTEM ALERT", "body": "The closing tease is structurally precise: Gordon introduces escalation as a consequence, not sequel bait. Batman stabilizes one layer of Gotham and triggers a higher-order adversary. Cause-and-effect remains the governing rule." }
+      ],
+      "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
+    }
+  },
+  {
+    "id": "the-dark-knight",
+    "title": "THE DARK KNIGHT",
+    "year": "2008",
+    "code": "TDK-2008",
+    "color": "#4a5a74",
+    "glowColor": "#88a9d6",
+    "tagline": "Rule systems fail fastest under pressure.",
+    "thumbnail": "🃏",
+    "themes": ["Chaos vs Order", "Surveillance Ethics", "Sacrifice", "Moral Contagion"],
+    "transmission": "ENDURANCE-LOG-3C",
+    "dossier": {
+      "opening": "This transmission examines escalation. Batman's presence professionalizes both policing and crime, then summons an antagonist whose strategy is to dissolve the very idea of stable rules.",
+      "sections": [
+        { "heading": "JOKER AS STRESS TEST", "body": "The Joker is less character than adversarial protocol. He probes institutions for contradiction, then forces visible failure. Every set piece is a live-fire audit: mob finance, police integrity, judicial process, media narratives, public trust. The question is never 'can he be stopped' but 'what breaks first while stopping him.'" },
+        { "heading": "HARVEY DENT'S FALL", "body": "Dent embodies the fantasy that lawful structures can absorb corruption without becoming it. His transformation into Two-Face demonstrates the fragility of that premise under concentrated trauma. Nolan treats moral collapse as incremental, procedural, and socially contagious." },
+        { "heading": "THE SONAR NETWORK", "body": "Lucius Fox's ethical objection to Batman's citywide sonar surveillance marks the film's sharpest line on emergency power. The system works tactically and fails civically. TDK argues that tools that save a night can still poison a city if normalized beyond that night." },
+        { "heading": "THE FERRY EXPERIMENT", "body": "The two-ferry climax is often read as optimism, but its deeper force is uncertainty. Civilians and prisoners both hesitate at the edge of atrocity, not because systems protected them, but because individuals improvised decency under impossible incentives. The film grants no stable framework for that outcome repeating." }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 71.6° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    },
+    "production": {
+      "layer_label": "DREAM LAYER 2 — PRODUCTION ARCHIVE",
+      "dream_color": "#5a6a86",
+      "dream_glow": "#9fbce6",
+      "opening": "Scale increase protocol: larger practical stunts, expanded IMAX footprint, and villain performance engineered for volatility and precision.",
+      "sections": [
+        { "heading": "HEATH LEDGER'S JOKER DESIGN", "body": "Ledger built the Joker from contradictory vectors: controlled vocal rhythm, unpredictable physicality, and improvised tactical beats. Makeup and wardrobe favored abrasion over stylization, reinforcing a sense of somebody assembled from damage and intention. Performance and production design converge on the same thesis: chaos is curated." },
+        { "heading": "IMAX AS NARRATIVE INTENSIFIER", "body": "TDK pioneered extensive use of IMAX cameras for major action sequences, including the opening heist and key city operations. Larger format wasn't used merely for spectacle; Nolan deploys it to increase spatial legibility during complex moral and tactical beats." },
+        { "heading": "REAL TRUCK FLIP", "body": "The semi-truck flip in downtown Chicago was executed practically using pneumatic rigging and controlled street engineering. Nolan's insistence on in-camera impact creates a tactile event impossible to fully fake. The scene reads as physically impossible and physically undeniable at once." },
+        { "heading": "CITY AS WARROOM", "body": "Production leaned heavily into real urban locations, blending Chicago detail with Gotham myth. Glass towers, service alleys, and civic interiors become strategic nodes in a city-wide contest. The geography remains coherent enough that tactics feel consequential." },
+        { "heading": "SCORE: SHEPARD-TONE ANXIETY", "body": "Zimmer and Howard used rising tonal structures and abrasive string textures to sustain unresolved tension. Joker-associated cues avoid melodic comfort and instead generate perpetual ascent, mirroring the character's logic: no endpoint, only escalation." },
+        { "heading": "PRACTICAL-DESTRUCTION BALANCE", "body": "Large effects moments—hospital collapse, armored convoy attacks, aerial extraction—combine practical execution with tightly scoped digital enhancement. The trilogy's production doctrine matures here: practical first for credibility, digital second for precision." }
+      ],
+      "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AMERICAN CINEMATOGRAPHER, EMPIRE, THE ART AND MAKING OF THE DARK KNIGHT, WB FEATURETTES"
+    },
+    "deepcuts": {
+      "layer_label": "DREAM LAYER 3 — SIGNAL DEPTH: CRITICAL",
+      "dream_color": "#2e3a4f",
+      "dream_glow": "#7fa3d4",
+      "opening": "TDK hides systemic arguments inside action geometry: who controls information, who accepts blame, and who gets to define legitimacy after catastrophe.",
+      "sections": [
+        { "heading": "BANK HEIST AS GOVERNANCE MODEL", "body": "The opening heist functions as institutional prelude. Criminal labor is segmented, anonymized, and disposable, mirroring how larger systems treat operators under stress. Joker's betrayal ladder is a compressed model of extractive management." },
+        { "heading": "BATMAN'S FALSE BINARY", "body": "Bruce frames choices as protect Rachel or protect Dent; save one ferry or lose both; reveal identity or trigger deaths. Joker's core tactic is manufacturing binary constraints where no ethical binary exists, forcing Batman into suboptimal action regardless of intent." },
+        { "heading": "DENT ACT AS MEMORY FIREWALL", "body": "Gordon and Batman preserve Dent's image to maintain institutional legitimacy, effectively deploying a myth patch over systemic failure. The lie stabilizes governance in the short term while accruing deferred moral debt—debt Rises later collects in full." },
+        { "heading": "JOKER'S ORIGIN STORIES", "body": "Contradictory scar narratives are not mystery-box trivia; they are anti-forensic strategy. By flooding the record with unstable self-reporting, Joker denies institutions a usable profile and forces response to behavior only, never motive." },
+        { "heading": "FOX AS CIVIC CONSCIENCE", "body": "Fox's agreement to use the sonar machine once, then destroy it, creates a procedural boundary Batman cannot set for himself. Without Fox, Batman's toolkit trends toward permanent exception. The film quietly assigns constitutional thinking to a private executive." },
+        { "heading": "ENDING AS SACRIFICIAL POLITICS", "body": "Batman taking the blame for Dent's crimes is less martyrdom than public-safety calculus: one discredited vigilante can absorb a city's panic more effectively than a fallen district attorney. The move preserves order while corrupting truth—a trade the trilogy keeps interrogating." }
+      ],
+      "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
+    }
+  },
+  {
+    "id": "the-dark-knight-rises",
+    "title": "THE DARK KNIGHT RISES",
+    "year": "2012",
+    "code": "TDKR-2012",
+    "color": "#6e5b4a",
+    "glowColor": "#c9a27f",
+    "tagline": "A fire will rise.",
+    "thumbnail": "🔥",
+    "themes": ["Revolution as Theater", "Pain and Recovery", "Legacy Transfer", "Mythic Closure"],
+    "transmission": "ENDURANCE-LOG-5D",
+    "dossier": {
+      "opening": "Final transmission in the Gotham cycle. Rises reframes Batman not as permanent guardian but as a finite intervention with succession planning and symbolic afterlife.",
+      "sections": [
+        { "heading": "BANE'S REVOLUTION SCRIPT", "body": "Bane stages populist uprising as controlled demolition. His rhetoric borrows from anti-elite revolt while his logistics serve total annihilation. Nolan depicts political spectacle as programmable: language of liberation, architecture of terror." },
+        { "heading": "THE PIT AS SYSTEM RESET", "body": "Bruce's imprisonment is built as functional decompression. The climb sequence externalizes rehabilitation: pain inventory, structural retraining, restored risk tolerance. The jump without the rope is not mysticism; it is behavioral recalibration under existential stakes." },
+        { "heading": "GOTHAM UNDER SIEGE", "body": "Rises expands from city corruption to city occupation. Courts, policing, infrastructure, and finance all get rewritten under emergency governance. The film's scale shift emphasizes that institutional failure is not event-based but layered and cumulative." },
+        { "heading": "BATMAN AS HANDOFF", "body": "The ending formalizes succession through Blake and codifies Batman as transferable civic myth. Bruce exits not because crime is solved, but because symbols outlive operators. Rises treats legacy as protocol, not sentiment." }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 116.2° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    },
+    "production": {
+      "layer_label": "DREAM LAYER 2 — PRODUCTION ARCHIVE",
+      "dream_color": "#8a6f58",
+      "dream_glow": "#d5ae88",
+      "opening": "Trilogy closeout at maximal scope: IMAX-heavy capture, large practical crowd choreography, and location design tuned for siege-state Gotham.",
+      "sections": [
+        { "heading": "AERIAL OPENING PRACTICAL STUNT", "body": "The opening aircraft hijack was executed with real planes, in-air capture, and practical stunt coordination rather than full-CG simulation. Nolan's preference for tangible mechanics remains intact even at franchise scale." },
+        { "heading": "PIT SET + LOCATION STRATEGY", "body": "Pit sequences combine constructed vertical environments with exterior plate work to produce architectural vertigo. The set language shifts away from Gotham steel-and-glass toward stone and void, visually separating Bruce's recovery loop from city conflict." },
+        { "heading": "STADIUM COLLAPSE EFFECTS", "body": "The football stadium sequence uses practical field effects, coordinated extras, and digital extension to create systemic rupture. The key production choice is readability: audiences can track cause, panic spread, and tactical response frame by frame." },
+        { "heading": "WINTER GOTHAM", "body": "Production leveraged cold-weather urban environments to portray prolonged occupation. Snow and low-light palettes turn Gotham into a slow-burn battlefield where mobility and morale degrade over time." },
+        { "heading": "SCORE MOTIF: DESHI BASARA", "body": "Zimmer's recurring chant motif provides psychological continuity between pit recovery and city confrontation. The phrase operates as both diegetic memory and non-diegetic propulsion, linking personal ascent to civic release." },
+        { "heading": "CLOSURE ENGINEERING", "body": "Rises balances ending finality with universe continuity: practical finale spectacle, restrained ambiguity around Bruce's fate, and explicit successor framing. Production decisions prioritize emotional closure while preserving myth elasticity." }
+      ],
+      "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AMERICAN CINEMATOGRAPHER, EMPIRE, WB PRODUCTION NOTES, THE ART OF THE DARK KNIGHT TRILOGY"
+    },
+    "deepcuts": {
+      "layer_label": "DREAM LAYER 3 — SIGNAL DEPTH: CRITICAL",
+      "dream_color": "#4f3d2f",
+      "dream_glow": "#b88c67",
+      "opening": "Rises embeds its sharpest arguments in timing, institutional memory, and delayed consequence from earlier films.",
+      "sections": [
+        { "heading": "DENT ACT PAYBACK", "body": "Rises is structurally downstream of TDK's noble lie. Bane weaponizes the buried truth to collapse trust in every institution that benefited from it. The trilogy's central policy lesson lands here: deferred truth compounds, then detonates." },
+        { "heading": "BANE'S VOICE AS WEAPONIZED CLARITY", "body": "Bane's vocal mix is unusually prominent, making him sound intimate and inescapable even in crowd scenes. The design choice turns speech into control technology: he doesn't shout over chaos; he authors it." },
+        { "heading": "BRUCE'S BODY AS TIMELINE", "body": "Early medical scans and movement restrictions literalize cumulative franchise damage. Rises treats heroism as wear pattern, not invulnerability. Recovery is depicted as negotiated with time, pain, and diminishing margin." },
+        { "heading": "BLAKE'S LEGAL NAME REVEAL", "body": "The 'Robin' reveal works as code transmission, not fan-service punchline. It signals baton pass while keeping iconography abstract enough to avoid direct replication. Successor identity is modular by design." },
+        { "heading": "THE NUCLEAR CLOCK", "body": "The final act's ticking core mirrors Nolan's recurring temporal pressure systems. Public panic, tactical planning, and personal sacrifice all synchronize to a single countdown, turning narrative into explicit deadline management." },
+        { "heading": "ALFRED'S CAFE VISION", "body": "The Florence tableau resolves Alfred's long-running protective arc while preserving operational ambiguity around Bruce's survival. Whether read literally or symbolically, its function is identical: permission for closure without full demystification." }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }

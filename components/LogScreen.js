@@ -1,14 +1,45 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { getFilmCreditLines } from '../lib/filmCredits'
 
 // Play the dedicated dream descent cue.
 function playDreamDescend() {
   try {
-    const a = document.createElement('audio')
-    const canOgg = a.canPlayType('audio/ogg')
-    const sfx = new Audio(canOgg ? '/audio/dream-descent.ogg' : '/audio/dream-descent.mp3')
-    sfx.volume = 0.11
-    sfx.play().catch(() => {})
+    const Ctx = window.AudioContext || window.webkitAudioContext
+    if (!Ctx) return
+    const ctx = new Ctx()
+    const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 2.8, ctx.sampleRate)
+    const channel = noiseBuffer.getChannelData(0)
+    for (let i = 0; i < channel.length; i++) {
+      channel[i] = (Math.random() * 2 - 1) * 0.35
+    }
+
+    const noise = ctx.createBufferSource()
+    noise.buffer = noiseBuffer
+
+    const lowPass = ctx.createBiquadFilter()
+    lowPass.type = 'lowpass'
+    lowPass.frequency.setValueAtTime(520, ctx.currentTime)
+    lowPass.frequency.linearRampToValueAtTime(220, ctx.currentTime + 2.2)
+    lowPass.Q.value = 0.7
+
+    const highPass = ctx.createBiquadFilter()
+    highPass.type = 'highpass'
+    highPass.frequency.value = 38
+
+    const master = ctx.createGain()
+    master.gain.setValueAtTime(0.0001, ctx.currentTime)
+    master.gain.exponentialRampToValueAtTime(0.07, ctx.currentTime + 0.45)
+    master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5)
+
+    noise.connect(lowPass)
+    lowPass.connect(highPass)
+    highPass.connect(master)
+    master.connect(ctx.destination)
+
+    noise.start()
+    noise.stop(ctx.currentTime + 2.7)
+    setTimeout(() => ctx.close(), 3200)
   } catch (_) {}
 }
 
@@ -29,21 +60,42 @@ function LoadingSequence({ film, onComplete, playUI }) {
 
   useEffect(() => {
     let idx = 0
+    let completeTimeout = null
     const li = setInterval(() => {
       if (idx < bootLines.length) { setLines(p => [...p, bootLines[idx]]); playUI?.('tick'); idx++ }
       else clearInterval(li)
-    }, 220)
+    }, 320)
     const pi = setInterval(() => {
       setProgress(p => {
-        if (p >= 100) { clearInterval(pi); setTimeout(onComplete, 300); return 100 }
-        return p + 2
+        if (p >= 100) {
+          clearInterval(pi)
+          completeTimeout = setTimeout(onComplete, 550)
+          return 100
+        }
+        return p + 1.5
       })
-    }, 36)
-    return () => { clearInterval(li); clearInterval(pi) }
-  }, [])
+    }, 42)
+    return () => {
+      clearInterval(li)
+      clearInterval(pi)
+      if (completeTimeout) clearTimeout(completeTimeout)
+    }
+  }, [onComplete, playUI])
 
   return (
     <div className="flex flex-col justify-center items-start h-full p-6 md:p-8 gap-4">
+      {film.id === 'interstellar' && (
+        <div className="pixel-intro-shell section-reveal">
+          <img
+            src="/animations/interstellar-pixel-scene.svg"
+            alt="Pixel-art Interstellar loading scene"
+            className="pixel-intro-scene pixel-art"
+            draggable={false}
+          />
+          <div className="pixel-intro-vignette" />
+          <div className="pixel-intro-scanlines" />
+        </div>
+      )}
       <div className="mb-2">
         <p className="text-[12px] md:text-[13px] tracking-[0.3em] uppercase mb-1" style={{ color: film.color }}>
           ENDURANCE // FILE SYSTEM SWAP
@@ -70,26 +122,186 @@ function LoadingSequence({ film, onComplete, playUI }) {
 }
 
 // ── DREAM TRANSITION ──────────────────────────────────────────────────────────
-function DreamTransition({ onComplete }) {
+function DreamTransition({ onComplete, pulseMs = 1450 }) {
   const [phase, setPhase] = useState(0)
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 500)
-    const t2 = setTimeout(() => setPhase(2), 850)
-    const t3 = setTimeout(onComplete, 1050)
+    const t1 = setTimeout(() => setPhase(1), 80)
+    const t2 = setTimeout(() => setPhase(2), Math.round(pulseMs * 0.7))
+    const t3 = setTimeout(onComplete, pulseMs)
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
-  }, [])
+  }, [onComplete, pulseMs])
 
   return (
     <div className="absolute inset-0 z-50 pointer-events-none">
-      <div className="absolute inset-0 transition-all"
+      <div className="absolute inset-0 transition-all dream-transition-zoom"
         style={{
-          transform: phase >= 1 ? 'scale(1.10)' : 'scale(1)',
-          filter: phase === 1 ? 'blur(10px) brightness(2.5)' : 'blur(0px)',
-          transitionDuration: phase === 1 ? '350ms' : '150ms',
+          transform: phase >= 1 ? 'scale(1.11)' : 'scale(1)',
+          filter: phase >= 1 ? 'blur(10px) brightness(0.82)' : 'blur(0px) brightness(1)',
+          opacity: phase >= 2 ? 0.08 : 1,
+          transitionDuration: phase === 1 ? `${Math.round(pulseMs * 0.5)}ms` : `${Math.round(pulseMs * 0.25)}ms`,
+          transitionTimingFunction: 'cubic-bezier(0.2, 0.7, 0, 1)',
         }} />
       <div className="absolute inset-0 transition-opacity"
-        style={{ backgroundColor: 'white', opacity: phase === 1 ? 0.92 : 0, transitionDuration: '200ms' }} />
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.92) 75%, #000 100%)',
+          opacity: phase >= 1 ? 1 : 0,
+          transitionDuration: `${Math.round(pulseMs * 0.55)}ms`,
+          transitionTimingFunction: 'ease-in',
+        }} />
+    </div>
+  )
+}
+
+const TERMINAL_GLITCH_FRAGMENTS = [
+  'CHK:ERR',
+  '0x7F_BAD',
+  'SIG_LOST',
+  'CRC..??',
+  'MEM:LEAK?',
+  'IRQ:??',
+  'SYNC_FAIL',
+  'BAD_SECT',
+  'READ_ERR',
+  'TIMEOUT',
+]
+
+function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '' }) {
+  const [lineGlitch, setLineGlitch] = useState(null)
+  const [staticFlash, setStaticFlash] = useState(false)
+  const [shiftBand, setShiftBand] = useState(null)
+  const [smileGlitch, setSmileGlitch] = useState(false)
+  const [terminalFlash, setTerminalFlash] = useState(null)
+  const [cursorBlink, setCursorBlink] = useState(null)
+  const [phosphorTick, setPhosphorTick] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    let active = true
+    let loopId = null
+    const transientIds = []
+
+    const tdk = filmId === 'the-dark-knight'
+    const minDelay = Math.max(720, 2800 - level * 380)
+    const maxDelay = Math.max(1100, 4200 - level * 480)
+
+    const trigger = () => {
+      if (!active) return
+      const roll = Math.random()
+      const lineChance = 0.12 + level * 0.055
+      const staticChance = 0.04 + level * 0.028
+      const shiftChance = 0.03 + level * 0.025
+      const terminalChance = 0.05 + level * 0.02 + (tdk ? 0.04 : 0)
+      const cursorChance = 0.035 + level * 0.015 + (tdk ? 0.03 : 0)
+      const phosphorChance = 0.06 + level * 0.02
+
+      if (roll < lineChance) {
+        setLineGlitch({
+          top: `${8 + Math.random() * 84}%`,
+          height: `${1 + Math.random() * 2.2}px`,
+          drift: `${(Math.random() * 10 - 5).toFixed(1)}px`,
+          opacity: 0.09 + level * 0.038,
+        })
+        transientIds.push(window.setTimeout(() => setLineGlitch(null), 80 + Math.random() * 100))
+      }
+
+      if (Math.random() < staticChance) {
+        setStaticFlash(true)
+        transientIds.push(window.setTimeout(() => setStaticFlash(false), 48 + Math.random() * 72))
+      }
+
+      if (Math.random() < shiftChance) {
+        setShiftBand({
+          top: `${12 + Math.random() * 70}%`,
+          height: `${5 + Math.random() * 10}px`,
+          offset: `${(Math.random() * 8 - 4).toFixed(1)}px`,
+          opacity: 0.06 + level * 0.025,
+        })
+        transientIds.push(window.setTimeout(() => setShiftBand(null), 72 + Math.random() * 88))
+      }
+
+      if (tdk && Math.random() < (0.028 + level * 0.012)) {
+        setSmileGlitch(true)
+        transientIds.push(window.setTimeout(() => setSmileGlitch(false), 120 + Math.random() * 160))
+      }
+
+      if (Math.random() < terminalChance) {
+        const text = TERMINAL_GLITCH_FRAGMENTS[Math.floor(Math.random() * TERMINAL_GLITCH_FRAGMENTS.length)]
+        setTerminalFlash({
+          text,
+          left: `${6 + Math.random() * 58}%`,
+          top: `${10 + Math.random() * 72}%`,
+        })
+        transientIds.push(window.setTimeout(() => setTerminalFlash(null), 95 + Math.random() * 140))
+      }
+
+      if (Math.random() < cursorChance) {
+        setCursorBlink({
+          left: `${4 + Math.random() * 88}%`,
+          top: `${14 + Math.random() * 68}%`,
+        })
+        transientIds.push(window.setTimeout(() => setCursorBlink(null), 55 + Math.random() * 85))
+      }
+
+      if (Math.random() < phosphorChance) {
+        setPhosphorTick(true)
+        transientIds.push(window.setTimeout(() => setPhosphorTick(false), 38 + Math.random() * 55))
+      }
+
+      const nextDelay = minDelay + Math.random() * (maxDelay - minDelay)
+      loopId = window.setTimeout(trigger, nextDelay)
+    }
+
+    loopId = window.setTimeout(trigger, minDelay + Math.random() * 800)
+
+    return () => {
+      active = false
+      if (loopId) window.clearTimeout(loopId)
+      transientIds.forEach((id) => window.clearTimeout(id))
+    }
+  }, [level, filmId])
+
+  return (
+    <div className="dream-layer-glitch-shell" aria-hidden style={{ '--dream-glitch-color': glowColor }}>
+      {phosphorTick && <span className="dream-layer-glitch-phosphor" />}
+      {lineGlitch && (
+        <span
+          className="dream-layer-glitch-line"
+          style={{
+            top: lineGlitch.top,
+            height: lineGlitch.height,
+            opacity: lineGlitch.opacity,
+            transform: `translateX(${lineGlitch.drift})`,
+          }}
+        />
+      )}
+      {staticFlash && <span className="dream-layer-glitch-static" />}
+      {shiftBand && (
+        <span
+          className="dream-layer-glitch-shift"
+          style={{
+            top: shiftBand.top,
+            height: shiftBand.height,
+            transform: `translateX(${shiftBand.offset})`,
+            opacity: shiftBand.opacity,
+          }}
+        />
+      )}
+      {terminalFlash && (
+        <span
+          className="dream-layer-glitch-terminal"
+          style={{ left: terminalFlash.left, top: terminalFlash.top }}
+        >
+          {terminalFlash.text}
+        </span>
+      )}
+      {cursorBlink && (
+        <span
+          className="dream-layer-glitch-cursor"
+          style={{ left: cursorBlink.left, top: cursorBlink.top }}
+        />
+      )}
+      {smileGlitch && <span className="dream-layer-glitch-smile">:)</span>}
     </div>
   )
 }
@@ -126,8 +338,153 @@ function DeeperButton({ color, glowColor, label, sublabel, onClick }) {
   )
 }
 
+const FINAL_DREAM_MOTIFS = {
+  interstellar: ['🪐', '🕳️', '⌚', '🚀'],
+  inception: ['🌀', '🏙️', '🧠', '🧱'],
+  tenet: ['⏳', '🔫', '🔁', '🧩'],
+  memento: ['📸', '📝', '🩸', '🧠'],
+  'batman-begins': ['🦇', '🚆', '🌫️', '⚙️'],
+  'the-dark-knight': ['🃏', '🚓', '🏙️', '🦇'],
+  'the-dark-knight-rises': ['🔥', '🕳️', '💣', '🦇'],
+}
+
+const TDK_FINALE_PALETTE = {
+  '.': null,
+  H: '#15803d',
+  h: '#22c55e',
+  f: '#d1fae5',
+  e: '#0f172a',
+  p: '#4c1d95',
+  P: '#7c3aed',
+  M: '#991b1b',
+  m: '#fca5a5',
+}
+
+const TDK_FINALE_PIXEL_ROWS = [
+  '....hhhhhh....',
+  '...hhhhhhhh...',
+  '..hhhhhhhhhh..',
+  '.hhffffffffhh.',
+  '.hffeeeeeeffh.',
+  '.hfePPPPeeefh.',
+  '.hfePMMMpeefh.',
+  '.hfePMMMpeefh.',
+  '.hfeemmmmeeefh.',
+  '.hffeeeeeeffh.',
+  '..hhppPPpphh..',
+  '...hhhhhhhh...',
+  '....hhhhhh....',
+]
+
+function TdkFinalePixelJoker() {
+  const w = TDK_FINALE_PIXEL_ROWS[0].length
+  const h = TDK_FINALE_PIXEL_ROWS.length
+  const scale = 10
+  return (
+    <svg
+      className="tdk-pixel-joker-svg pixel-art"
+      viewBox={`0 0 ${w} ${h}`}
+      width={w * scale}
+      height={h * scale}
+      aria-hidden
+    >
+      {TDK_FINALE_PIXEL_ROWS.flatMap((row, y) =>
+        [...row].map((ch, x) => {
+          const fill = TDK_FINALE_PALETTE[ch]
+          if (!fill) return null
+          return <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={fill} />
+        })
+      )}
+    </svg>
+  )
+}
+
+function TdkLayer4Finale() {
+  return (
+    <div className="tdk-layer4-finale">
+      <div className="tdk-pixel-joker-wrap" style={{ '--tdk-laugh-dur': '4.6s' }}>
+        <div className="tdk-pixel-joker-glow">
+          <TdkFinalePixelJoker />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Layer4View({ film, onSurface }) {
+  const motifs = FINAL_DREAM_MOTIFS[film.id] || ['◈', '✦', '▦', '⌁']
+  const dreamColor = film.deepcuts?.dream_color || film.color
+  const dreamGlow = film.deepcuts?.dream_glow || film.glowColor
+  const creditLines = getFilmCreditLines(film)
+  const rollingCredits = [...creditLines, ...creditLines, ...creditLines]
+  const isTdk = film.id === 'the-dark-knight'
+
+  return (
+    <div
+      className="flex flex-col h-full relative dream-layer-final"
+      style={{
+        background: `radial-gradient(ellipse at center, ${dreamGlow}24 0%, ${dreamColor}45 35%, #020304 82%)`,
+      }}
+    >
+      <DreamLayerGlitches level={4} glowColor={dreamGlow} filmId={film.id} />
+      <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
+        style={{ borderColor: `${dreamGlow}70`, borderStyle: 'dashed' }}>
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="dream-core-led" />
+          <span className="text-[9px] md:text-[10px] tracking-[0.28em] uppercase font-bold"
+            style={{ color: dreamGlow, textShadow: `0 0 12px ${dreamGlow}` }}>
+            DREAM LAYER 4 — CORE SIGNAL LOOP
+          </span>
+        </div>
+        <button onClick={onSurface} className="console-btn text-[9px] md:text-[10px] px-2 py-1"
+          style={{ borderColor: `${dreamGlow}70`, color: dreamGlow }}>
+          ↑↑↑ SURFACE
+        </button>
+      </div>
+
+      <div className="flex-1 relative px-4 py-6">
+        <div className="dream-credits-bg" aria-hidden>
+          <div className="dream-credits-roll dream-credits-roll--bg">
+            <div className="dream-credits-roll-inner">
+              {rollingCredits.map((line, idx) => (
+                <p key={`${film.id}-credit-bg-${idx}`} className="dream-credits-line dream-credits-line--bg">
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-20 flex h-full flex-col items-center justify-center gap-4">
+          {isTdk ? (
+            <TdkLayer4Finale />
+          ) : (
+            <div className="pixel-core-shell">
+              <div className="pixel-core-grid pixel-art" />
+              <div className="pixel-core-vignette" />
+              <div className="pixel-core-scan" />
+              {motifs.map((motif, index) => (
+                <span
+                  key={`${film.id}-motif-${index}`}
+                  className={`pixel-core-motif motif-${index + 1}`}
+                  style={{ color: index % 2 ? dreamGlow : '#d5edf4' }}
+                >
+                  {motif}
+                </span>
+              ))}
+            </div>
+          )}
+          <p className="text-[10px] md:text-[11px] tracking-[0.22em] uppercase text-console-muted text-center">
+            {film.title} // recursive memory fragment // live loop
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── LAYER 3: DEEP CUTS ────────────────────────────────────────────────────────
-function Layer3View({ film, onSurface }) {
+function Layer3View({ film, onSurface, onDeeper }) {
   const [visibleSections, setVisibleSections] = useState(0)
   const d = film.deepcuts
   const scrollRef = useRef(null)
@@ -143,9 +500,13 @@ function Layer3View({ film, onSurface }) {
   }, [film])
 
   return (
-    <div className="flex flex-col h-full" style={{
-      background: `radial-gradient(ellipse at center top, ${d.dream_color}18 0%, #020205 70%)`,
-    }}>
+    <div
+      className="flex flex-col h-full relative dream-layer-deep"
+      style={{
+        background: `radial-gradient(ellipse at 60% 10%, ${d.dream_glow}1f 0%, transparent 42%), radial-gradient(ellipse at 20% 20%, ${d.dream_color}38 0%, #020206 68%)`,
+      }}
+    >
+      <DreamLayerGlitches level={3} glowColor={d.dream_glow} filmId={film.id} />
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${d.dream_color}60`, borderStyle: 'dashed' }}>
@@ -205,6 +566,18 @@ function Layer3View({ film, onSurface }) {
             </p>
           </div>
         )}
+        {visibleSections >= d.sections.length + 2 && (
+          <DeeperButton
+            color={d.dream_color}
+            glowColor={d.dream_glow}
+            label="Descend to final layer..."
+            sublabel="LAYER 4 // DREAM CORE LOOP"
+            onClick={() => {
+              playDreamDescend()
+              onDeeper()
+            }}
+          />
+        )}
         <div className="h-8" />
       </div>
     </div>
@@ -233,8 +606,11 @@ function Layer2View({ film, onSurface, onDeeper }) {
   }
 
   return (
-    <div className="flex flex-col h-full relative"
-      style={{ background: `radial-gradient(ellipse at center top, ${p.dream_color}08 0%, #050508 60%)` }}>
+    <div
+      className="flex flex-col h-full relative dream-layer-mid"
+      style={{ background: `radial-gradient(ellipse at 70% 0%, ${p.dream_glow}18 0%, transparent 44%), radial-gradient(ellipse at 30% 15%, ${p.dream_color}24 0%, #050509 66%)` }}
+    >
+      <DreamLayerGlitches level={2} glowColor={p.dream_glow} filmId={film.id} />
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -313,7 +689,7 @@ function Layer2View({ film, onSurface, onDeeper }) {
 // ── LAYER 1: DOSSIER ──────────────────────────────────────────────────────────
 function DossierView({ film, onClose, onGoToShelf }) {
   const [visibleSections, setVisibleSections] = useState(0)
-  const [layer, setLayer]                     = useState(1) // 1 | '1to2' | 2 | 3
+  const [layer, setLayer]                     = useState(1) // 1 | '1to2' | 2 | '2to3' | 3 | '3to4' | 4
   const scrollRef = useRef(null)
 
   useEffect(() => {
@@ -331,23 +707,55 @@ function DossierView({ film, onClose, onGoToShelf }) {
     setLayer('1to2')
   }
 
-  if (layer === 3) {
-    return <Layer3View film={film} onSurface={() => setLayer(2)} />
+  if (layer === 4) {
+    return <Layer4View film={film} onSurface={() => setLayer(3)} />
   }
 
-  if (layer === 2) {
+  if (layer === 3 || layer === '3to4') {
     return (
-      <Layer2View
-        film={film}
-        onSurface={() => setLayer(1)}
-        onDeeper={() => setLayer(3)}
-      />
+      <div className="relative h-full">
+        <Layer3View
+          film={film}
+          onSurface={() => setLayer(2)}
+          onDeeper={() => setLayer('3to4')}
+        />
+        {layer === '3to4' && (
+          <DreamTransition
+            pulseMs={1850}
+            onComplete={() => setLayer(4)}
+          />
+        )}
+      </div>
+    )
+  }
+
+  if (layer === 2 || layer === '2to3') {
+    return (
+      <div className="relative h-full">
+        <Layer2View
+          film={film}
+          onSurface={() => setLayer(1)}
+          onDeeper={() => setLayer('2to3')}
+        />
+        {layer === '2to3' && (
+          <DreamTransition
+            pulseMs={1680}
+            onComplete={() => setLayer(3)}
+          />
+        )}
+      </div>
     )
   }
 
   return (
     <div className="flex flex-col h-full relative">
-      {layer === '1to2' && <DreamTransition onComplete={() => setLayer(2)} />}
+      <DreamLayerGlitches level={1} glowColor={film.glowColor} filmId={film.id} />
+      {layer === '1to2' && (
+        <DreamTransition
+          pulseMs={1540}
+          onComplete={() => setLayer(2)}
+        />
+      )}
 
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -449,11 +857,25 @@ function DossierView({ film, onClose, onGoToShelf }) {
 }
 
 // ── ROOT ──────────────────────────────────────────────────────────────────────
-export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf }) {
+export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf, jokerGlitchTick = 0 }) {
+  const [showJokerGlitch, setShowJokerGlitch] = useState(false)
+
+  useEffect(() => {
+    if (!film || film.id !== 'the-dark-knight' || !jokerGlitchTick) return
+    setShowJokerGlitch(true)
+    const id = window.setTimeout(() => setShowJokerGlitch(false), 220)
+    return () => window.clearTimeout(id)
+  }, [film, jokerGlitchTick])
+
   return (
     <div className="console-screen flex-1 h-full relative">
       <div className="absolute inset-0 pointer-events-none z-10"
         style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%)' }} />
+      {showJokerGlitch && (
+        <div className="joker-glitch-overlay" aria-hidden>
+          <span className="joker-glitch-text">HA</span>
+        </div>
+      )}
 
       {!film ? (
         <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
@@ -463,6 +885,18 @@ export default function LogScreen({ film, isLoading, onLoadComplete, onEject, pl
             <p className="text-[11px] md:text-[12px] text-console-muted mt-2 tracking-wider">
               <span className="hidden md:inline">Select a log from the archive and drag to this console</span>
               <span className="md:hidden">Tap a disc in the Archive to load a log</span>
+            </p>
+          </div>
+          <div className="max-w-xl space-y-2 border-t border-console-border pt-4">
+            <p className="text-[10px] md:text-[11px] tracking-[0.24em] text-console-muted uppercase">Nolan Throughline</p>
+            <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
+              These films run as systems under pressure: time distortion, memory failure, institutional decay, and moral trade-offs made under constraint.
+            </p>
+            <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
+              Different genre wrappers, same core engine: build a framework to survive uncertainty, then pay the hidden cost that framework creates.
+            </p>
+            <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
+              Recurring signal: structure is argument.
             </p>
           </div>
           <div className="w-2 h-3 bg-console-muted animate-pulse mt-2" />
