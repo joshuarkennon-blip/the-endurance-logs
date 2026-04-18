@@ -28,7 +28,7 @@ export default function Home() {
       />
 
       {/* Main layout: desk perspective */}
-      <main className="fixed inset-0 flex items-center justify-center p-6">
+      <main className="fixed inset-0 flex items-center justify-center p-0 md:p-6">
         {/* Outer desk frame */}
         <div
           className="relative w-full h-full"
@@ -40,11 +40,11 @@ export default function Home() {
             boxShadow: '0 0 80px rgba(0,0,0,0.9), 0 0 30px rgba(74,124,158,0.04) inset',
           }}
         >
-          {/* Corner bolts */}
+          {/* Corner bolts — desktop only */}
           {['top-2 left-2', 'top-2 right-2', 'bottom-2 left-2', 'bottom-2 right-2'].map((pos, i) => (
             <div
               key={i}
-              className={`absolute ${pos} w-3 h-3 rounded-full`}
+              className={`hidden md:block absolute ${pos} w-3 h-3 rounded-full`}
               style={{
                 background: 'radial-gradient(circle, #2a2a3a 30%, #1a1a25 100%)',
                 border: '1px solid #333344',
