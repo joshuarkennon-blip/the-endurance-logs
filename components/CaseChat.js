@@ -185,6 +185,7 @@ export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggCl
       {isActive && (
         <div className="case-terminal">
           <div ref={scrollRef} className="case-messages">
+            <div className="case-spacer" />
             {messages.map((message, index) => (
               <div key={`${message.role}-${index}`} className={`case-msg ${message.role}`}>
                 {message.text.split('\n').map((line, lineIndex) => (
@@ -203,20 +204,20 @@ export default function CaseChat({ films, playUI, onLoadFilm, onEggOpen, onEggCl
                 ))}
               </div>
             )}
-
-            <form className="case-input" onSubmit={handleSubmit}>
-              <label>&gt; Ask C.A.S.E. ::</label>
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                placeholder="input.stream"
-                aria-label="Ask C.A.S.E. something"
-                disabled={isStreaming}
-              />
-            </form>
           </div>
+
+          <form className="case-input" onSubmit={handleSubmit}>
+            <label>&gt;</label>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="query C.A.S.E."
+              aria-label="Ask C.A.S.E. something"
+              disabled={isStreaming}
+            />
+          </form>
         </div>
       )}
     </div>
