@@ -1,11 +1,58 @@
 'use client'
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef, useId } from 'react'
 import Link from 'next/link'
 import DiscShelf from './DiscShelf'
 import DiscInsertFlight from './DiscInsertFlight'
 import LogScreen from './LogScreen'
 import CaseChat from './CaseChat'
+import CursorGlowTrail from './CursorGlowTrail'
 import { useAudioEngine } from './AudioEngine'
+import { filmCursorCssValue } from '../lib/cursorFilm'
+
+function ConsoleAudioControls({ masterVolume, setMasterVolume, isMuted, toggleMute, playUI }) {
+  const id = useId()
+  const pct = Math.round(Math.min(100, Math.max(0, masterVolume * 100)))
+  const outputOff = isMuted || masterVolume <= 0.0005
+
+  return (
+    <div className="flex flex-col gap-2 w-full min-w-0">
+      <div className="flex flex-col gap-1 w-full min-w-0">
+        <label htmlFor={`${id}-master-vol`} className="text-[8px] md:text-[9px] tracking-[0.14em] text-console-muted uppercase">
+          Master gain
+        </label>
+        <input
+          id={`${id}-master-vol`}
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          value={pct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={pct}
+          aria-valuetext={`${pct} percent`}
+          aria-label="Master volume; zero is silent, one hundred is full mix level"
+          onChange={(e) => setMasterVolume(Number(e.target.value) / 100)}
+          className="console-master-vol w-full min-w-0 min-h-[44px] md:min-h-[36px] py-2 md:py-1 touch-manipulation"
+        />
+      </div>
+      <button
+        type="button"
+        onClick={() => {
+          playUI('tick')
+          toggleMute()
+        }}
+        className="console-btn w-full px-2 py-1.5 md:py-1 text-[9px] shrink-0"
+        style={{
+          borderColor: outputOff ? '#9e5c4a' : '#4a7c9e',
+          color: outputOff ? '#dc8c6a' : '#9ecad8',
+        }}
+      >
+        AUDIO: {outputOff ? 'MUTED' : 'LIVE'}
+      </button>
+    </div>
+  )
+}
 
 export default function Console({ films, registerStopAll }) {
   const [loadedFilm, setLoadedFilm]   = useState(null)
@@ -25,7 +72,17 @@ export default function Console({ films, registerStopAll }) {
     contrastMode: 'normal', // normal | high
   })
 
-  const { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll, isMuted, toggleMute } = useAudioEngine()
+  const {
+    playLoadTrigger,
+    startAmbient,
+    stopAmbient,
+    playUI,
+    stopAll,
+    isMuted,
+    toggleMute,
+    masterVolume,
+    setMasterVolume,
+  } = useAudioEngine()
   const trayCloseTimer = useRef(null)
   const lastJokerGlitchAt = useRef(0)
 
@@ -203,8 +260,15 @@ export default function Console({ films, registerStopAll }) {
     if (loadedFilm && !isLoading) startAmbient(loadedFilm.id)
   }, [loadedFilm, isLoading, startAmbient])
 
+  const filmCursorAccent = loadedFilm ? loadedFilm.glowColor || loadedFilm.color : null
+
   return (
-    <div className="relative w-full h-full flex flex-col" onClick={unlockAudio}>
+    <div
+      className={`relative w-full h-full flex flex-col${filmCursorAccent ? ' console-film-cursor' : ''}`}
+      onClick={unlockAudio}
+      style={filmCursorAccent ? { cursor: filmCursorCssValue(filmCursorAccent) } : undefined}
+    >
+      <CursorGlowTrail accentHex={filmCursorAccent} />
       {insertFlight ? (
         <DiscInsertFlight
           key={insertFlight.key}
@@ -333,7 +397,7 @@ export default function Console({ films, registerStopAll }) {
 
         {/* ── RIGHT INSTRUMENTS — desktop only ── */}
         <div className="hidden md:block w-px bg-console-border shrink-0" />
-        <div className="hidden md:flex panel flex-col gap-3 p-3 shrink-0" style={{ width: 110 }}>
+        <div className="hidden md:flex panel flex-col gap-3 p-3 shrink-0 min-w-0" style={{ width: 124, maxWidth: 'min(124px, 22vw)' }}>
           <div className="border-b border-console-border pb-2">
             <p className="text-[10px] tracking-widest text-console-muted uppercase">Instruments</p>
           </div>
@@ -363,17 +427,13 @@ export default function Console({ films, registerStopAll }) {
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '124.7°' : '---.-°'}</p>
             <p className="text-[11px] text-console-glow font-mono">{loadedFilm ? '89.2°' : '---.-°'}</p>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                playUI('tick')
-                toggleMute()
-              }}
-              className="console-btn w-full px-2 py-1 text-[9px]"
-              style={{ borderColor: isMuted ? '#9e5c4a' : '#4a7c9e', color: isMuted ? '#dc8c6a' : '#9ecad8' }}
-            >
-              AUDIO: {isMuted ? 'MUTED' : 'LIVE'}
-            </button>
+            <ConsoleAudioControls
+              masterVolume={masterVolume}
+              setMasterVolume={setMasterVolume}
+              isMuted={isMuted}
+              toggleMute={toggleMute}
+              playUI={playUI}
+            />
             <button
               type="button"
               onClick={() => {
@@ -440,6 +500,15 @@ export default function Console({ films, registerStopAll }) {
       </div>
 
       {/* ── BOTTOM STATUS BAR ── */}
+      <div className="md:hidden border-t border-console-border bg-[rgba(10,12,18,0.92)] px-3 py-2 shrink-0">
+        <ConsoleAudioControls
+          masterVolume={masterVolume}
+          setMasterVolume={setMasterVolume}
+          isMuted={isMuted}
+          toggleMute={toggleMute}
+          playUI={playUI}
+        />
+      </div>
       <div className="md:hidden">
         <CaseChat
           films={films}

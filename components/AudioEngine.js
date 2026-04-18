@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useCallback, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useCallback, useState } from 'react'
 
 function pickSrc(base) {
   if (/\.[a-z0-9]+$/i.test(base)) return base
@@ -52,9 +52,21 @@ const LOAD_LEVEL_BY_FILM = {
 
 const FADE_MS = 1200
 
+function readStoredMasterVolume() {
+  if (typeof window === 'undefined') return 1
+  try {
+    const raw = localStorage.getItem('endurance-master-volume')
+    const p = parseFloat(raw)
+    if (Number.isFinite(p) && p >= 0 && p <= 1) return p
+  } catch (_) {}
+  return 1
+}
+
 export function useAudioEngine() {
   const [isMuted, setIsMuted] = useState(false)
+  const [masterVolume, setMasterVolumeState] = useState(1)
   const isMutedRef = useRef(isMuted)
+  const masterVolumeRef = useRef(1)
   const idleRef      = useRef(null)
   const ambientRef   = useRef(null)
   const loadSfxRef   = useRef(null)   // track the current one-shot so we can kill it
@@ -62,6 +74,7 @@ export function useAudioEngine() {
   const loadSynthRef = useRef(null)
   const currentAmbientFilmIdRef = useRef(null)
   const ambientTargetRef = useRef(VOL.ambient)
+  const idleFaderReadyRef = useRef(false)
   const timersRef    = useRef([])     // setTimeout handles
   const fadersRef    = useRef([])     // setInterval handles
 
@@ -69,7 +82,28 @@ export function useAudioEngine() {
     isMutedRef.current = isMuted
   }, [isMuted])
 
-  const targetVolume = useCallback((value) => (isMuted ? 0 : value), [isMuted])
+  useEffect(() => {
+    masterVolumeRef.current = masterVolume
+  }, [masterVolume])
+
+  /** Design-level volume (VOL.*) × master fader; mute forces silence. Max = current mix ceiling. */
+  const effectiveVolume = useCallback(
+    (designVolume) => {
+      if (isMuted) return 0
+      return Math.min(1, Math.max(0, designVolume * masterVolume))
+    },
+    [isMuted, masterVolume],
+  )
+
+  const setMasterVolume = useCallback((value) => {
+    const n = Math.min(1, Math.max(0, typeof value === 'number' ? value : Number(value)))
+    if (!Number.isFinite(n)) return
+    setMasterVolumeState(n)
+    masterVolumeRef.current = n
+    try {
+      localStorage.setItem('endurance-master-volume', String(n))
+    } catch (_) {}
+  }, [])
 
   const ambientLevelFor = useCallback((filmId) => AMBIENT_LEVEL_BY_FILM[filmId] ?? 1, [])
   const loadLevelFor = useCallback((filmId) => LOAD_LEVEL_BY_FILM[filmId] ?? 1, [])
@@ -129,7 +163,7 @@ export function useAudioEngine() {
     return src
   }
 
-  function createBatmanLoadCue(filmId, muted) {
+  function createBatmanLoadCue(filmId, muted, masterMult) {
     try {
       const Ctx = window.AudioContext || window.webkitAudioContext
       if (!Ctx) return null
@@ -141,7 +175,8 @@ export function useAudioEngine() {
       const stop = () => {
         try { ctx.close() } catch (_) {}
       }
-      const cue = { ctx, master, currentGain: muted ? 0 : VOL.load * 0.95, stop }
+      const m = muted ? 0 : Math.min(1, Math.max(0, masterMult))
+      const cue = { ctx, master, currentGain: m <= 0 ? 0 : VOL.load * 0.95 * m, stop }
       ensureCtxRunning(ctx)
       const target = cue.currentGain
       master.gain.exponentialRampToValueAtTime(Math.max(target, 0.0001), ctx.currentTime + 0.18)
@@ -191,7 +226,7 @@ export function useAudioEngine() {
     }
   }
 
-  function createBatmanAmbient(filmId, muted) {
+  function createBatmanAmbient(filmId, muted, masterMult) {
     try {
       const Ctx = window.AudioContext || window.webkitAudioContext
       if (!Ctx) return null
@@ -202,7 +237,8 @@ export function useAudioEngine() {
 
       const nodes = []
       const timers = []
-      const currentGain = muted ? 0 : VOL.ambient
+      const m = muted ? 0 : Math.min(1, Math.max(0, masterMult))
+      const currentGain = VOL.ambient * m
       ensureCtxRunning(ctx)
 
       const addDrone = (freq, type, gain, detune = 0) => {
@@ -304,15 +340,24 @@ export function useAudioEngine() {
   }
 
   // Initialise idle loop on mount — never destroyed, only paused/resumed
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const initialMaster = readStoredMasterVolume()
+    masterVolumeRef.current = initialMaster
+    setMasterVolumeState(initialMaster)
+
     const idle = new Audio(pickSrc(PATHS.idle))
     idle.loop   = true
     idle.volume = 0
     idle.play().catch(() => {})
     idleRef.current = idle
-    fadeTo(idle, targetVolume(VOL.idle), 2500)
+    fadeTo(idle, VOL.idle * initialMaster, 2500)
+    const idleFadeUnlock = window.setTimeout(() => {
+      idleFaderReadyRef.current = true
+    }, 2520)
 
     return () => {
+      window.clearTimeout(idleFadeUnlock)
+      idleFaderReadyRef.current = false
       clearAll()
       killNode(idleRef.current)
       killNode(ambientRef.current)
@@ -320,7 +365,8 @@ export function useAudioEngine() {
       stopSynth(ambientSynthRef, 0)
       stopSynth(loadSynthRef, 0)
     }
-  }, [targetVolume]) // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot init; master from LS
+  }, [])
 
   // Ensure browser audio unlock on first user gesture.
   useEffect(() => {
@@ -347,20 +393,20 @@ export function useAudioEngine() {
     stopSynth(loadSynthRef, 0)
 
     if (BATMAN_FILMS.has(filmId)) {
-      loadSynthRef.current = createBatmanLoadCue(filmId, isMuted)
+      loadSynthRef.current = createBatmanLoadCue(filmId, isMuted, masterVolume)
       return
     }
 
     const path = PATHS.load[filmId]
     if (!path) return
     const sfx   = new Audio(pickSrc(path))
-    sfx.volume  = targetVolume(VOL.load * loadLevelFor(filmId))
+    sfx.volume  = effectiveVolume(VOL.load * loadLevelFor(filmId))
     sfx.play().catch(() => {})
     loadSfxRef.current = sfx
 
     const t = setTimeout(() => fadeTo(sfx, 0, 800, { destroy: true }), 4000)
     timersRef.current.push(t)
-  }, [targetVolume, isMuted, loadLevelFor])
+  }, [effectiveVolume, isMuted, masterVolume, loadLevelFor])
 
   // Start film ambient — crossfade cleanly
   const startAmbient = useCallback((filmId) => {
@@ -378,7 +424,7 @@ export function useAudioEngine() {
     stopSynth(ambientSynthRef, 250)
 
     if (BATMAN_FILMS.has(filmId)) {
-      ambientSynthRef.current = createBatmanAmbient(filmId, isMuted)
+      ambientSynthRef.current = createBatmanAmbient(filmId, isMuted, masterVolume)
       currentAmbientFilmIdRef.current = filmId
       return
     }
@@ -393,8 +439,8 @@ export function useAudioEngine() {
     amb.volume = 0
     amb.play().catch(() => {})
     ambientRef.current = amb
-    fadeTo(amb, targetVolume(ambientTarget), FADE_MS)
-  }, [clearAll, targetVolume, isMuted, ambientLevelFor])
+    fadeTo(amb, effectiveVolume(ambientTarget), FADE_MS)
+  }, [clearAll, effectiveVolume, isMuted, masterVolume, ambientLevelFor])
 
   // Stop ambient and return to idle
   const stopAmbient = useCallback(() => {
@@ -415,18 +461,18 @@ export function useAudioEngine() {
     if (idle) {
       idle.volume = 0
       idle.play().catch(() => {})
-      fadeTo(idle, targetVolume(VOL.idle), FADE_MS)
+      fadeTo(idle, effectiveVolume(VOL.idle), FADE_MS)
     }
-  }, [clearAll, targetVolume])
+  }, [clearAll, effectiveVolume])
 
   // One-shot UI sound
   const playUI = useCallback((name) => {
     const path = PATHS.ui[name]
     if (!path) return
     const sfx  = new Audio(pickSrc(path))
-    sfx.volume = targetVolume(VOL.ui)
+    sfx.volume = effectiveVolume(VOL.ui)
     sfx.play().catch(() => {})
-  }, [targetVolume])
+  }, [effectiveVolume])
 
   // Stop everything — called on page navigation
   const stopAll = useCallback(() => {
@@ -457,21 +503,48 @@ export function useAudioEngine() {
     const idle = idleRef.current
     if (ambient && ambient.src) {
       ambient.play().catch(() => {})
-      fadeTo(ambient, ambientTargetRef.current, 260)
+      fadeTo(ambient, effectiveVolume(ambientTargetRef.current), 260)
       if (idle) fadeTo(idle, 0, 220)
       return
     }
     if (ambientSynthRef.current) {
-      rampGain(ambientSynthRef.current, ambientTargetRef.current, 260)
+      rampGain(ambientSynthRef.current, effectiveVolume(ambientTargetRef.current), 260)
       if (idle) fadeTo(idle, 0, 220)
       return
     }
 
     if (idle && idle.src) {
       idle.play().catch(() => {})
-      fadeTo(idle, VOL.idle, 260)
+      fadeTo(idle, effectiveVolume(VOL.idle), 260)
     }
-  }, [isMuted])
+  }, [isMuted, effectiveVolume])
 
-  return { playLoadTrigger, startAmbient, stopAmbient, playUI, stopAll, isMuted, toggleMute }
+  // Live master fader + mute: update all running buses without tearing down idle
+  useEffect(() => {
+    const ev = (design) => effectiveVolume(design)
+
+    const idle = idleRef.current
+    if (idleFaderReadyRef.current && idle?.src) idle.volume = ev(VOL.idle)
+
+    const amb = ambientRef.current
+    if (amb?.src) amb.volume = ev(ambientTargetRef.current)
+
+    const asynth = ambientSynthRef.current
+    if (asynth?.master) rampGain(asynth, ev(ambientTargetRef.current), 140)
+
+    const lsynth = loadSynthRef.current
+    if (lsynth?.master) rampGain(lsynth, ev(VOL.load * 0.95), 140)
+  }, [isMuted, masterVolume, effectiveVolume])
+
+  return {
+    playLoadTrigger,
+    startAmbient,
+    stopAmbient,
+    playUI,
+    stopAll,
+    isMuted,
+    toggleMute,
+    masterVolume,
+    setMasterVolume,
+  }
 }

@@ -1,5 +1,8 @@
 node_modules/
 .next/
+
+# Local duplicate / scratch tree (not part of this repo)
+tel lite/
 .vercel/
 .env
 .env.local

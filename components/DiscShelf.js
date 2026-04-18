@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useCallback, useEffect } from 'react'
 import { Permanent_Marker } from 'next/font/google'
 
 const tapeMarker = Permanent_Marker({
@@ -8,6 +9,79 @@ const tapeMarker = Permanent_Marker({
   display: 'swap',
   adjustFontFallback: true,
 })
+
+function discHoverMotionOff() {
+  if (typeof document === 'undefined') return true
+  return (
+    document.body.classList.contains('motion-min') ||
+    document.body.classList.contains('fx-off')
+  )
+}
+
+/** Pointer tilt + lift; pauses while dragging or when motion/FX reduced. */
+function HoverReactiveDisc({ children, interactionActive, locked = false }) {
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0, lift: 0, s: 1 })
+
+  const apply = useCallback((clientX, clientY, el) => {
+    if (discHoverMotionOff() || !interactionActive || !el) return
+    const r = el.getBoundingClientRect()
+    const px = (clientX - r.left) / Math.max(1, r.width) - 0.5
+    const py = (clientY - r.top) / Math.max(1, r.height) - 0.5
+    const cap = locked ? 0.38 : 1
+    const maxRx = 12 * cap
+    const maxRy = 14 * cap
+    setTilt({
+      rx: Math.max(-maxRx, Math.min(maxRx, -py * 2.2 * maxRx)),
+      ry: Math.max(-maxRy, Math.min(maxRy, px * 2.2 * maxRy)),
+      lift: locked ? -3 : -6,
+      s: locked ? 1.03 : 1.05,
+    })
+  }, [interactionActive, locked])
+
+  const reset = useCallback(() => {
+    setTilt({ rx: 0, ry: 0, lift: 0, s: 1 })
+  }, [])
+
+  useEffect(() => {
+    if (!interactionActive) reset()
+  }, [interactionActive, reset])
+
+  const off = discHoverMotionOff() || !interactionActive
+  const popped = tilt.lift !== 0 || tilt.rx !== 0 || tilt.ry !== 0
+
+  return (
+    <div
+      className={`archive-disc-hover-wrap flex items-center justify-center touch-manipulation ${popped ? 'relative z-[4]' : 'relative z-0'}`}
+      onMouseEnter={(e) => {
+        if (discHoverMotionOff() || !interactionActive) return
+        apply(e.clientX, e.clientY, e.currentTarget)
+      }}
+      onMouseMove={(e) => apply(e.clientX, e.clientY, e.currentTarget)}
+      onMouseLeave={reset}
+      onTouchMove={(e) => {
+        const t = e.touches[0]
+        if (t) apply(t.clientX, t.clientY, e.currentTarget)
+      }}
+      onTouchEnd={reset}
+    >
+      <div
+        className="archive-disc-hover-inner will-change-transform"
+        style={{
+          transform: off
+            ? 'none'
+            : `perspective(580px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) translate3d(0, ${tilt.lift}px, 14px) scale(${tilt.s})`,
+          transition:
+            tilt.lift === 0 && tilt.rx === 0 && tilt.ry === 0
+              ? 'transform 0.4s cubic-bezier(0.22, 1, 0.32, 1), filter 0.4s ease'
+              : 'transform 0.06s ease-out, filter 0.12s ease-out',
+          filter: off || !popped ? 'none' : 'drop-shadow(0 14px 26px rgba(0,0,0,0.38))',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
 
 function hexToRgb(hex) {
   const h = (hex || '#6ab4dc').replace('#', '')
@@ -122,25 +196,119 @@ function discCssVars(hex) {
   }
 }
 
-/** Shrink one-line tape copy so long titles stay inside the torn strip. */
-function tapeLineScale(fullText) {
-  const n = (fullText || '').length
-  if (n <= 17) return 1
-  if (n <= 22) return 0.9
-  if (n <= 28) return 0.78
-  if (n <= 34) return 0.68
-  if (n <= 40) return 0.6
-  return 0.52
+/** Catalog letters before the year, e.g. INT-2014 → INT */
+function catalogPrefixFromCode(code) {
+  if (!code || typeof code !== 'string') return ''
+  const trimmed = code.trim()
+  const m = trimmed.match(/^(.+?)-(\d{4})$/)
+  if (m) return m[1].replace(/[^A-Za-z]/g, '').toUpperCase()
+  return trimmed.replace(/[^A-Za-z]/g, '').toUpperCase()
+}
+
+/**
+ * Short hand-written style denominator: INT → I-N-T; TDK / TDKR stay compact blocks.
+ */
+function tapeLabelAbbrev(code) {
+  const prefix = catalogPrefixFromCode(code)
+  if (!prefix) return '?'
+  if (prefix === 'TDK' || prefix === 'TDKR') return prefix
+  return prefix.split('').join('-')
+}
+
+/** Slight scale only when hyphenated string gets long (e.g. T-D-K-R). */
+function tapeLineScale(abbrev) {
+  const n = (abbrev || '').length
+  if (n <= 4) return 1
+  if (n <= 6) return 0.94
+  return 0.88
+}
+
+/** Deterministic micro-variation on the tape strip only (rotate, skew, size, padding). */
+function tapeStripVars(seedId) {
+  const id = seedId || 'slot'
+  let h = 0
+  for (let i = 0; i < id.length; i += 1) {
+    h = (Math.imul(31, h) + id.charCodeAt(i)) | 0
+  }
+  const u = (k) => ((h >>> k) & 0x7fff) / 0x7fff
+  const rot = (u(3) - 0.5) * 1.75
+  const skew = (u(7) - 0.5) * 1.1
+  const top = 7.8 + u(11) * 2.4
+  const widthPct = 74.5 + u(15) * 7.5
+  const maxW = 78 + Math.round(u(19) * 10)
+  const padY = 0.26 + u(23) * 0.14
+  const padX = 0.36 + u(27) * 0.14
+  const br = 2.2 + u(31) * 3.8
+  const borderA = 0.14 + u(35) * 0.1
+
+  return {
+    '--tape-rot': `${rot.toFixed(2)}deg`,
+    '--tape-skew': `${skew.toFixed(2)}deg`,
+    '--tape-top': `${top.toFixed(2)}%`,
+    '--tape-width-pct': `${widthPct.toFixed(1)}%`,
+    '--tape-max-w': `${maxW}px`,
+    '--tape-pad-y': `${padY.toFixed(3)}em`,
+    '--tape-pad-x': `${padX.toFixed(3)}em`,
+    '--tape-br': `${br.toFixed(2)}px`,
+    '--tape-border-a': borderA.toFixed(3),
+  }
+}
+
+/** FNV-1a-ish mix for stable glyph jitter from seed + index + character. */
+function mixGlyphSeed(seedId, index, ch) {
+  const s = `${seedId}\0${index}\0${ch}`
+  let h = 2166136261
+  for (let i = 0; i < s.length; i += 1) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+function nextUnit(ref) {
+  let x = ref.h
+  x ^= x << 13
+  x ^= x >>> 17
+  x ^= x << 5
+  ref.h = x >>> 0
+  return (x >>> 0) / 0xffffffff
+}
+
+/** Per-glyph Sharpie-style wobble: rotation, nudge, size, side-bearing (deterministic). */
+function tapeGlyphVars(seedId, index, ch) {
+  const h = mixGlyphSeed(seedId, index, ch)
+  const ref = { h }
+  const r1 = nextUnit(ref)
+  const r2 = nextUnit(ref)
+  const r3 = nextUnit(ref)
+  const r4 = nextUnit(ref)
+  const r5 = nextUnit(ref)
+  const r6 = nextUnit(ref)
+
+  const rot = (r1 - 0.5) * 6.2
+  const ty = (r2 - 0.5) * 0.13
+  const tx = (r3 - 0.5) * 0.09
+  const sc = 0.9 + r4 * 0.18
+  const mr = (ch === '-' ? 0.04 : 0.01) + (r5 - 0.5) * 0.07
+  const skew = (r6 - 0.5) * 2.8
+
+  return {
+    '--tg-rot': `${rot.toFixed(2)}deg`,
+    '--tg-skew': `${skew.toFixed(2)}deg`,
+    '--tg-tx': `${tx.toFixed(4)}em`,
+    '--tg-ty': `${ty.toFixed(4)}em`,
+    '--tg-sc': sc.toFixed(4),
+    '--tg-mr': `${mr.toFixed(4)}em`,
+  }
 }
 
 export function ArchiveDisc({ film, isLoaded, locked }) {
   const hex = locked ? '#f0b429' : film.color
   const vars = discCssVars(hex)
-  const title = locked ? '?' : film.title
-  const code = locked ? '· · ·' : film.code
   const emoji = locked ? '?' : film.thumbnail || '◈'
-  const oneLine = locked ? '?' : `${code}  ${title}`
-  const lineScale = tapeLineScale(oneLine)
+  const abbrev = locked ? '?' : tapeLabelAbbrev(film.code)
+  const lineScale = tapeLineScale(abbrev)
+  const stripVars = tapeStripVars(locked ? 'locked-slot' : film.id)
 
   return (
     <div
@@ -154,19 +322,32 @@ export function ArchiveDisc({ film, isLoaded, locked }) {
         <div className="archive-disc-metal-hub" />
       </div>
 
-      <div className={`archive-disc-tape ${tapeMarker.className}`} aria-label={locked ? 'Locked slot' : `${film.title} ${film.code}`}>
-        <div className="archive-disc-tape-line-outer">
+      <div
+        className={`archive-disc-tape ${tapeMarker.className}`}
+        style={stripVars}
+        aria-label={locked ? 'Locked slot' : `${film.title} ${film.code}`}
+      >
+        <div className="archive-disc-tape-line-outer" aria-hidden="true">
           <span className="archive-disc-tape-line" style={{ transform: `scale(${lineScale})` }}>
             {locked ? (
-              <span className="archive-disc-tape-locked-char">?</span>
+              <span
+                className="archive-disc-tape-glyph archive-disc-tape-locked-char"
+                style={tapeGlyphVars('locked-slot', 0, '?')}
+              >
+                ?
+              </span>
             ) : (
-              <>
-                <span className="archive-disc-tape-code">{code}</span>
-                <span className="archive-disc-tape-sep" aria-hidden="true">
-                  {' '}
-                </span>
-                <span className="archive-disc-tape-title">{title}</span>
-              </>
+              <span className="archive-disc-tape-abbrev">
+                {abbrev.split('').map((ch, i) => (
+                  <span
+                    key={`${film.id}-g-${i}`}
+                    className="archive-disc-tape-glyph"
+                    style={tapeGlyphVars(film.id, i, ch)}
+                  >
+                    {ch}
+                  </span>
+                ))}
+              </span>
             )}
           </span>
         </div>
@@ -230,7 +411,9 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
                   : undefined
               }
             >
-              <ArchiveDisc film={film} isLoaded={isLoaded} locked={false} />
+              <HoverReactiveDisc interactionActive={!isDragging}>
+                <ArchiveDisc film={film} isLoaded={isLoaded} locked={false} />
+              </HoverReactiveDisc>
 
               {isLoaded && (
                 <div className="absolute top-1.5 right-1.5">
@@ -256,11 +439,13 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
           aria-label="Locked archive slot teaser"
           className="disc archive-bay-cell archive-bay-cell--locked group relative flex cursor-not-allowed items-center justify-center border border-dashed border-console-amber/55 bg-console-dim/70 opacity-90"
         >
-          <ArchiveDisc
-            film={{ id: 'locked', title: '?', code: '· · ·', color: '#f0b429', thumbnail: '?' }}
-            isLoaded={false}
-            locked
-          />
+          <HoverReactiveDisc interactionActive locked>
+            <ArchiveDisc
+              film={{ id: 'locked', title: '?', code: '· · ·', color: '#f0b429', thumbnail: '?' }}
+              isLoaded={false}
+              locked
+            />
+          </HoverReactiveDisc>
           <div className="absolute top-1.5 right-1.5 text-[8px] tracking-[0.14em] text-console-amber">LOCK</div>
         </div>
       </div>
