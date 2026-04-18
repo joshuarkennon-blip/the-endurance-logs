@@ -65,7 +65,6 @@ export default function Console({ films, registerStopAll }) {
   const [draggingId, setDraggingId]   = useState(null)
   const [dropActive, setDropActive]   = useState(false)
   const [trayClosing, setTrayClosing] = useState(false)
-  const [mobileView, setMobileView]   = useState('shelf') // 'shelf' | 'screen'
   const [audioReady, setAudioReady]   = useState(false)
   const [jokerGlitchTick, setJokerGlitchTick] = useState(0)
   const [insertFlight, setInsertFlight] = useState(null)
@@ -175,7 +174,6 @@ export default function Console({ films, registerStopAll }) {
     setLoadedFilm(film)
     setIsLoading(true)
     setIsZoomed(true)
-    setMobileView('screen')
     playLoadTrigger(film.id)
   }, [loadedFilm, playLoadTrigger])
 
@@ -249,7 +247,6 @@ export default function Console({ films, registerStopAll }) {
     playUI('eject')
     stopAmbient()
     setIsZoomed(false)
-    setMobileView('shelf')
     setTimeout(() => {
       setLoadedFilm(null)
       setIsLoading(false)
@@ -312,20 +309,13 @@ export default function Console({ films, registerStopAll }) {
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 text-[10px] md:text-[11px] text-console-muted">
-          {/* Mobile nav toggle */}
-          <div className="flex md:hidden gap-0">
-            <button
-              onClick={() => setMobileView('shelf')}
-              className={`console-btn px-3 py-1 text-[10px] ${mobileView === 'shelf' ? 'border-console-accent text-console-glow' : ''}`}
-            >
-              ARCHIVE
-            </button>
-            <button
-              onClick={() => setMobileView('screen')}
-              className={`console-btn px-3 py-1 text-[10px] ${mobileView === 'screen' ? 'border-console-accent text-console-glow' : ''}`}
-            >
-              LOG
-            </button>
+          {/* Mobile: loaded film indicator */}
+          <div className="flex md:hidden items-center gap-2">
+            {loadedFilm && (
+              <span className="text-console-glow tracking-widest text-[10px]">
+                ◈ {loadedFilm.code}
+              </span>
+            )}
           </div>
 
           <div className="hidden md:block text-right">
@@ -349,8 +339,8 @@ export default function Console({ films, registerStopAll }) {
           transform: isZoomed ? 'scale(1.015)' : 'scale(1)',
         }}
       >
-        {/* ── DISC SHELF — hidden on mobile when viewing screen ── */}
-        <div className={`${mobileView === 'screen' ? 'hidden' : 'flex'} md:flex shrink-0 flex-col`}>
+        {/* ── DISC SHELF — always visible on mobile ── */}
+        <div className={`flex md:flex w-full md:w-auto md:shrink-0 flex-col`}>
           <DiscShelf
             films={films}
             loadedFilm={loadedFilm}
@@ -380,9 +370,9 @@ export default function Console({ films, registerStopAll }) {
 
         <div className="hidden md:block w-px bg-console-border shrink-0" />
 
-        {/* ── LOG SCREEN — full width on mobile when viewing screen ── */}
+        {/* ── LOG SCREEN — desktop only ── */}
         <div
-          className={`${mobileView === 'shelf' ? 'hidden' : 'flex'} md:flex flex-1 flex-col transition-all duration-300 ${dropActive ? 'drop-active' : ''}`}
+          className={`hidden md:flex flex-1 flex-col transition-all duration-300 ${dropActive ? 'drop-active' : ''}`}
           style={dropActive ? { borderColor: '#6ab4dc', boxShadow: '0 0 30px rgba(106,180,220,0.2) inset' } : {}}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -394,7 +384,7 @@ export default function Console({ films, registerStopAll }) {
             onLoadComplete={handleLoadComplete}
             onEject={handleEject}
             playUI={playUI}
-            onGoToShelf={() => setMobileView('shelf')}
+
             jokerGlitchTick={jokerGlitchTick}
           />
         </div>
