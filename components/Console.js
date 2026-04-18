@@ -309,15 +309,6 @@ export default function Console({ films, registerStopAll }) {
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 text-[10px] md:text-[11px] text-console-muted">
-          {/* Mobile: loaded film indicator */}
-          <div className="flex md:hidden items-center gap-2">
-            {loadedFilm && (
-              <span className="text-console-glow tracking-widest text-[10px]">
-                ◈ {loadedFilm.code}
-              </span>
-            )}
-          </div>
-
           <div className="hidden md:block text-right">
             <p className="tracking-widest">LOADED: <span className="text-console-text">{loadedFilm?.code || '—'}</span></p>
             <p className="tracking-widest">STATUS: <span className={loadedFilm ? 'text-green-400' : 'text-console-muted'}>
@@ -350,7 +341,7 @@ export default function Console({ films, registerStopAll }) {
             onTap={loadFilm}
           />
           <div
-            className="shelf-disc-dropzone"
+            className="shelf-disc-dropzone hidden md:block"
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -517,18 +508,17 @@ export default function Console({ films, registerStopAll }) {
         <div className="flex gap-3 md:gap-6 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">ENDURANCE // ARCHIVAL TERMINAL</span>
           <span className="hidden md:inline italic text-console-muted opacity-60">for RK — my reason for existence</span>
-          <span className="md:hidden">NOLAN // PHASE I</span>
+          <span className="md:hidden text-console-glow">{loadedFilm ? `◈ ${loadedFilm.code}` : '◈ STANDBY'}</span>
         </div>
         <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>
-          <span className="md:hidden">TAP DISC TO LOAD</span>
           <Link href="/info" className="hover:text-console-glow transition-colors tracking-widest">
-            SOURCES & INFO
+            INFO
           </Link>
           <Link href="/collect" className="hover:text-console-amber transition-colors tracking-widest text-console-amber opacity-60 hover:opacity-100">
             ACQUIRE ◈
           </Link>
-          <span className="text-console-glow">◈ NOMINAL</span>
+          <span className="hidden md:inline text-console-glow">◈ NOMINAL</span>
         </div>
       </div>
     </div>

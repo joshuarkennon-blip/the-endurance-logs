@@ -57,7 +57,15 @@ function readStoredMasterVolume() {
   try {
     const raw = localStorage.getItem('endurance-master-volume')
     const p = parseFloat(raw)
-    if (Number.isFinite(p) && p >= 0 && p <= 1) return p
+    if (Number.isFinite(p) && p >= 0 && p <= 1) {
+      // One-time migration: quietly lower the old 1.0 default to 0.35
+      if (p >= 0.98 && !localStorage.getItem('endurance-vol-v2')) {
+        localStorage.setItem('endurance-master-volume', '0.35')
+        localStorage.setItem('endurance-vol-v2', '1')
+        return 0.35
+      }
+      return p
+    }
   } catch (_) {}
   return 0.35
 }
