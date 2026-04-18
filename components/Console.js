@@ -13,43 +13,47 @@ function ConsoleAudioControls({ masterVolume, setMasterVolume, isMuted, toggleMu
   const id = useId()
   const pct = Math.round(Math.min(100, Math.max(0, masterVolume * 100)))
   const outputOff = isMuted || masterVolume <= 0.0005
+  const volStyle = { '--vol-pct': `${pct}%` }
+  const btnStyle = { borderColor: outputOff ? '#9e5c4a' : '#4a7c9e', color: outputOff ? '#dc8c6a' : '#9ecad8' }
 
   return (
-    <div className="flex flex-col gap-2 w-full min-w-0">
-      <div className="flex flex-col gap-1 w-full min-w-0">
-        <label htmlFor={`${id}-master-vol`} className="text-[8px] md:text-[9px] tracking-[0.14em] text-console-muted uppercase">
-          Master gain
-        </label>
+    <div className="w-full min-w-0">
+      {/* Desktop: stacked — label, slider, mute */}
+      <div className="hidden md:flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
+          <label htmlFor={`${id}-vol`} className="text-[9px] tracking-[0.14em] text-console-muted uppercase">
+            Master gain
+          </label>
+          <input
+            id={`${id}-vol`}
+            type="range" min={0} max={100} step={1} value={pct}
+            aria-label="Master volume"
+            onChange={(e) => setMasterVolume(Number(e.target.value) / 100)}
+            className="console-master-vol w-full min-h-[36px] py-1 touch-manipulation"
+            style={volStyle}
+          />
+        </div>
+        <button type="button" onClick={() => { playUI('tick'); toggleMute() }}
+          className="console-btn w-full px-2 py-1 text-[9px]" style={btnStyle}>
+          AUDIO: {outputOff ? 'MUTED' : 'LIVE'}
+        </button>
+      </div>
+
+      {/* Mobile: horizontal — mute button + slider */}
+      <div className="flex md:hidden items-center gap-2">
+        <button type="button" onClick={() => { playUI('tick'); toggleMute() }}
+          className="console-btn shrink-0 px-3 py-2 text-[10px]" style={btnStyle}>
+          {outputOff ? 'MUTED' : 'LIVE'}
+        </button>
         <input
-          id={`${id}-master-vol`}
-          type="range"
-          min={0}
-          max={100}
-          step={1}
-          value={pct}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={pct}
-          aria-valuetext={`${pct} percent`}
-          aria-label="Master volume; zero is silent, one hundred is full mix level"
+          id={`${id}-vol-m`}
+          type="range" min={0} max={100} step={1} value={pct}
+          aria-label="Master volume"
           onChange={(e) => setMasterVolume(Number(e.target.value) / 100)}
-          className="console-master-vol w-full min-w-0 min-h-[44px] md:min-h-[36px] py-2 md:py-1 touch-manipulation"
+          className="console-master-vol flex-1 min-h-[44px] touch-manipulation"
+          style={volStyle}
         />
       </div>
-      <button
-        type="button"
-        onClick={() => {
-          playUI('tick')
-          toggleMute()
-        }}
-        className="console-btn w-full px-2 py-1.5 md:py-1 text-[9px] shrink-0"
-        style={{
-          borderColor: outputOff ? '#9e5c4a' : '#4a7c9e',
-          color: outputOff ? '#dc8c6a' : '#9ecad8',
-        }}
-      >
-        AUDIO: {outputOff ? 'MUTED' : 'LIVE'}
-      </button>
     </div>
   )
 }
@@ -499,17 +503,17 @@ export default function Console({ films, registerStopAll }) {
         </div>
       </div>
 
-      {/* ── BOTTOM STATUS BAR ── */}
-      <div className="md:hidden border-t border-console-border bg-[rgba(10,12,18,0.92)] px-3 py-2 shrink-0">
-        <ConsoleAudioControls
-          masterVolume={masterVolume}
-          setMasterVolume={setMasterVolume}
-          isMuted={isMuted}
-          toggleMute={toggleMute}
-          playUI={playUI}
-        />
-      </div>
-      <div className="md:hidden">
+      {/* ── MOBILE BOTTOM BAR: audio controls + CASE toggle ── */}
+      <div className="md:hidden border-t border-console-border bg-[rgba(8,10,15,0.95)] px-3 py-2 shrink-0 flex items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <ConsoleAudioControls
+            masterVolume={masterVolume}
+            setMasterVolume={setMasterVolume}
+            isMuted={isMuted}
+            toggleMute={toggleMute}
+            playUI={playUI}
+          />
+        </div>
         <CaseChat
           films={films}
           playUI={playUI}
