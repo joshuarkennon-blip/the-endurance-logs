@@ -11,6 +11,15 @@ function trailDisabled() {
   )
 }
 
+function isTouchPrimary() {
+  if (typeof window === 'undefined') return false
+  if (typeof window.matchMedia !== 'function') return false
+  return (
+    window.matchMedia('(hover: none)').matches ||
+    window.matchMedia('(pointer: coarse)').matches
+  )
+}
+
 /**
  * Soft glow trail following the cursor. Tint follows `accentHex` when a film is active.
  */
@@ -22,6 +31,7 @@ export default function CursorGlowTrail({ accentHex = null }) {
   accentRef.current = accentHex
 
   useEffect(() => {
+    if (isTouchPrimary()) return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')

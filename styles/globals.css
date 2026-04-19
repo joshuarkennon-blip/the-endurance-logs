@@ -1322,8 +1322,13 @@ body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
 
 /* ── MOBILE LEGIBILITY ── */
 @media (max-width: 767px) {
-  /* Reduce grain intensity on mobile — it muddies small text */
-  .grain { opacity: 0.18; }
+  /* Reduce grain intensity on mobile — it muddies small text.
+     Also stop the per-frame transform so Mobile GPUs aren't recompositing
+     a 200% × 200% layer 2× per second. */
+  .grain {
+    opacity: 0.18;
+    animation: none;
+  }
 
   /* Slightly reduce scanline contrast so text reads cleaner */
   .crt::before {
@@ -1334,6 +1339,12 @@ body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
       rgba(0,0,0,0.04) 2px,
       rgba(0,0,0,0.04) 4px
     );
+  }
+
+  /* The travelling scanline forces a fullscreen repaint each frame. Hide it
+     on small viewports — the static stripe overlay above is enough texture. */
+  .crt::after {
+    display: none;
   }
 
   /* Tighten letter-spacing on mobile — wide tracking hurts readability at small sizes */

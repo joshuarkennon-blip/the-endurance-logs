@@ -12,10 +12,21 @@ const tapeMarker = Permanent_Marker({
 
 function discHoverMotionOff() {
   if (typeof document === 'undefined') return true
-  return (
+  if (
     document.body.classList.contains('motion-min') ||
     document.body.classList.contains('fx-off')
-  )
+  ) {
+    return true
+  }
+  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+    if (
+      window.matchMedia('(hover: none)').matches ||
+      window.matchMedia('(pointer: coarse)').matches
+    ) {
+      return true
+    }
+  }
+  return false
 }
 
 /** Pointer tilt + lift; pauses while dragging or when motion/FX reduced. */
@@ -58,11 +69,6 @@ function HoverReactiveDisc({ children, interactionActive, locked = false }) {
       }}
       onMouseMove={(e) => apply(e.clientX, e.clientY, e.currentTarget)}
       onMouseLeave={reset}
-      onTouchMove={(e) => {
-        const t = e.touches[0]
-        if (t) apply(t.clientX, t.clientY, e.currentTarget)
-      }}
-      onTouchEnd={reset}
     >
       <div
         className="archive-disc-hover-inner will-change-transform"
