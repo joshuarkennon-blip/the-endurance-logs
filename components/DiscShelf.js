@@ -59,10 +59,14 @@ function HoverReactiveDisc({ children, interactionActive, locked = false }) {
       onMouseMove={(e) => apply(e.clientX, e.clientY, e.currentTarget)}
       onMouseLeave={reset}
       onTouchMove={(e) => {
+        if (!interactionActive) return
         const t = e.touches[0]
         if (t) apply(t.clientX, t.clientY, e.currentTarget)
       }}
-      onTouchEnd={reset}
+      onTouchEnd={() => {
+        if (!interactionActive) return
+        reset()
+      }}
     >
       <div
         className="archive-disc-hover-inner will-change-transform"
@@ -412,7 +416,7 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
                   : undefined
               }
             >
-              <HoverReactiveDisc interactionActive={!isDragging}>
+              <HoverReactiveDisc interactionActive={!isDragging && !disableDrag}>
                 <ArchiveDisc film={film} isLoaded={isLoaded} locked={false} />
               </HoverReactiveDisc>
 
@@ -440,7 +444,7 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
           aria-label="Locked archive slot teaser"
           className="disc archive-bay-cell archive-bay-cell--locked group relative flex cursor-not-allowed items-center justify-center border border-dashed border-console-amber/55 bg-console-dim/70 opacity-90"
         >
-          <HoverReactiveDisc interactionActive locked>
+          <HoverReactiveDisc interactionActive={!disableDrag} locked>
             <ArchiveDisc
               film={{ id: 'locked', title: '?', code: '· · ·', color: '#f0b429', thumbnail: '?' }}
               isLoaded={false}

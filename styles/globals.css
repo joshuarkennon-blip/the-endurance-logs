@@ -1174,6 +1174,41 @@ body.touch-primary .archive-disc {
   max-width: min(100%, 102px);
 }
 
+body.touch-primary .archive-disc-hover-inner {
+  transform: none !important;
+  transition: none !important;
+  filter: none !important;
+}
+
+body.touch-primary .console-screen *,
+body.touch-primary .case-terminal *,
+body.touch-primary .panel * {
+  transition-duration: 0.01ms !important;
+}
+
+body.touch-primary .section-reveal,
+body.touch-primary .pixel-intro-scene,
+body.touch-primary .dream-layer-mid::after,
+body.touch-primary .dream-layer-deep,
+body.touch-primary .dream-layer-deep::before,
+body.touch-primary .dream-layer-deep::after,
+body.touch-primary .dream-layer-glitch-shell,
+body.touch-primary .dream-layer-glitch-line,
+body.touch-primary .dream-layer-glitch-static,
+body.touch-primary .dream-layer-glitch-shift,
+body.touch-primary .dream-layer-glitch-phosphor,
+body.touch-primary .dream-layer-glitch-terminal,
+body.touch-primary .dream-layer-glitch-cursor,
+body.touch-primary .dream-layer-glitch-smile,
+body.touch-primary .tdk-pixel-joker-glow,
+body.touch-primary .dream-credits-roll-inner,
+body.touch-primary .joker-glitch-overlay,
+body.touch-primary .case-orb,
+body.touch-primary .led,
+body.touch-primary .crt::after {
+  animation: none !important;
+}
+
 body.motion-min .section-reveal,
 body.motion-min .pixel-intro-scene,
 body.motion-min .dream-layer-deep,

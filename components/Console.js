@@ -166,16 +166,22 @@ export default function Console({ films, registerStopAll }) {
     } catch (_) {}
 
     document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high', 'perf-constrained')
-    if (settings.fxMode === 'lite') document.body.classList.add('fx-lite')
-    if (settings.fxMode === 'off') document.body.classList.add('fx-off')
-    if (settings.motionMode === 'reduced') document.body.classList.add('motion-min')
+    const activeFxMode = isTouchPrimary
+      ? 'off'
+      : settings.fxMode === 'full' && performanceConstrained
+        ? 'lite'
+        : settings.fxMode
+    const activeMotionMode = isTouchPrimary ? 'reduced' : settings.motionMode
+    if (activeFxMode === 'lite') document.body.classList.add('fx-lite')
+    if (activeFxMode === 'off') document.body.classList.add('fx-off')
+    if (activeMotionMode === 'reduced') document.body.classList.add('motion-min')
     if (settings.contrastMode === 'high') document.body.classList.add('contrast-high')
     if (performanceConstrained) document.body.classList.add('perf-constrained')
 
     return () => {
       document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high', 'perf-constrained')
     }
-  }, [settings, performanceConstrained])
+  }, [settings, performanceConstrained, isTouchPrimary])
 
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
@@ -324,10 +330,14 @@ export default function Console({ films, registerStopAll }) {
   }, [loadedFilm, isLoading, startAmbient])
 
   const filmCursorAccent = loadedFilm ? loadedFilm.glowColor || loadedFilm.color : null
-  const fxMode = settings.fxMode === 'full' && performanceConstrained ? 'lite' : settings.fxMode
-  const canUseMotion = settings.motionMode === 'full' && !performanceConstrained
+  const fxMode = isTouchPrimary
+    ? 'off'
+    : settings.fxMode === 'full' && performanceConstrained
+      ? 'lite'
+      : settings.fxMode
+  const canUseMotion = !isTouchPrimary && settings.motionMode === 'full' && !performanceConstrained
   const isMobileImmersive = isTouchPrimary && isPhoneViewport && Boolean(loadedFilm)
-  const shellStyle = filmCursorAccent
+  const shellStyle = filmCursorAccent && !isTouchPrimary
     ? {
         cursor: filmCursorCssValue(filmCursorAccent),
         background: `radial-gradient(120% 90% at 50% 46%, ${filmCursorAccent}14 0%, transparent 54%)`,
@@ -351,7 +361,7 @@ export default function Console({ films, registerStopAll }) {
     fxMode,
     fullscreen: isMobileImmersive,
   }
-  const disableDnD = isTouchPrimary
+  const disableDrag = isTouchPrimary
 
   useEffect(() => {
     document.body.classList.toggle('mobile-log-immersive', Boolean(isMobileImmersive))
@@ -475,9 +485,9 @@ export default function Console({ films, registerStopAll }) {
             onDragEnd={handleDragEnd}
             draggingId={draggingId}
             onTap={loadFilm}
-            disableDnD={disableDnD}
+            disableDrag={disableDrag}
           />
-          {!disableDnD ? (
+          {!disableDrag ? (
             <div
               className="shelf-disc-dropzone"
               onDragOver={handleDragOver}
