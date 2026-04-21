@@ -361,5 +361,57 @@
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
+  },
+  {
+    "id": "oppenheimer",
+    "title": "OPPENHEIMER",
+    "year": "2023",
+    "code": "OPP-2023",
+    "color": "#8a5a42",
+    "glowColor": "#d69b74",
+    "tagline": "Theory reached critical mass. Consequence became permanent.",
+    "thumbnail": "☢️",
+    "themes": ["Scientific Responsibility", "State Power", "Moral Injury", "Security Theater"],
+    "transmission": "ENDURANCE-LOG-8E",
+    "dossier": {
+      "opening": "This transmission concerns a man who solved one impossible problem and was then consumed by the political machinery built to weaponize the solution. Oppenheimer is not a biopic of genius. It is an audit of consequence.",
+      "sections": [
+        { "heading": "TRINITY AS PROOF-OF-CONCEPT", "body": "The Trinity test sequence is framed as an engineering threshold and an existential rupture. Nolan withholds score and impact delay so the blast arrives as cognitive lag: first sight, then comprehension, then fear. The bomb is not treated as an endpoint. It is treated as the beginning of a system no one can later shut down." },
+        { "heading": "THE HEARING AS COUNTERATTACK", "body": "The 1954 security clearance hearing is the film's central battlefield. Publicly procedural and privately punitive, it functions as bureaucratic retaliation disguised as due process. Oppenheimer's enemies do not need to disprove his science; they only need to reframe his loyalty. Reputation becomes infrastructure, and the state turns it into a weapon." },
+        { "heading": "SUBJECTIVE VS. STRUCTURAL TIME", "body": "Nolan alternates between subjective memory flow and institutional chronology to show two incompatible realities: what Oppenheimer felt happened, and what the record can be made to say happened. The color/monochrome split is less about objective truth than power over narrative format. Whoever controls framing controls verdict." },
+        { "heading": "PROMETHEUS, MODERNIZED", "body": "The film repeatedly invokes the Prometheus analogy, but strips it of heroism. Knowledge transfer here does not liberate humanity; it formalizes permanent deterrence and permanent threat. Oppenheimer's achievement is real and irreversible, and the film's argument is that moral injury can coexist with technical success without resolving it." }
+      ],
+      "closing_transmission": "END LOG // ENDURANCE COORDINATE: 173.3° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
+    },
+    "production": {
+      "layer_label": "DREAM LAYER 2 — PRODUCTION ARCHIVE",
+      "dream_color": "#8a5a42",
+      "dream_glow": "#d69b74",
+      "opening": "Large-format historical reconstruction with practical detonation language, dense procedural dialogue, and courtroom architecture tuned for pressure.",
+      "sections": [
+        { "heading": "IMAX 65MM BLACK-AND-WHITE", "body": "Oppenheimer became the first feature to photograph black-and-white sequences on IMAX 65mm stock, developed in partnership with Kodak and FotoKem. Nolan's format choice is functional, not ornamental: it gives institutional scenes a hard documentary authority while preserving large-format texture." },
+        { "heading": "PRACTICAL NUCLEAR VISUALIZATION", "body": "Rather than rely on full-CG spectacle, production used large-scale practical effects, fluid dynamics photography, miniature work, and in-camera light events to represent atomic imagery. The result keeps abstraction physically anchored: the audience feels material behavior, not synthetic simulation." },
+        { "heading": "LOS ALAMOS RECREATION", "body": "The team built extensive practical environments to recreate wartime Los Alamos operations and social hierarchy. Nolan stages science as logistics: chalkboards, procurement, military oversight, and scheduling pressure. Discovery is shown as organizational throughput as much as inspiration." },
+        { "heading": "SCORE AS NEURAL PRESSURE", "body": "Ludwig Goransson's violin-forward score operates like accelerating cognition under stress. Rhythmic ostinatos and dissonant swells mirror chain-reaction logic: local events trigger irreversible escalation. The music behaves like an internal reactor, not a traditional heroic cue system." },
+        { "heading": "HEARING ROOM GEOMETRY", "body": "Courtroom and hearing scenes are shot to emphasize confinement, witness alignment, and conversational crossfire. Blocking places Oppenheimer at the center of institutional triangulation, where testimony, memory, and policy collide. The visual grammar makes administrative procedure feel like siege warfare." },
+        { "heading": "ADAPTATION SCOPE", "body": "The screenplay adapts material from Kai Bird and Martin J. Sherwin's American Prometheus while compressing decades of scientific, military, and political context into a continuous pressure narrative. Nolan prioritizes causal links over encyclopedic breadth, keeping the focus on decision chains and fallout." }
+      ],
+      "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AMERICAN PROMETHEUS (BIRD/SHERWIN), KODAK/FOTOKEM FORMAT NOTES, UNIVERSAL PRODUCTION MATERIALS, CAST/CREW INTERVIEWS"
+    },
+    "deepcuts": {
+      "layer_label": "DREAM LAYER 3 — SIGNAL DEPTH: CRITICAL",
+      "dream_color": "#5c3726",
+      "dream_glow": "#be7f57",
+      "opening": "Below the official narrative are the mechanisms: language management, political choreography, and the problem of living after an irreversible success.",
+      "sections": [
+        { "heading": "STRAUSS'S FRAME CONTROL", "body": "The Strauss thread demonstrates that policy conflict can be won by controlling witness order, social pressure, and selective disclosure. The film treats bureaucratic revenge as an engineered process with clear stages: isolate target, contaminate record, ratify outcome." },
+        { "heading": "THE VISIBLE-ONLY-TO-HIM BLAST", "body": "Nolan visualizes imagined detonation waves inside dialogue scenes to represent delayed psychological impact rather than literal event. Oppenheimer's mind runs catastrophe simulations in real time, even when rooms are quiet. Internal aftermath precedes public aftermath." },
+        { "heading": "SECURITY LANGUAGE AS CUDGEL", "body": "Terms like 'clearance,' 'risk,' and 'association' become flexible legal instruments. The film shows how ambiguous security vocabulary can be operationalized to punish dissent without proving disloyalty. Procedure supplies legitimacy while outcomes are preselected." },
+        { "heading": "FISSION TO FUSION ESCALATION", "body": "Postwar argument over the hydrogen bomb reframes Trinity as phase one, not finale. Oppenheimer's caution is interpreted as obstruction by hawkish actors who define momentum as patriotism. The strategic system rewards acceleration, not restraint." },
+        { "heading": "EINSTEIN POND MISDIRECTION", "body": "The recurring Einstein conversation functions as delayed-key storytelling. Characters project private assumptions onto an interaction they did not hear, and policy consequences follow from that projection. Misread signal becomes historical force." },
+        { "heading": "ENDING AS OPEN SYSTEM WARNING", "body": "The closing exchange shifts from personal legacy to planetary systems logic: once proliferation dynamics are active, no single actor can guarantee containment. The film ends not with closure, but with a model of permanent instability." }
+      ],
+      "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
+    }
   }
 ]
