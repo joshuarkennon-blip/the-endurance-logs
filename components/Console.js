@@ -67,6 +67,7 @@ export default function Console({ films, registerStopAll }) {
   const [insertFlight, setInsertFlight] = useState(null)
   const [trayIngest, setTrayIngest]     = useState(false)
   const [isDesktop, setIsDesktop]       = useState(null)
+  const [isTouchPrimary, setIsTouchPrimary] = useState(false)
   const [performanceConstrained, setPerformanceConstrained] = useState(false)
   const [settings, setSettings]       = useState({
     fxMode: 'full',       // full | lite | off
@@ -115,7 +116,9 @@ export default function Console({ films, registerStopAll }) {
       navigator.deviceMemory > 0 &&
       navigator.deviceMemory <= 4
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches
-    setPerformanceConstrained(coarsePointer && (lowThreadBudget || lowMemoryBudget))
+    setIsTouchPrimary(coarsePointer)
+    // Treat touch-first devices as constrained to keep mobile/tablet smooth.
+    setPerformanceConstrained(coarsePointer || lowThreadBudget || lowMemoryBudget)
   }, [])
 
   useEffect(() => {
@@ -303,7 +306,7 @@ export default function Console({ films, registerStopAll }) {
   const filmCursorAccent = loadedFilm ? loadedFilm.glowColor || loadedFilm.color : null
   const fxMode = settings.fxMode === 'full' && performanceConstrained ? 'lite' : settings.fxMode
   const canUseMotion = settings.motionMode === 'full' && !performanceConstrained
-  const isMobileImmersive = isDesktop === false && Boolean(loadedFilm)
+  const isMobileImmersive = isTouchPrimary && Boolean(loadedFilm)
   const shellStyle = filmCursorAccent
     ? {
         cursor: filmCursorCssValue(filmCursorAccent),
@@ -577,7 +580,7 @@ export default function Console({ films, registerStopAll }) {
             >
               RESET SETTINGS
             </button>
-            {isDesktop === true ? <CaseChat {...caseChatProps} /> : null}
+            {isDesktop === true && !isTouchPrimary ? <CaseChat {...caseChatProps} /> : null}
           </div>
         </div>
       </div>
@@ -592,7 +595,7 @@ export default function Console({ films, registerStopAll }) {
           playUI={playUI}
         />
       </div>
-      {isDesktop === false && !isMobileImmersive ? (
+      {isTouchPrimary && !isMobileImmersive ? (
         <div className="md:hidden">
           <CaseChat {...caseChatProps} />
         </div>
