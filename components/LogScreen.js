@@ -865,7 +865,7 @@ function DossierView({ film, onClose, onGoToShelf, fxMode }) {
 }
 
 // ── ROOT ──────────────────────────────────────────────────────────────────────
-export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf, jokerGlitchTick = 0, fxMode = 'full' }) {
+export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf, jokerGlitchTick = 0, fxMode = 'full', fullscreen = false }) {
   const [showJokerGlitch, setShowJokerGlitch] = useState(false)
 
   useEffect(() => {
@@ -876,7 +876,16 @@ export default function LogScreen({ film, isLoading, onLoadComplete, onEject, pl
   }, [film, jokerGlitchTick, fxMode])
 
   return (
-    <div className="console-screen flex-1 h-full relative">
+    <div
+      className={`console-screen flex-1 h-full relative ${fullscreen ? 'console-screen-fullscreen' : ''}`}
+      style={
+        film
+          ? {
+              boxShadow: `inset 0 0 40px color-mix(in srgb, ${film.glowColor || film.color} 16%, transparent)`,
+            }
+          : undefined
+      }
+    >
       <div className="absolute inset-0 pointer-events-none z-10"
         style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%)' }} />
       {showJokerGlitch && fxMode !== 'off' && (

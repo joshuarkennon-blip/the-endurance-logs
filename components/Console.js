@@ -159,6 +159,11 @@ export default function Console({ films, registerStopAll }) {
     }
   }, [settings, performanceConstrained])
 
+  useEffect(() => {
+    document.body.classList.toggle('mobile-log-immersive', Boolean(isMobileImmersive))
+    return () => document.body.classList.remove('mobile-log-immersive')
+  }, [isMobileImmersive])
+
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
     if (!audioReady) setAudioReady(true)
@@ -285,11 +290,12 @@ export default function Console({ films, registerStopAll }) {
     stopAmbient()
     setIsZoomed(false)
     setMobileView('shelf')
+    const clearDelay = isDesktop === false ? 140 : 600
     setTimeout(() => {
       setLoadedFilm(null)
       setIsLoading(false)
-    }, 600)
-  }, [playUI, stopAmbient])
+    }, clearDelay)
+  }, [playUI, stopAmbient, isDesktop])
 
   const handleEggOpen = useCallback(() => {
     stopAmbient()
@@ -302,6 +308,13 @@ export default function Console({ films, registerStopAll }) {
   const filmCursorAccent = loadedFilm ? loadedFilm.glowColor || loadedFilm.color : null
   const fxMode = settings.fxMode === 'full' && performanceConstrained ? 'lite' : settings.fxMode
   const canUseMotion = settings.motionMode === 'full' && !performanceConstrained
+  const isMobileImmersive = isDesktop === false && Boolean(loadedFilm)
+  const shellStyle = filmCursorAccent
+    ? {
+        cursor: filmCursorCssValue(filmCursorAccent),
+        background: `radial-gradient(120% 90% at 50% 46%, ${filmCursorAccent}14 0%, transparent 54%)`,
+      }
+    : undefined
   const caseChatProps = {
     films,
     playUI,
@@ -309,12 +322,23 @@ export default function Console({ films, registerStopAll }) {
     onEggOpen: handleEggOpen,
     onEggClose: handleEggClose,
   }
+  const logScreenProps = {
+    film: loadedFilm,
+    isLoading,
+    onLoadComplete: handleLoadComplete,
+    onEject: handleEject,
+    playUI,
+    onGoToShelf: () => setMobileView('shelf'),
+    jokerGlitchTick,
+    fxMode,
+    fullscreen: isMobileImmersive,
+  }
 
   return (
     <div
       className={`relative w-full h-full flex flex-col${filmCursorAccent ? ' console-film-cursor' : ''}`}
       onClick={unlockAudio}
-      style={filmCursorAccent ? { cursor: filmCursorCssValue(filmCursorAccent) } : undefined}
+      style={shellStyle}
     >
       <CursorGlowTrail accentHex={filmCursorAccent} fxMode={fxMode} />
       {insertFlight ? (
@@ -337,6 +361,31 @@ export default function Console({ films, registerStopAll }) {
 
       <div id="case-easter-egg" />
 
+      {isMobileImmersive ? (
+        <div className="console-mobile-immersive fixed inset-0 z-[10030] flex flex-col">
+          <div className="console-mobile-immersive-head px-3 py-2 border-b border-console-border">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-console-glow font-bold">
+              {loadedFilm?.code} // ACTIVE TRANSMISSION
+            </p>
+            <p className="text-[9px] text-console-muted tracking-widest mt-0.5">
+              MOBILE IMMERSIVE MODE
+            </p>
+          </div>
+          <div className="flex-1 min-h-0">
+            <LogScreen {...logScreenProps} />
+          </div>
+          <div className="border-t border-console-border bg-[rgba(8,10,16,0.92)] px-3 py-2 shrink-0">
+            <ConsoleAudioControls
+              masterVolume={masterVolume}
+              setMasterVolume={setMasterVolume}
+              isMuted={isMuted}
+              toggleMute={toggleMute}
+              playUI={playUI}
+            />
+          </div>
+        </div>
+      ) : (
+        <>
       {/* ── TOP BAR ── */}
       <div className="panel border-b-0 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3 md:gap-4">
@@ -432,16 +481,7 @@ export default function Console({ films, registerStopAll }) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <LogScreen
-            film={loadedFilm}
-            isLoading={isLoading}
-            onLoadComplete={handleLoadComplete}
-            onEject={handleEject}
-            playUI={playUI}
-            onGoToShelf={() => setMobileView('shelf')}
-            jokerGlitchTick={jokerGlitchTick}
-            fxMode={fxMode}
-          />
+          <LogScreen {...logScreenProps} />
         </div>
 
         {/* ── RIGHT INSTRUMENTS — desktop only ── */}
@@ -552,7 +592,7 @@ export default function Console({ films, registerStopAll }) {
           playUI={playUI}
         />
       </div>
-      {isDesktop === false ? (
+      {isDesktop === false && !isMobileImmersive ? (
         <div className="md:hidden">
           <CaseChat {...caseChatProps} />
         </div>
@@ -576,6 +616,8 @@ export default function Console({ films, registerStopAll }) {
           <span className="text-console-glow">◈ NOMINAL</span>
         </div>
       </div>
+      </>
+      )}
     </div>
   )
 }

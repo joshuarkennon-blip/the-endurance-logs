@@ -416,6 +416,24 @@ html, body {
   pointer-events: none;
 }
 
+.console-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--terminal-texture-opacity, 0.22);
+  mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(140, 202, 235, 0.04) 0px,
+      rgba(140, 202, 235, 0.04) 1px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0) 4px
+    ),
+    radial-gradient(ellipse at 20% 16%, rgba(106, 180, 220, 0.12) 0%, rgba(0, 0, 0, 0) 42%);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
@@ -1606,6 +1624,46 @@ body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
 }
 
 @media (max-width: 767px) {
+  body.mobile-log-immersive {
+    background: #020307;
+  }
+
+  body.mobile-log-immersive .crt::before {
+    opacity: 0.26;
+  }
+
+  body.mobile-log-immersive .grain {
+    opacity: 0.09;
+  }
+
+  body.mobile-log-immersive .case-widget {
+    bottom: 10px;
+    right: 10px;
+    z-index: 10060;
+  }
+
+  body.mobile-log-immersive .case-terminal {
+    left: 10px;
+    right: 10px;
+    bottom: 54px;
+    height: min(300px, calc(100vh - 120px));
+    border-color: rgba(74, 124, 158, 0.74);
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.84), inset 0 0 14px rgba(24, 95, 165, 0.08);
+  }
+
+  body.mobile-log-immersive .console-screen {
+    border-width: 1px;
+    border-color: rgba(66, 84, 105, 0.74);
+  }
+
+  body.mobile-log-immersive .console-screen::before {
+    background: radial-gradient(ellipse at center, rgba(100, 180, 220, 0.07) 0%, rgba(0, 0, 0, 0) 72%);
+  }
+
+  body.mobile-log-immersive .console-screen::after {
+    opacity: 0.16;
+  }
+
   .crt::after {
     animation-duration: 13s;
     opacity: 0.22;
@@ -1873,6 +1931,26 @@ body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
   color: rgba(90, 120, 136, 0.76);
 }
 
+.console-mobile-immersive {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(92, 155, 194, 0.16) 0%, rgba(8, 10, 16, 0.95) 58%),
+    #04060b;
+  backdrop-filter: blur(1.6px);
+}
+
+.console-mobile-immersive-head {
+  background: linear-gradient(180deg, rgba(12, 16, 24, 0.92) 0%, rgba(8, 11, 17, 0.84) 100%);
+}
+
+.console-screen-fullscreen {
+  border: 0;
+}
+
+.case-widget-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 #case-easter-egg {
   display: none;
   position: fixed;
@@ -1921,5 +1999,15 @@ body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
 
   .case-input {
     flex-wrap: nowrap;
+  }
+
+  .console-mobile-immersive .console-master-vol {
+    height: 5px;
+  }
+
+  .console-mobile-immersive .console-master-vol::-webkit-slider-thumb,
+  .console-mobile-immersive .console-master-vol::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
   }
 }
