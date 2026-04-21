@@ -44,7 +44,7 @@ function playDreamDescend() {
 }
 
 // ── LOADING SEQUENCE ──────────────────────────────────────────────────────────
-function LoadingSequence({ film, onComplete, playUI }) {
+function LoadingSequence({ film, onComplete, playUI, fxMode = 'full' }) {
   const [progress, setProgress] = useState(0)
   const [lines, setLines]       = useState([])
 
@@ -89,7 +89,7 @@ function LoadingSequence({ film, onComplete, playUI }) {
           <img
             src="/animations/interstellar-pixel-scene.svg"
             alt="Pixel-art Interstellar loading scene"
-            className="pixel-intro-scene pixel-art"
+            className={`pixel-intro-scene pixel-art ${fxMode === 'lite' ? 'pixel-intro-scene-lite' : ''}`}
             draggable={false}
           />
           <div className="pixel-intro-vignette" />
@@ -166,7 +166,7 @@ const TERMINAL_GLITCH_FRAGMENTS = [
   'TIMEOUT',
 ]
 
-function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '' }) {
+function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '', fxMode = 'full' }) {
   const [lineGlitch, setLineGlitch] = useState(null)
   const [staticFlash, setStaticFlash] = useState(false)
   const [shiftBand, setShiftBand] = useState(null)
@@ -174,26 +174,30 @@ function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '' }) {
   const [terminalFlash, setTerminalFlash] = useState(null)
   const [cursorBlink, setCursorBlink] = useState(null)
   const [phosphorTick, setPhosphorTick] = useState(false)
+  const fxDisabled = fxMode === 'off'
 
   useEffect(() => {
+    if (fxDisabled) return
     if (typeof window === 'undefined') return
     let active = true
     let loopId = null
     const transientIds = []
+    const chanceScale = fxMode === 'lite' ? 0.58 : 1
+    const delayScale = fxMode === 'lite' ? 1.45 : 1
 
     const tdk = filmId === 'the-dark-knight'
-    const minDelay = Math.max(720, 2800 - level * 380)
-    const maxDelay = Math.max(1100, 4200 - level * 480)
+    const minDelay = Math.max(720, (2800 - level * 380) * delayScale)
+    const maxDelay = Math.max(1100, (4200 - level * 480) * delayScale)
 
     const trigger = () => {
       if (!active) return
       const roll = Math.random()
-      const lineChance = 0.12 + level * 0.055
-      const staticChance = 0.04 + level * 0.028
-      const shiftChance = 0.03 + level * 0.025
-      const terminalChance = 0.05 + level * 0.02 + (tdk ? 0.04 : 0)
-      const cursorChance = 0.035 + level * 0.015 + (tdk ? 0.03 : 0)
-      const phosphorChance = 0.06 + level * 0.02
+      const lineChance = (0.12 + level * 0.055) * chanceScale
+      const staticChance = (0.04 + level * 0.028) * chanceScale
+      const shiftChance = (0.03 + level * 0.025) * chanceScale
+      const terminalChance = (0.05 + level * 0.02 + (tdk ? 0.04 : 0)) * chanceScale
+      const cursorChance = (0.035 + level * 0.015 + (tdk ? 0.03 : 0)) * chanceScale
+      const phosphorChance = (0.06 + level * 0.02) * chanceScale
 
       if (roll < lineChance) {
         setLineGlitch({
@@ -220,7 +224,7 @@ function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '' }) {
         transientIds.push(window.setTimeout(() => setShiftBand(null), 72 + Math.random() * 88))
       }
 
-      if (tdk && Math.random() < (0.028 + level * 0.012)) {
+      if (tdk && Math.random() < (0.028 + level * 0.012) * chanceScale) {
         setSmileGlitch(true)
         transientIds.push(window.setTimeout(() => setSmileGlitch(false), 120 + Math.random() * 160))
       }
@@ -259,10 +263,12 @@ function DreamLayerGlitches({ level = 1, glowColor = '#8ab4d2', filmId = '' }) {
       if (loopId) window.clearTimeout(loopId)
       transientIds.forEach((id) => window.clearTimeout(id))
     }
-  }, [level, filmId])
+  }, [level, filmId, fxMode, fxDisabled])
+
+  if (fxDisabled) return null
 
   return (
-    <div className="dream-layer-glitch-shell" aria-hidden style={{ '--dream-glitch-color': glowColor }}>
+    <div className="dream-layer-glitch-shell" aria-hidden style={{ '--dream-glitch-color': glowColor, opacity: fxMode === 'lite' ? 0.7 : 1 }}>
       {phosphorTick && <span className="dream-layer-glitch-phosphor" />}
       {lineGlitch && (
         <span
@@ -411,7 +417,7 @@ function TdkLayer4Finale() {
   )
 }
 
-function Layer4View({ film, onSurface }) {
+function Layer4View({ film, onSurface, fxMode }) {
   const motifs = FINAL_DREAM_MOTIFS[film.id] || ['◈', '✦', '▦', '⌁']
   const dreamColor = film.deepcuts?.dream_color || film.color
   const dreamGlow = film.deepcuts?.dream_glow || film.glowColor
@@ -426,7 +432,7 @@ function Layer4View({ film, onSurface }) {
         background: `radial-gradient(ellipse at center, ${dreamGlow}24 0%, ${dreamColor}45 35%, #020304 82%)`,
       }}
     >
-      <DreamLayerGlitches level={4} glowColor={dreamGlow} filmId={film.id} />
+      <DreamLayerGlitches level={4} glowColor={dreamGlow} filmId={film.id} fxMode={fxMode} />
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${dreamGlow}70`, borderStyle: 'dashed' }}>
         <div className="flex items-center gap-2 md:gap-3">
@@ -484,7 +490,7 @@ function Layer4View({ film, onSurface }) {
 }
 
 // ── LAYER 3: DEEP CUTS ────────────────────────────────────────────────────────
-function Layer3View({ film, onSurface, onDeeper }) {
+function Layer3View({ film, onSurface, onDeeper, fxMode }) {
   const [visibleSections, setVisibleSections] = useState(0)
   const d = film.deepcuts
   const scrollRef = useRef(null)
@@ -506,7 +512,7 @@ function Layer3View({ film, onSurface, onDeeper }) {
         background: `radial-gradient(ellipse at 60% 10%, ${d.dream_glow}1f 0%, transparent 42%), radial-gradient(ellipse at 20% 20%, ${d.dream_color}38 0%, #020206 68%)`,
       }}
     >
-      <DreamLayerGlitches level={3} glowColor={d.dream_glow} filmId={film.id} />
+      <DreamLayerGlitches level={3} glowColor={d.dream_glow} filmId={film.id} fxMode={fxMode} />
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
         style={{ borderColor: `${d.dream_color}60`, borderStyle: 'dashed' }}>
@@ -585,7 +591,7 @@ function Layer3View({ film, onSurface, onDeeper }) {
 }
 
 // ── LAYER 2: PRODUCTION ───────────────────────────────────────────────────────
-function Layer2View({ film, onSurface, onDeeper }) {
+function Layer2View({ film, onSurface, onDeeper, fxMode }) {
   const [visibleSections, setVisibleSections] = useState(0)
   const p = film.production
   const scrollRef = useRef(null)
@@ -610,7 +616,7 @@ function Layer2View({ film, onSurface, onDeeper }) {
       className="flex flex-col h-full relative dream-layer-mid"
       style={{ background: `radial-gradient(ellipse at 70% 0%, ${p.dream_glow}18 0%, transparent 44%), radial-gradient(ellipse at 30% 15%, ${p.dream_color}24 0%, #050509 66%)` }}
     >
-      <DreamLayerGlitches level={2} glowColor={p.dream_glow} filmId={film.id} />
+      <DreamLayerGlitches level={2} glowColor={p.dream_glow} filmId={film.id} fxMode={fxMode} />
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-5 py-2 md:py-3 border-b shrink-0"
@@ -687,7 +693,7 @@ function Layer2View({ film, onSurface, onDeeper }) {
 }
 
 // ── LAYER 1: DOSSIER ──────────────────────────────────────────────────────────
-function DossierView({ film, onClose, onGoToShelf }) {
+function DossierView({ film, onClose, onGoToShelf, fxMode }) {
   const [visibleSections, setVisibleSections] = useState(0)
   const [layer, setLayer]                     = useState(1) // 1 | '1to2' | 2 | '2to3' | 3 | '3to4' | 4
   const scrollRef = useRef(null)
@@ -708,7 +714,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
   }
 
   if (layer === 4) {
-    return <Layer4View film={film} onSurface={() => setLayer(3)} />
+    return <Layer4View film={film} onSurface={() => setLayer(3)} fxMode={fxMode} />
   }
 
   if (layer === 3 || layer === '3to4') {
@@ -718,6 +724,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
           film={film}
           onSurface={() => setLayer(2)}
           onDeeper={() => setLayer('3to4')}
+          fxMode={fxMode}
         />
         {layer === '3to4' && (
           <DreamTransition
@@ -736,6 +743,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
           film={film}
           onSurface={() => setLayer(1)}
           onDeeper={() => setLayer('2to3')}
+          fxMode={fxMode}
         />
         {layer === '2to3' && (
           <DreamTransition
@@ -749,7 +757,7 @@ function DossierView({ film, onClose, onGoToShelf }) {
 
   return (
     <div className="flex flex-col h-full relative">
-      <DreamLayerGlitches level={1} glowColor={film.glowColor} filmId={film.id} />
+      <DreamLayerGlitches level={1} glowColor={film.glowColor} filmId={film.id} fxMode={fxMode} />
       {layer === '1to2' && (
         <DreamTransition
           pulseMs={1540}
@@ -857,21 +865,21 @@ function DossierView({ film, onClose, onGoToShelf }) {
 }
 
 // ── ROOT ──────────────────────────────────────────────────────────────────────
-export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf, jokerGlitchTick = 0 }) {
+export default function LogScreen({ film, isLoading, onLoadComplete, onEject, playUI, onGoToShelf, jokerGlitchTick = 0, fxMode = 'full' }) {
   const [showJokerGlitch, setShowJokerGlitch] = useState(false)
 
   useEffect(() => {
-    if (!film || film.id !== 'the-dark-knight' || !jokerGlitchTick) return
+    if (!film || film.id !== 'the-dark-knight' || !jokerGlitchTick || fxMode === 'off') return
     setShowJokerGlitch(true)
-    const id = window.setTimeout(() => setShowJokerGlitch(false), 220)
+    const id = window.setTimeout(() => setShowJokerGlitch(false), fxMode === 'lite' ? 140 : 220)
     return () => window.clearTimeout(id)
-  }, [film, jokerGlitchTick])
+  }, [film, jokerGlitchTick, fxMode])
 
   return (
     <div className="console-screen flex-1 h-full relative">
       <div className="absolute inset-0 pointer-events-none z-10"
         style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%)' }} />
-      {showJokerGlitch && (
+      {showJokerGlitch && fxMode !== 'off' && (
         <div className="joker-glitch-overlay" aria-hidden>
           <span className="joker-glitch-text">HA</span>
         </div>
@@ -909,9 +917,9 @@ export default function LogScreen({ film, isLoading, onLoadComplete, onEject, pl
           </div>
         </div>
       ) : isLoading ? (
-        <LoadingSequence film={film} onComplete={onLoadComplete} playUI={playUI} />
+        <LoadingSequence film={film} onComplete={onLoadComplete} playUI={playUI} fxMode={fxMode} />
       ) : (
-        <DossierView film={film} onClose={onEject} onGoToShelf={onGoToShelf} />
+        <DossierView film={film} onClose={onEject} onGoToShelf={onGoToShelf} fxMode={fxMode} />
       )}
     </div>
   )

@@ -66,6 +66,8 @@ export default function Console({ films, registerStopAll }) {
   const [jokerGlitchTick, setJokerGlitchTick] = useState(0)
   const [insertFlight, setInsertFlight] = useState(null)
   const [trayIngest, setTrayIngest]     = useState(false)
+  const [isDesktop, setIsDesktop]       = useState(null)
+  const [performanceConstrained, setPerformanceConstrained] = useState(false)
   const [settings, setSettings]       = useState({
     fxMode: 'full',       // full | lite | off
     motionMode: 'full',   // full | reduced
@@ -85,6 +87,8 @@ export default function Console({ films, registerStopAll }) {
   } = useAudioEngine()
   const trayCloseTimer = useRef(null)
   const lastJokerGlitchAt = useRef(0)
+  const hasStoredSettings = useRef(false)
+  const hasAppliedAutoProfile = useRef(false)
 
   // Register stopAll with _app so navigation kills audio cleanly
   useEffect(() => {
@@ -92,9 +96,33 @@ export default function Console({ films, registerStopAll }) {
   }, [stopAll, registerStopAll])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia('(min-width: 768px)')
+    const sync = () => setIsDesktop(media.matches)
+    sync()
+    media.addEventListener('change', sync)
+    return () => media.removeEventListener('change', sync)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const lowThreadBudget =
+      typeof navigator.hardwareConcurrency === 'number' &&
+      navigator.hardwareConcurrency > 0 &&
+      navigator.hardwareConcurrency <= 4
+    const lowMemoryBudget =
+      typeof navigator.deviceMemory === 'number' &&
+      navigator.deviceMemory > 0 &&
+      navigator.deviceMemory <= 4
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches
+    setPerformanceConstrained(coarsePointer && (lowThreadBudget || lowMemoryBudget))
+  }, [])
+
+  useEffect(() => {
     try {
       const raw = localStorage.getItem('endurance-console-settings')
       if (!raw) return
+      hasStoredSettings.current = true
       const parsed = JSON.parse(raw)
       setSettings(prev => ({
         fxMode: parsed.fxMode || prev.fxMode,
@@ -105,20 +133,31 @@ export default function Console({ films, registerStopAll }) {
   }, [])
 
   useEffect(() => {
+    if (!performanceConstrained || hasStoredSettings.current || hasAppliedAutoProfile.current) return
+    hasAppliedAutoProfile.current = true
+    setSettings((prev) => ({
+      ...prev,
+      fxMode: prev.fxMode === 'full' ? 'lite' : prev.fxMode,
+      motionMode: 'reduced',
+    }))
+  }, [performanceConstrained])
+
+  useEffect(() => {
     try {
       localStorage.setItem('endurance-console-settings', JSON.stringify(settings))
     } catch (_) {}
 
-    document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high')
+    document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high', 'perf-constrained')
     if (settings.fxMode === 'lite') document.body.classList.add('fx-lite')
     if (settings.fxMode === 'off') document.body.classList.add('fx-off')
     if (settings.motionMode === 'reduced') document.body.classList.add('motion-min')
     if (settings.contrastMode === 'high') document.body.classList.add('contrast-high')
+    if (performanceConstrained) document.body.classList.add('perf-constrained')
 
     return () => {
-      document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high')
+      document.body.classList.remove('fx-lite', 'fx-off', 'motion-min', 'contrast-high', 'perf-constrained')
     }
-  }, [settings])
+  }, [settings, performanceConstrained])
 
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
@@ -261,6 +300,15 @@ export default function Console({ films, registerStopAll }) {
   }, [loadedFilm, isLoading, startAmbient])
 
   const filmCursorAccent = loadedFilm ? loadedFilm.glowColor || loadedFilm.color : null
+  const fxMode = settings.fxMode === 'full' && performanceConstrained ? 'lite' : settings.fxMode
+  const canUseMotion = settings.motionMode === 'full' && !performanceConstrained
+  const caseChatProps = {
+    films,
+    playUI,
+    onLoadFilm: loadFilm,
+    onEggOpen: handleEggOpen,
+    onEggClose: handleEggClose,
+  }
 
   return (
     <div
@@ -268,7 +316,7 @@ export default function Console({ films, registerStopAll }) {
       onClick={unlockAudio}
       style={filmCursorAccent ? { cursor: filmCursorCssValue(filmCursorAccent) } : undefined}
     >
-      <CursorGlowTrail accentHex={filmCursorAccent} />
+      <CursorGlowTrail accentHex={filmCursorAccent} fxMode={fxMode} />
       {insertFlight ? (
         <DiscInsertFlight
           key={insertFlight.key}
@@ -341,8 +389,8 @@ export default function Console({ films, registerStopAll }) {
       <div
         className="flex flex-1 overflow-hidden panel"
         style={{
-          transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-          transform: isZoomed ? 'scale(1.015)' : 'scale(1)',
+          transition: canUseMotion ? 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+          transform: isZoomed && canUseMotion ? 'scale(1.015)' : 'scale(1)',
         }}
       >
         {/* ── DISC SHELF — hidden on mobile when viewing screen ── */}
@@ -392,6 +440,7 @@ export default function Console({ films, registerStopAll }) {
             playUI={playUI}
             onGoToShelf={() => setMobileView('shelf')}
             jokerGlitchTick={jokerGlitchTick}
+            fxMode={fxMode}
           />
         </div>
 
@@ -488,13 +537,7 @@ export default function Console({ films, registerStopAll }) {
             >
               RESET SETTINGS
             </button>
-            <CaseChat
-              films={films}
-              playUI={playUI}
-              onLoadFilm={loadFilm}
-              onEggOpen={handleEggOpen}
-              onEggClose={handleEggClose}
-            />
+            {isDesktop === true ? <CaseChat {...caseChatProps} /> : null}
           </div>
         </div>
       </div>
@@ -509,15 +552,11 @@ export default function Console({ films, registerStopAll }) {
           playUI={playUI}
         />
       </div>
-      <div className="md:hidden">
-        <CaseChat
-          films={films}
-          playUI={playUI}
-          onLoadFilm={loadFilm}
-          onEggOpen={handleEggOpen}
-          onEggClose={handleEggClose}
-        />
-      </div>
+      {isDesktop === false ? (
+        <div className="md:hidden">
+          <CaseChat {...caseChatProps} />
+        </div>
+      ) : null}
 
       <div className="panel border-t-0 px-4 md:px-6 py-2 flex items-center justify-between shrink-0">
         <div className="flex gap-3 md:gap-6 text-[10px] md:text-[11px] text-console-muted">

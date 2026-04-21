@@ -629,6 +629,11 @@ body.motion-min .archive-disc-hover-inner {
   will-change: transform;
 }
 
+.pixel-intro-scene-lite {
+  animation-duration: 11s;
+  opacity: 0.92;
+}
+
 .pixel-intro-vignette {
   position: absolute;
   inset: 0;
@@ -1079,10 +1084,41 @@ body.fx-lite .crt::after {
   opacity: 0.45;
 }
 
+body.fx-lite .dream-layer-glitch-shell {
+  opacity: 0.7;
+}
+
 body.fx-off .grain,
 body.fx-off .crt::before,
 body.fx-off .crt::after {
   display: none !important;
+}
+
+body.perf-constrained .grain {
+  opacity: 0.1 !important;
+}
+
+body.perf-constrained .crt::before {
+  opacity: 0.35;
+}
+
+body.perf-constrained .crt::after {
+  animation-duration: 14s;
+  opacity: 0.22;
+}
+
+body.perf-constrained .dream-layer-deep,
+body.perf-constrained .dream-layer-deep::before,
+body.perf-constrained .dream-layer-deep::after {
+  animation-duration: 9s;
+}
+
+body.perf-constrained .dream-credits-roll-inner {
+  animation-duration: 44s;
+}
+
+body.perf-constrained .cursor-glow-trail {
+  opacity: 0.72;
 }
 
 body.motion-min .section-reveal,
@@ -1570,6 +1606,11 @@ body.motion-min .disc-tray-slot[data-ingest] .disc-tray-groove {
 }
 
 @media (max-width: 767px) {
+  .crt::after {
+    animation-duration: 13s;
+    opacity: 0.22;
+  }
+
   .case-widget {
     position: fixed;
     right: 12px;
