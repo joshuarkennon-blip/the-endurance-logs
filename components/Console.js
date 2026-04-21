@@ -68,6 +68,7 @@ export default function Console({ films, registerStopAll }) {
   const [trayIngest, setTrayIngest]     = useState(false)
   const [isDesktop, setIsDesktop]       = useState(null)
   const [isTouchPrimary, setIsTouchPrimary] = useState(false)
+  const [isPhoneViewport, setIsPhoneViewport] = useState(false)
   const [performanceConstrained, setPerformanceConstrained] = useState(false)
   const [settings, setSettings]       = useState({
     fxMode: 'full',       // full | lite | off
@@ -100,6 +101,15 @@ export default function Console({ films, registerStopAll }) {
     if (typeof window === 'undefined') return
     const media = window.matchMedia('(min-width: 768px)')
     const sync = () => setIsDesktop(media.matches)
+    sync()
+    media.addEventListener('change', sync)
+    return () => media.removeEventListener('change', sync)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia('(max-width: 767px)')
+    const sync = () => setIsPhoneViewport(media.matches)
     sync()
     media.addEventListener('change', sync)
     return () => media.removeEventListener('change', sync)
@@ -175,15 +185,17 @@ export default function Console({ films, registerStopAll }) {
   }, [audioReady, loadedFilm?.id])
 
   const handleDragStart = useCallback((filmId) => {
+    if (isTouchPrimary) return
     if (trayCloseTimer.current) {
       clearTimeout(trayCloseTimer.current)
       trayCloseTimer.current = null
     }
     setTrayClosing(false)
     setDraggingId(filmId)
-  }, [])
+  }, [isTouchPrimary])
 
   const handleDragEnd = useCallback(() => {
+    if (isTouchPrimary) return
     setTrayClosing(true)
     if (trayCloseTimer.current) clearTimeout(trayCloseTimer.current)
     trayCloseTimer.current = setTimeout(() => {
@@ -192,19 +204,21 @@ export default function Console({ films, registerStopAll }) {
     }, 260)
     setDraggingId(null)
     setDropActive(false)
-  }, [])
+  }, [isTouchPrimary])
 
   const handleDragOver = useCallback((e) => {
+    if (isTouchPrimary) return
     e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
     setDropActive(true)
-  }, [])
+  }, [isTouchPrimary])
 
   const handleDragLeave = useCallback((e) => {
+    if (isTouchPrimary) return
     const next = e.relatedTarget
     if (next instanceof Node && e.currentTarget.contains(next)) return
     setDropActive(false)
-  }, [])
+  }, [isTouchPrimary])
 
   const loadFilm = useCallback((film, options = {}) => {
     if (!film) return
@@ -219,6 +233,7 @@ export default function Console({ films, registerStopAll }) {
 
   const handleDrop = useCallback(
     (e) => {
+      if (isTouchPrimary) return
       e.preventDefault()
       setDropActive(false)
       setDraggingId(null)
@@ -269,7 +284,7 @@ export default function Console({ films, registerStopAll }) {
         endY,
       })
     },
-    [films, loadedFilm?.id, loadFilm, playUI],
+    [films, isTouchPrimary, loadedFilm?.id, loadFilm, playUI],
   )
 
   useEffect(() => {
@@ -306,7 +321,7 @@ export default function Console({ films, registerStopAll }) {
   const filmCursorAccent = loadedFilm ? loadedFilm.glowColor || loadedFilm.color : null
   const fxMode = settings.fxMode === 'full' && performanceConstrained ? 'lite' : settings.fxMode
   const canUseMotion = settings.motionMode === 'full' && !performanceConstrained
-  const isMobileImmersive = isTouchPrimary && Boolean(loadedFilm)
+  const isMobileImmersive = isTouchPrimary && isPhoneViewport && Boolean(loadedFilm)
   const shellStyle = filmCursorAccent
     ? {
         cursor: filmCursorCssValue(filmCursorAccent),
@@ -331,6 +346,7 @@ export default function Console({ films, registerStopAll }) {
     fxMode,
     fullscreen: isMobileImmersive,
   }
+  const disableDnD = isTouchPrimary
 
   useEffect(() => {
     document.body.classList.toggle('mobile-log-immersive', Boolean(isMobileImmersive))
@@ -454,24 +470,27 @@ export default function Console({ films, registerStopAll }) {
             onDragEnd={handleDragEnd}
             draggingId={draggingId}
             onTap={loadFilm}
+            disableDnD={disableDnD}
           />
-          <div
-            className="shelf-disc-dropzone"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
+          {!disableDnD ? (
             <div
-              className={`disc-tray shelf-disc-tray ${draggingId ? 'open' : ''} ${dropActive ? 'disc-tray-ready' : ''} ${trayClosing ? 'closing' : ''}`}
+              className="shelf-disc-dropzone"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
             >
-              <div className="disc-tray-slot" data-ingest={trayIngest ? '1' : undefined}>
-                <div className="disc-tray-groove" />
+              <div
+                className={`disc-tray shelf-disc-tray ${draggingId ? 'open' : ''} ${dropActive ? 'disc-tray-ready' : ''} ${trayClosing ? 'closing' : ''}`}
+              >
+                <div className="disc-tray-slot" data-ingest={trayIngest ? '1' : undefined}>
+                  <div className="disc-tray-groove" />
+                </div>
+                <p className="disc-tray-label">
+                  {trayClosing ? 'LOCKING TRAY' : dropActive ? 'RELEASE TO LOAD' : draggingId ? 'TRAY OPEN' : 'DISC TRAY STANDBY'}
+                </p>
               </div>
-              <p className="disc-tray-label">
-                {trayClosing ? 'LOCKING TRAY' : dropActive ? 'RELEASE TO LOAD' : draggingId ? 'TRAY OPEN' : 'DISC TRAY STANDBY'}
-              </p>
             </div>
-          </div>
+          ) : null}
         </div>
 
         <div className="hidden md:block w-px bg-console-border shrink-0" />

@@ -1139,6 +1139,41 @@ body.perf-constrained .cursor-glow-trail {
   opacity: 0.72;
 }
 
+body.touch-primary .cursor-glow-trail {
+  display: none !important;
+}
+
+body.touch-primary .disc,
+body.touch-primary .console-film-cursor .disc {
+  cursor: pointer !important;
+}
+
+body.touch-primary .disc:active {
+  cursor: pointer !important;
+}
+
+body.touch-primary .shelf-disc-dropzone,
+body.touch-primary .disc-tray,
+body.touch-primary .disc-tray-slot {
+  display: none !important;
+}
+
+body.touch-primary .archive-bay-grid {
+  grid-auto-rows: minmax(132px, auto);
+  gap: 8px;
+}
+
+body.touch-primary .archive-bay-cell,
+body.touch-primary .archive-bay-cell--locked {
+  min-height: 132px;
+}
+
+body.touch-primary .archive-disc {
+  width: 102px;
+  height: 102px;
+  max-width: min(100%, 102px);
+}
+
 body.motion-min .section-reveal,
 body.motion-min .pixel-intro-scene,
 body.motion-min .dream-layer-deep,

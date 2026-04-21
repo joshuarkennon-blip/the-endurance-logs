@@ -362,7 +362,7 @@ export function ArchiveDisc({ film, isLoaded, locked }) {
   )
 }
 
-export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, draggingId, onTap }) {
+export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, draggingId, onTap, disableDrag = false }) {
   return (
     <div
       className="panel archive-bay-panel flex flex-col flex-1 min-h-0"
@@ -390,13 +390,14 @@ export default function DiscShelf({ films, loadedFilm, onDragStart, onDragEnd, d
           return (
             <div
               key={film.id}
-              draggable
+              draggable={!disableDrag}
               onDragStart={(e) => {
+                if (disableDrag) return
                 e.dataTransfer.effectAllowed = 'move'
                 e.dataTransfer.setData('filmId', film.id)
                 onDragStart(film.id)
               }}
-              onDragEnd={onDragEnd}
+              onDragEnd={disableDrag ? undefined : onDragEnd}
               onClick={() => onTap(film)}
               className={`disc archive-bay-cell group relative flex items-center justify-center border transition-all duration-200 ${
                 isLoaded ? 'border-console-border' : 'border-console-border bg-console-dim hover:border-opacity-60'
