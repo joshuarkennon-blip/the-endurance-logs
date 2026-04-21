@@ -159,11 +159,6 @@ export default function Console({ films, registerStopAll }) {
     }
   }, [settings, performanceConstrained])
 
-  useEffect(() => {
-    document.body.classList.toggle('mobile-log-immersive', Boolean(isMobileImmersive))
-    return () => document.body.classList.remove('mobile-log-immersive')
-  }, [isMobileImmersive])
-
   // Unlock audio on first user gesture
   const unlockAudio = useCallback(() => {
     if (!audioReady) setAudioReady(true)
@@ -333,6 +328,11 @@ export default function Console({ films, registerStopAll }) {
     fxMode,
     fullscreen: isMobileImmersive,
   }
+
+  useEffect(() => {
+    document.body.classList.toggle('mobile-log-immersive', Boolean(isMobileImmersive))
+    return () => document.body.classList.remove('mobile-log-immersive')
+  }, [isMobileImmersive])
 
   return (
     <div
