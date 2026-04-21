@@ -9,6 +9,7 @@ export default function Home() {
         <title>The Endurance Logs // Nolan Archive</title>
         <meta name="description" content="An immersive digital museum dedicated to the filmography of Christopher Nolan." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="x-endurance-build" content="2026-04-21-tablet-safe-v2" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

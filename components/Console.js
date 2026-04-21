@@ -132,6 +132,11 @@ export default function Console({ films, registerStopAll }) {
   }, [])
 
   useEffect(() => {
+    document.body.classList.toggle('touch-primary', isTouchPrimary)
+    return () => document.body.classList.remove('touch-primary')
+  }, [isTouchPrimary])
+
+  useEffect(() => {
     try {
       const raw = localStorage.getItem('endurance-console-settings')
       if (!raw) return
@@ -150,7 +155,7 @@ export default function Console({ films, registerStopAll }) {
     hasAppliedAutoProfile.current = true
     setSettings((prev) => ({
       ...prev,
-      fxMode: prev.fxMode === 'full' ? 'lite' : prev.fxMode,
+      fxMode: 'off',
       motionMode: 'reduced',
     }))
   }, [performanceConstrained])
