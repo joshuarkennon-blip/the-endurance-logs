@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DECKARD-9 // Endurance Logs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800;900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+<style>
+:root{
+  --void:#050607;--panel:#0D0F12;--panel-hi:#11151A;
+  --amber:#FF7B2C;--amber-soft:#E8954A;--amber-deep:#A84E12;
+  --cyan:#00E1FF;--mag:#FF2F92;--mist:#D7D1C4;--mute:#6F6A5E;
+  --line-hair:rgba(255,123,44,.18);--line-rule:rgba(255,123,44,.42);
+  --f-display:"Inter","Neue Haas Grotesk Display",system-ui,sans-serif;
+  --f-ui:"Inter Tight","Inter",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--void);color:var(--mist);font-family:var(--f-ui);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:transparent;border:0;cursor:crosshair}
+.mono{font-family:var(--f-mono);letter-spacing:.04em}
+.cap{text-transform:uppercase;letter-spacing:.22em}
+
+/* Atmospheric layers */
+.haze{position:fixed;inset:-20%;pointer-events:none;z-index:0;filter:blur(120px);opacity:.55}
+.haze.a{background:radial-gradient(ellipse 1200px 800px at 20% 30%,rgba(255,123,44,.22),transparent 60%);animation:driftA 40s linear infinite}
+.haze.b{background:radial-gradient(ellipse 1000px 700px at 80% 70%,rgba(232,149,74,.16),transparent 60%);animation:driftB 55s linear infinite}
+@keyframes driftA{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,-40px)}}
+@keyframes driftB{0%,100%{transform:translate(0,0)}50%{transform:translate(-100px,60px)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.35;mix-blend-mode:overlay;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(255,123,44,.05) 2px 3px)}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:.08;mix-blend-mode:overlay;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 240px 80px rgba(0,0,0,.7)}
+
+/* Boot */
+#boot{position:fixed;inset:0;z-index:100;background:var(--void);display:grid;place-items:center;text-align:center}
+#boot .slate{font-family:var(--f-display);font-weight:900;letter-spacing:.02em;text-transform:uppercase;font-size:clamp(48px,8vw,128px);line-height:.92}
+#boot .slate.a{color:var(--amber)}
+#boot .slate.b{color:var(--cyan);border:1px solid var(--cyan);padding:18px 28px;font-size:clamp(28px,4vw,64px);letter-spacing:.06em}
+#boot .slate.c{color:var(--mag);text-shadow:0 0 20px var(--mag);font-size:clamp(36px,5vw,88px)}
+#boot.done{animation:bootOut 600ms var(--ease) forwards}
+@keyframes bootOut{to{opacity:0;transform:scale(1.02);pointer-events:none}}
+#boot .skip{position:absolute;bottom:20px;right:20px;font-family:var(--f-mono);font-size:10px;color:var(--mute);letter-spacing:.22em;text-transform:uppercase}
+
+/* Chrome */
+.chrome{position:sticky;top:0;z-index:20;height:56px;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:22px;align-items:center;padding:0 36px;border-bottom:1px solid var(--line-hair);background:rgba(5,6,7,.78);backdrop-filter:blur(10px)}
+.chrome-brand{display:flex;align-items:center;gap:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mist)}
+.chrome-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s ease-in-out infinite}
+.chrome-nav{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;color:var(--mute);text-transform:uppercase}
+.chrome-coord{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--amber-soft);text-transform:uppercase}
+.chrome-live{display:flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase}
+.chrome-live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);animation:pulse 1.6s ease-in-out infinite}
+.chrome-clearance{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;color:var(--amber);text-transform:uppercase;border:1px solid var(--amber);padding:4px 8px}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* Page */
+.page{position:relative;z-index:5;max-width:1600px;margin:0 auto;padding:0 48px 140px}
+
+/* Hero */
+.hero{position:relative;min-height:96vh;padding:80px 0 40px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.9fr);gap:64px;align-items:center}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:32px;height:1px;background:var(--line-rule)}
+.hero h1{font-family:var(--f-display);font-weight:900;font-size:clamp(62px,11.2vw,144px);line-height:.86;letter-spacing:-.025em;text-transform:uppercase;color:var(--amber);margin:26px 0 0;text-shadow:0 0 60px rgba(255,123,44,.3)}
+.hero h1 em{font-style:normal;color:var(--mist);opacity:.85}
+.hero .subline{margin-top:22px;font-family:var(--f-ui);font-weight:500;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+.hero .meta-strip{margin-top:28px;font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:18px 26px}
+.hero .meta-strip em{font-style:normal;color:var(--amber-soft)}
+
+/* Coordinate block */
+.coord{position:relative;padding:32px 32px;background:var(--panel);border:1px solid var(--line-hair);overflow:hidden}
+.coord::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(255,123,44,.14),transparent 70%)}
+.coord-head{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);margin-bottom:22px}
+.coord-row{display:grid;grid-template-columns:60px 1fr auto;gap:16px;align-items:center;font-family:var(--f-mono);font-size:14px;padding:8px 0;border-bottom:1px dashed rgba(255,123,44,.1)}
+.coord-row:last-child{border-bottom:0}
+.coord-row .k{font-size:10px;letter-spacing:.22em;color:var(--mute);text-transform:uppercase}
+.coord-row .v{color:var(--amber);letter-spacing:.04em}
+.coord-row .bar{display:flex;gap:2px}
+.coord-row .bar span{width:8px;height:10px;background:var(--line-hair)}
+.coord-row .bar span.on{background:var(--amber)}
+.coord-row .live{color:var(--cyan);font-size:10px;letter-spacing:.22em}
+.coord-row .live::before{content:"◉ ";color:var(--cyan)}
+.classif-stamp{position:absolute;bottom:14px;right:-12px;transform:rotate(-6deg);font-family:var(--f-display);font-weight:900;font-size:16px;letter-spacing:.22em;color:var(--amber);border:2px solid var(--amber);padding:8px 14px;text-transform:uppercase;background:rgba(5,6,7,.5)}
+
+/* Section */
+.section{padding:96px 0 0}
+.section-head{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:flex-end;margin-bottom:36px;padding-top:20px;border-top:1px solid var(--line-hair)}
+.section-head .num{font-family:var(--f-display);font-weight:900;font-size:clamp(44px,6vw,84px);color:var(--amber);line-height:.92;letter-spacing:-.02em;text-transform:uppercase}
+.section-head h2{font-family:var(--f-display);font-weight:900;font-size:clamp(36px,5vw,64px);line-height:.92;letter-spacing:-.01em;text-transform:uppercase;color:var(--mist)}
+.section-head h2 em{font-style:normal;color:var(--amber)}
+.section-head .note{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);text-align:right;line-height:1.7}
+
+/* Archive browser */
+.browser{display:grid;grid-template-columns:340px 1fr;gap:0;border:1px solid var(--line-hair);min-height:540px;position:relative;background:linear-gradient(180deg,rgba(13,15,18,.9),rgba(5,6,7,.92))}
+.browser::after{content:"CLEARANCE · DECKARD · ORANGE · CLEARANCE · DECKARD · ORANGE";position:absolute;inset:0;pointer-events:none;font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);opacity:.035;overflow:hidden;line-height:100px;white-space:nowrap;transform:rotate(-22deg);padding:60px}
+.filmlist{border-right:1px solid var(--line-hair);background:rgba(5,6,7,.45)}
+.filmlist h3{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);padding:18px 24px;border-bottom:1px solid var(--line-hair)}
+.filmrow{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;padding:14px 24px;border-bottom:1px solid rgba(255,123,44,.06);cursor:crosshair;position:relative;transition:background .24s var(--ease)}
+.filmrow::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--amber);transform:scaleY(0);transform-origin:center;transition:transform .3s var(--ease)}
+.filmrow:hover{background:rgba(255,123,44,.04)}
+.filmrow:hover::before{transform:scaleY(1)}
+.filmrow.active{background:rgba(255,123,44,.06)}
+.filmrow.active::before{background:var(--mag);transform:scaleY(1);box-shadow:0 0 12px var(--mag)}
+.filmrow .code{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--amber-soft);text-transform:uppercase}
+.filmrow .title{font-family:var(--f-display);font-weight:800;font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--mist)}
+.filmrow .title em{font-style:normal;font-family:var(--f-mono);font-weight:400;font-size:10px;color:var(--mute);display:block;margin-top:2px;letter-spacing:.16em}
+.filmrow .ind{font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase}
+.filmrow.critical .ind{color:var(--mag);animation:pulse 2s ease-in-out infinite}
+
+/* Dossier */
+.dossier{padding:36px 40px;position:relative}
+.dossier .kicker{font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute)}
+.dossier h3{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,4.6vw,64px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase;color:var(--amber);margin-top:8px}
+.dossier .sub{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:var(--amber-soft);text-transform:uppercase;margin-top:8px}
+.dossier .quote{font-family:var(--f-ui);font-style:italic;font-size:16px;color:var(--mist);margin-top:22px;padding-left:18px;border-left:2px solid var(--amber);letter-spacing:.01em}
+.dossier .wavebox{margin-top:26px;display:flex;align-items:flex-end;gap:2px;height:48px;padding:6px 0}
+.dossier .wavebox span{width:3px;background:var(--amber);opacity:.75}
+.dossier .wavebox span.ghost{background:rgba(215,209,196,.22)}
+.dossier .wavebox span.now{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.dossier .body{margin-top:22px;font-family:var(--f-ui);font-weight:400;font-size:15px;line-height:1.7;color:var(--mist);max-width:68ch}
+.dossier .body p + p{margin-top:14px}
+.dossier .body .redact{background:#000;color:#000;padding:0 8px;user-select:none;box-shadow:0 0 0 1px rgba(255,123,44,.2)}
+.dossier-actions{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap}
+.dbtn{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;padding:12px 18px;border:1px solid var(--amber);color:var(--amber)}
+.dbtn:hover{background:rgba(255,123,44,.12);box-shadow:0 0 20px rgba(255,123,44,.2)}
+.dbtn.ghost{border-color:var(--line-rule);color:var(--mute)}
+.dossier .layers{position:absolute;top:36px;right:36px;display:flex;flex-direction:column;gap:10px}
+.lpill{width:44px;height:44px;border:1px solid var(--line-rule);color:var(--mute);font-family:var(--f-mono);font-size:12px;display:grid;place-items:center;letter-spacing:.08em}
+.lpill.on{border-color:var(--amber);color:var(--amber);background:rgba(255,123,44,.08);box-shadow:0 0 16px rgba(255,123,44,.18)}
+
+/* Layer selector band */
+.layerband{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:0;border:1px solid var(--line-hair);border-top:0;background:rgba(5,6,7,.6)}
+.layer{padding:42px 32px;border-right:1px solid var(--line-hair);cursor:crosshair;transition:all .3s var(--ease);position:relative}
+.layer:last-child{border-right:0}
+.layer .big{font-family:var(--f-display);font-weight:900;font-size:clamp(120px,16vw,200px);line-height:.8;letter-spacing:-.04em;color:var(--amber);opacity:.2;transition:opacity .3s var(--ease)}
+.layer.active .big{opacity:1}
+.layer .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);margin-top:8px}
+.layer.active .lbl{color:var(--amber)}
+.layer .desc{margin-top:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;color:var(--amber-soft);text-transform:uppercase;opacity:.7}
+.layer:hover .big{opacity:.5}
+.layer.active{background:rgba(255,123,44,.05)}
+
+/* Signal grid */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dcard{border:1px solid var(--line-hair);background:var(--panel);padding:26px 26px 24px;position:relative;transition:all .3s var(--ease)}
+.dcard::before,.dcard::after{content:"";position:absolute;width:12px;height:12px;border:1px solid var(--amber);opacity:.65}
+.dcard::before{top:0;left:0;border-right:0;border-bottom:0}
+.dcard::after{bottom:0;right:0;border-left:0;border-top:0}
+.dcard:hover{border-color:var(--amber);background:var(--panel-hi)}
+.dcard .c-eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;color:var(--mute);text-transform:uppercase}
+.dcard h4{font-family:var(--f-display);font-weight:800;font-size:26px;letter-spacing:.02em;text-transform:uppercase;color:var(--amber);margin-top:10px;line-height:1.05}
+.dcard .year{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:var(--amber-soft);margin-top:6px;text-transform:uppercase}
+.dcard .q{font-family:var(--f-ui);font-style:italic;font-size:14px;color:var(--mist);margin-top:14px;line-height:1.5}
+.dcard .mini-wave{margin-top:14px;display:flex;align-items:flex-end;gap:1.5px;height:18px}
+.dcard .mini-wave span{width:2px;background:var(--amber-soft)}
+.dcard .excerpt{margin-top:14px;font-size:13px;color:var(--mist);line-height:1.6;opacity:.88}
+.dcard .excerpt .redact{background:#000;color:#000;padding:0 6px;user-select:none}
+
+/* Stamps strip */
+.stamps{margin-top:56px;padding:28px 0;display:flex;flex-wrap:wrap;gap:36px;justify-content:center;align-items:center;border-top:1px solid var(--line-hair);border-bottom:1px solid var(--line-hair)}
+.stamp{font-family:var(--f-display);font-weight:900;font-size:16px;letter-spacing:.22em;text-transform:uppercase;padding:10px 18px;border:2px solid var(--amber);color:var(--amber);transform:rotate(var(--r,-4deg));background:rgba(5,6,7,.5)}
+.stamp.mag{border-color:var(--mag);color:var(--mag);animation:pulse 2.4s ease-in-out infinite}
+.stamp.cyan{border-color:var(--cyan);color:var(--cyan)}
+
+/* Field notes */
+.notes{margin-top:48px;max-width:780px;margin-left:auto;margin-right:auto;padding:36px 40px;border:1px solid var(--line-hair);background:rgba(13,15,18,.5)}
+.notes h4{font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;color:var(--mute);text-transform:uppercase;margin-bottom:18px}
+.notes p{font-family:var(--f-mono);font-size:13px;line-height:1.75;color:var(--mist);letter-spacing:.02em}
+.notes p + p{margin-top:16px}
+.notes .redact{background:#000;color:#000;padding:0 8px;user-select:none}
+
+/* Footer + ticker + waveform */
+.ticker-wrap{position:fixed;left:0;right:0;bottom:96px;height:28px;background:rgba(5,6,7,.92);border-top:1px solid var(--line-hair);border-bottom:1px solid var(--line-hair);overflow:hidden;z-index:15;backdrop-filter:blur(8px)}
+.ticker-track{display:inline-block;white-space:nowrap;animation:tickerRun 80s linear infinite;font-family:var(--f-mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);line-height:28px;padding-left:100%}
+@keyframes tickerRun{to{transform:translateX(-100%)}}
+.console{position:fixed;left:0;right:0;bottom:0;height:96px;background:linear-gradient(180deg,rgba(13,15,18,.94),rgba(5,6,7,.96));border-top:1px solid var(--line-rule);z-index:15;display:grid;grid-template-columns:auto 1fr auto auto;gap:24px;align-items:center;padding:0 36px;backdrop-filter:blur(10px)}
+.play{width:44px;height:44px;border:1px solid var(--amber);color:var(--amber);display:grid;place-items:center;font-size:16px;cursor:crosshair}
+.play:hover{background:rgba(255,123,44,.1);box-shadow:0 0 20px rgba(255,123,44,.25)}
+.bigwave{display:flex;align-items:flex-end;gap:2px;height:56px;flex:1}
+.bigwave span{width:3px;background:var(--amber);opacity:.7;transition:height .4s var(--ease)}
+.bigwave span.past{background:rgba(215,209,196,.25)}
+.bigwave span.now{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.timecode{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;color:var(--amber-soft);text-transform:uppercase}
+.timecode em{font-style:normal;color:var(--mist)}
+.sigpct{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase}
+
+.footer{margin-top:56px;padding:28px 0 120px;border-top:1px solid var(--line-hair);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;color:var(--mute);text-transform:uppercase}
+.footer a{color:var(--amber-soft)}
+
+/* Responsive */
+@media (max-width:1200px){
+  .hero{grid-template-columns:1fr;gap:40px}
+  .browser{grid-template-columns:1fr}
+  .filmlist{border-right:0;border-bottom:1px solid var(--line-hair)}
+  .grid3{grid-template-columns:repeat(2,1fr)}
+  .chrome{padding:0 20px;grid-template-columns:auto 1fr auto;gap:14px}
+  .chrome-nav,.chrome-coord{display:none}
+}
+@media (max-width:760px){
+  .page{padding:0 22px 120px}
+  .grid3{grid-template-columns:1fr}
+  .layerband{grid-template-columns:1fr}
+  .layer{border-right:0;border-bottom:1px solid var(--line-hair)}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="haze a"></div>
+<div class="haze b"></div>
+<div class="scan"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- Boot -->
+<div id="boot">
+  <div class="slate a" id="boot-1">CLEARANCE VERIFIED<br/>DECKARD-9</div>
+  <div class="slate b" id="boot-2" style="display:none">ENDURANCE LOGS // 2049.Ω</div>
+  <div class="slate c" id="boot-3" style="display:none">ARCHIVE UNLOCKED</div>
+  <div class="skip">[ click to skip ]</div>
+</div>
+
+<!-- Chrome -->
+<header class="chrome">
+  <div class="chrome-brand"><span class="dot"></span>DECKARD-9</div>
+  <div class="chrome-nav">ENDURANCE LOGS // v9.4</div>
+  <div class="chrome-coord">LAT 34.0194°N · LON 118.4108°W</div>
+  <div class="chrome-live">LIVE</div>
+  <div class="chrome-clearance">CLEARANCE · ORANGE</div>
+</header>
+
+<main class="page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Deep Field Archive · Subject: Nolan, C.</p>
+      <h1>THE<br/>ENDURANCE<br/><em>LOGS</em></h1>
+      <p class="subline">Recovered Transmissions · 1998 – Present · Authorized Personnel Only</p>
+      <div class="meta-strip">
+        <span>Dossiers <em>8 ACTIVE</em></span>
+        <span>Last Ingest <em>04.21.2049</em></span>
+        <span>Deckard-9 Signal <em>LOCK</em></span>
+        <span>Operator <em>K.</em></span>
+      </div>
+    </div>
+    <div class="coord">
+      <div class="coord-head">▮ COORDINATE READOUT</div>
+      <div class="coord-row"><span class="k">LAT</span><span class="v">34.0194° N</span><span class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+      <div class="coord-row"><span class="k">LON</span><span class="v">118.4108° W</span><span class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span></div>
+      <div class="coord-row"><span class="k">ALT</span><span class="v">+104.2 M</span><span class="bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+      <div class="coord-row"><span class="k">SIG</span><span class="v">DECKARD-9 · Ω</span><span class="live">LOCK</span></div>
+      <div class="classif-stamp">CLASSIFIED</div>
+    </div>
+  </section>
+
+  <!-- Archive browser -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">01</span>
+      <div>
+        <h2>Archive <em>Browser</em></h2>
+      </div>
+      <div class="note">8 FILES · LAYER 01–03<br/>SELECT TO OPEN</div>
+    </div>
+    <div class="browser">
+      <div class="filmlist">
+        <h3>◢ FILM INDEX</h3>
+        <button class="filmrow"><span class="code">MEM-2000</span><span class="title">MEMENTO<em>113 MIN · REV. CHRONOLOGY</em></span><span class="ind">LYR·3</span></button>
+        <button class="filmrow"><span class="code">BB-2005</span><span class="title">BATMAN BEGINS<em>140 MIN · FEAR PROTOCOL</em></span><span class="ind">LYR·2</span></button>
+        <button class="filmrow"><span class="code">TDK-2008</span><span class="title">THE DARK KNIGHT<em>152 MIN · CHAOS AUDIT</em></span><span class="ind">LYR·3</span></button>
+        <button class="filmrow"><span class="code">INC-2010</span><span class="title">INCEPTION<em>148 MIN · DREAM ARCHITECTURE</em></span><span class="ind">LYR·3</span></button>
+        <button class="filmrow"><span class="code">TDKR-2012</span><span class="title">DARK KNIGHT RISES<em>165 MIN · LEGACY TRANSFER</em></span><span class="ind">LYR·2</span></button>
+        <button class="filmrow active"><span class="code">INT-2014</span><span class="title">INTERSTELLAR<em>169 MIN · GRAVITY LITURGY</em></span><span class="ind">LYR·3</span></button>
+        <button class="filmrow critical"><span class="code">TEN-2020</span><span class="title">TENET<em>150 MIN · ENTROPY LOOP</em></span><span class="ind">CLASS</span></button>
+        <button class="filmrow"><span class="code">OPP-2023</span><span class="title">OPPENHEIMER<em>180 MIN · CRITICAL MASS</em></span><span class="ind">LYR·3</span></button>
+      </div>
+      <div class="dossier">
+        <div class="kicker">DOSSIER · N-0014 · CLEARANCE ORANGE</div>
+        <h3>INTERSTELLAR</h3>
+        <div class="sub">2014 · 169 MIN · PARAMOUNT/WB · FILE OPEN</div>
+        <p class="quote">"They chose us. Not because we were strong. Because we were willing."</p>
+        <div class="wavebox">
+          <span style="height:30%"></span><span style="height:55%"></span><span style="height:70%"></span><span style="height:90%" class="now"></span><span style="height:62%"></span><span style="height:48%"></span><span style="height:72%"></span><span style="height:38%"></span><span style="height:55%"></span><span style="height:28%"></span><span style="height:62%" class="ghost"></span><span style="height:40%" class="ghost"></span><span style="height:58%" class="ghost"></span><span style="height:34%" class="ghost"></span><span style="height:50%" class="ghost"></span><span style="height:22%" class="ghost"></span><span style="height:44%" class="ghost"></span><span style="height:66%" class="ghost"></span><span style="height:38%" class="ghost"></span><span style="height:52%" class="ghost"></span>
+        </div>
+        <div class="body">
+          <p>Corn, then ice, then a library behind the wall of the world. He left a daughter on a porch and came back through a bookshelf. Every agent who reviewed the tape filed a clean report. Only one of them cried.</p>
+          <p>The equation was already solved. Brand knew. He kept humanity building on a premise he had buried — every rocket launched, every name accepted into the program, every death absorbed, downstream of a truth one man decided we were not ready to hear. Love is not, strictly, an instrument. But it reads like one. <span class="redact">REDACTED · LAYER 3 ONLY</span>.</p>
+          <p>Subject Cooper returned. Location <span class="redact">████████████</span>.</p>
+        </div>
+        <div class="dossier-actions">
+          <button class="dbtn">◢ OPEN FILE</button>
+          <button class="dbtn">◢ TRANSMIT</button>
+          <button class="dbtn ghost">◢ EXPORT .LOG</button>
+        </div>
+        <div class="layers" aria-label="Transmission depth">
+          <div class="lpill">L1</div>
+          <div class="lpill on">L2</div>
+          <div class="lpill">L3</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Transmission depth -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">02</span>
+      <div><h2>Transmission <em>Depth</em></h2></div>
+      <div class="note">THREE STRATA<br/>SELECT LAYER TO FILTER</div>
+    </div>
+    <div class="layerband">
+      <div class="layer"><div class="big">01</div><div class="lbl">Live Signal</div><div class="desc">The transmission as received</div></div>
+      <div class="layer active"><div class="big">02</div><div class="lbl">Production Archive</div><div class="desc">How it was actually built</div></div>
+      <div class="layer"><div class="big">03</div><div class="lbl">Deep Cuts</div><div class="desc">Recovered from the frame itself</div></div>
+    </div>
+  </section>
+
+  <!-- Signal grid -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">03</span>
+      <div><h2>Signal <em>Grid</em></h2></div>
+      <div class="note">03 RECENT DOSSIERS<br/>LAYER 02 · PRODUCTION</div>
+    </div>
+    <div class="grid3">
+      <article class="dcard">
+        <div class="c-eyebrow">DOSSIER · N-0007</div>
+        <h4>Memento</h4>
+        <div class="year">2000 · 113 MIN · Layer 3</div>
+        <p class="q">"Memory is not a record. It is a story we tell ourselves. And he has decided which story he needs."</p>
+        <div class="mini-wave"><span style="height:40%"></span><span style="height:62%"></span><span style="height:34%"></span><span style="height:72%"></span><span style="height:45%"></span><span style="height:28%"></span><span style="height:66%"></span><span style="height:52%"></span><span style="height:36%"></span><span style="height:58%"></span><span style="height:42%"></span><span style="height:70%"></span><span style="height:48%"></span><span style="height:32%"></span><span style="height:60%"></span></div>
+        <p class="excerpt">Subject has no short-term memory, or claims not to. Either way the ledger is in his skin. I've stopped believing witnesses who write things down — they always write the version they need. <span class="redact">████████</span>.</p>
+      </article>
+
+      <article class="dcard">
+        <div class="c-eyebrow">DOSSIER · N-0019</div>
+        <h4>Tenet</h4>
+        <div class="year">2020 · 150 MIN · CLASSIFIED</div>
+        <p class="q">"Protagonist has no name because names move forward. We've logged the bullet before it was fired. Twice."</p>
+        <div class="mini-wave"><span style="height:55%"></span><span style="height:32%"></span><span style="height:68%"></span><span style="height:42%"></span><span style="height:78%"></span><span style="height:48%"></span><span style="height:38%"></span><span style="height:62%"></span><span style="height:52%"></span><span style="height:45%"></span><span style="height:70%"></span><span style="height:36%"></span><span style="height:58%"></span><span style="height:40%"></span><span style="height:66%"></span></div>
+        <p class="excerpt">Advise: do not pursue the algorithm. Advise: we are already too late. Advise: <span class="redact">████████████████████</span>.</p>
+      </article>
+
+      <article class="dcard">
+        <div class="c-eyebrow">DOSSIER · N-0023</div>
+        <h4>Oppenheimer</h4>
+        <div class="year">2023 · 180 MIN · Layer 3</div>
+        <p class="q">"Theory reached critical mass. Consequence became permanent. The hearing was the second detonation."</p>
+        <div class="mini-wave"><span style="height:72%"></span><span style="height:48%"></span><span style="height:64%"></span><span style="height:38%"></span><span style="height:82%"></span><span style="height:54%"></span><span style="height:46%"></span><span style="height:68%"></span><span style="height:58%"></span><span style="height:42%"></span><span style="height:76%"></span><span style="height:52%"></span><span style="height:64%"></span><span style="height:48%"></span><span style="height:72%"></span></div>
+        <p class="excerpt">Strauss took the hearing room. Decades later the Senate took Strauss. The chain reaction does not resolve. It only widens. <span class="redact">████████</span>.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Stamps -->
+  <section class="stamps">
+    <div class="stamp" style="--r:-6deg">CLEARANCE ORANGE</div>
+    <div class="stamp mag" style="--r:3deg">DO NOT DISTRIBUTE</div>
+    <div class="stamp" style="--r:-2deg">EYES ONLY · DECKARD</div>
+    <div class="stamp cyan" style="--r:4deg">SIGNAL LOCK</div>
+    <div class="stamp" style="--r:-5deg">LAYER 03 RESTRICTED</div>
+  </section>
+
+  <!-- Field notes -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">04</span>
+      <div><h2>Field <em>Notes</em></h2></div>
+      <div class="note">COLLECTED · OPERATOR K.<br/>MONO TYPEWRITER ENCODE</div>
+    </div>
+    <div class="notes">
+      <h4>◢ FIELD NOTE · 04.21.2049 · 02:14 LOCAL</h4>
+      <p>The subject's films do not ask you to follow. They ask you to compile. Memory is externalized — tattoos, Polaroids, watches, children. What remains is a man administering his own evidence, legibly, in <span class="redact">REVERSE</span>.</p>
+      <p>I've tracked eight dossiers. Each one re-teaches the instrument how to listen. The ocean keeps a clock. The Protagonist has no name. The bomb is not the ending. The deep field is <span class="redact">STILL</span> receiving.</p>
+      <p>Closing transmission: if the archive has been watching me, I would not know. That is the point of the archive.</p>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>◢ DECKARD-9 · Endurance Logs · v9.4.ω</span>
+    <span><a href="./">← Concept Selector</a></span>
+    <span>Operator K. · 2049</span>
+  </div>
+</main>
+
+<!-- Ticker + Console -->
+<div class="ticker-wrap">
+  <div class="ticker-track">• DECKARD-9 ONLINE  •  34.0194°N / 118.4108°W  •  ENDURANCE LOGS v9.4  •  TRANSMISSION INTEGRITY 87%  •  DO NOT DISTRIBUTE  •  CLEARANCE · ORANGE  •  NEXT INGEST T-00:14:22  •  LAYER 03 RESTRICTED  •  8 DOSSIERS ACTIVE  •  DECKARD-9 ONLINE  •  34.0194°N / 118.4108°W  •</div>
+</div>
+<div class="console">
+  <button class="play">▶</button>
+  <div class="bigwave" id="bigwave"></div>
+  <div class="timecode">02:47 <em>/ 11:08</em>   INTERSTELLAR — COMMS FRAGMENT</div>
+  <div class="sigpct">◉ SIG 87%</div>
+</div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Boot sequence
+  var boot = document.getElementById('boot');
+  var s1 = document.getElementById('boot-1');
+  var s2 = document.getElementById('boot-2');
+  var s3 = document.getElementById('boot-3');
+  function endBoot(){ boot.classList.add('done'); setTimeout(function(){boot.remove()},620) }
+  boot.addEventListener('click', endBoot);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') endBoot(); });
+  if (reduce){ endBoot(); }
+  else {
+    setTimeout(function(){ s1.style.display='none'; s2.style.display='block'; },900);
+    setTimeout(function(){ s2.style.display='none'; s3.style.display='block'; },1700);
+    setTimeout(endBoot, 2500);
+  }
+
+  // Populate bottom waveform
+  var big = document.getElementById('bigwave');
+  if (big){
+    var seed = [40,56,72,88,64,48,36,60,78,52,40,66,82,58,44,38,64,70,48,32,56,72,44,60,80,52,36,68,58,42,74,50,62,38,54,70,44,56,82,60,46,72,48,64,38,52,74,40,58,64,46,70,54,38,62,78,44,56,40,68,52,46,62,78,50,36,68,74,58,42,66,80,52,44,58,72,38,54,66,48];
+    seed.forEach(function(h,i){
+      var sp = document.createElement('span');
+      sp.style.height = h+'%';
+      if (i<24) sp.classList.add('past');
+      if (i===24) sp.classList.add('now');
+      big.appendChild(sp);
+    });
+  }
+
+  // Film row click cycles active + swaps dossier title
+  var rows = document.querySelectorAll('.filmrow');
+  rows.forEach(function(r){
+    r.addEventListener('click', function(){
+      rows.forEach(function(x){x.classList.remove('active')});
+      r.classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>

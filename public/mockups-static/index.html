@@ -3,96 +3,149 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Concept Mockups // The Endurance Logs</title>
+<title>Terminal Concepts // The Endurance Logs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap" />
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:#07080a;color:#e8e4d8;font-family:"Inter Tight",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
-  .wrap{max-width:980px;margin:0 auto;padding:80px 40px 120px;position:relative}
-  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.28em;color:#8a8372;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px}
-  .eyebrow::before{content:"";width:32px;height:1px;background:#C9A24A;opacity:.6}
-  h1{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(48px,7vw,96px);line-height:.92;letter-spacing:-.02em;color:#F4EFE4;margin-bottom:18px}
-  h1 em{color:#C9A24A;font-style:italic}
-  .lede{font-family:"Bodoni Moda",serif;font-style:italic;font-size:19px;line-height:1.6;color:#a8a297;max-width:62ch;margin-bottom:50px}
-  .rule{height:1px;background:rgba(201,162,74,.3);margin:40px 0 32px;position:relative}
-  .rule::after{content:"◇";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#C9A24A;background:#07080a;padding:0 10px;font-size:10px}
-  .grid{display:grid;gap:18px}
-  .card{display:block;text-decoration:none;color:inherit;border:1px solid rgba(201,162,74,.24);background:linear-gradient(180deg,#111114,#0c0c10);padding:26px 28px;transition:all .3s cubic-bezier(.2,.7,.1,1);position:relative;overflow:hidden}
-  .card:hover{border-color:#C9A24A;transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 32px rgba(201,162,74,.12)}
-  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#C9A24A,#D69B74);opacity:.6}
-  .card-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:10px}
-  .num{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:42px;color:#C9A24A;line-height:1;letter-spacing:-.02em}
-  .tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:#E6C069;text-transform:uppercase;border:1px solid rgba(201,162,74,.4);padding:5px 9px}
-  .card h2{font-family:"Bodoni Moda",serif;font-weight:700;font-size:26px;color:#F4EFE4;letter-spacing:-.01em;margin-bottom:6px}
-  .card .sub{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;color:#a8a297;line-height:1.5;margin-bottom:14px;max-width:64ch}
-  .card .meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:#6b6459;text-transform:uppercase;display:flex;gap:18px;flex-wrap:wrap}
-  .card .open{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:#E6C069;text-transform:uppercase;margin-top:14px;display:inline-flex;align-items:center;gap:10px}
-  .card .open::after{content:"→";transition:transform .24s cubic-bezier(.2,.7,.1,1)}
-  .card:hover .open::after{transform:translateX(6px)}
-  .v3{border-color:rgba(201,162,74,.55);background:linear-gradient(180deg,#15140e,#0a0a0c)}
-  .v3::before{opacity:1;width:4px}
-  footer{margin-top:60px;padding-top:26px;border-top:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;color:#6b6459;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
-  footer a{color:#8a8372}
-  footer a:hover{color:#E6C069}
-  @media (max-width:640px){.wrap{padding:50px 22px 80px}.card-head{flex-direction:column;align-items:flex-start}}
+:root{
+  --void:#05070c;--panel:#0a0e14;--cyan:#00F0FF;--mag:#FF00AA;--acid:#7CFF4A;
+  --amber:#FFB23F;--orange:#FF7B2C;--red:#FF3355;--white:#E6F7FF;--mute:#6B7180;
+  --line:rgba(0,240,255,.14);--line-hot:rgba(0,240,255,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--void);color:var(--white);font-family:"Inter Tight",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;mix-blend-mode:screen;opacity:.35;background:repeating-linear-gradient(0deg,rgba(0,240,255,.04) 0 1px,transparent 1px 3px)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2;box-shadow:inset 0 0 240px 80px rgba(0,0,0,.7)}
+.grid-bg{position:fixed;inset:0;z-index:0;opacity:.18;background-image:linear-gradient(rgba(0,240,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.18) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 80%)}
+.wrap{position:relative;z-index:5;max-width:1200px;margin:0 auto;padding:80px 40px 120px}
+.brand{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.brand::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--acid);box-shadow:0 0 8px var(--acid);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+h1{font-family:"JetBrains Mono",monospace;font-weight:800;font-size:clamp(44px,6.5vw,84px);line-height:.9;letter-spacing:-.025em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px;text-shadow:0 0 24px rgba(0,240,255,.32)}
+h1 em{font-style:normal;color:var(--mag);text-shadow:0 0 24px rgba(255,0,170,.4)}
+.lede{font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.65;color:var(--white);max-width:60ch;margin-bottom:14px;letter-spacing:.02em}
+.sub{font-family:"Inter Tight",sans-serif;font-size:16px;line-height:1.6;color:var(--mute);max-width:62ch;margin-bottom:50px}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--line-hot),transparent);margin:36px 0 32px;position:relative}
+.rule::after{content:"//";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--cyan);background:var(--void);padding:0 12px;font-family:"JetBrains Mono";font-size:11px;letter-spacing:.22em}
+
+.grid{display:grid;gap:18px}
+.card{position:relative;display:block;text-decoration:none;color:inherit;border:1px solid var(--line);background:linear-gradient(180deg,rgba(10,14,20,.92),rgba(5,7,12,.95));padding:32px 32px 28px;transition:all .32s cubic-bezier(.22,.61,.36,1);overflow:hidden;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
+.card::before{content:"";position:absolute;top:0;right:0;width:16px;height:16px;background:linear-gradient(225deg,var(--accent,var(--cyan)) 0 50%,transparent 50%);transition:all .3s}
+.card:hover{transform:translateY(-4px);border-color:var(--accent,var(--cyan));box-shadow:0 0 0 1px var(--accent,var(--cyan)),0 20px 40px rgba(0,0,0,.5),0 0 40px color-mix(in srgb,var(--accent,var(--cyan)) 24%,transparent)}
+.card:hover .go::after{transform:translateX(8px)}
+
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:14px}
+.id{font-family:"JetBrains Mono",monospace;font-weight:800;font-size:56px;line-height:.92;color:var(--accent,var(--cyan));letter-spacing:-.02em;text-shadow:0 0 18px color-mix(in srgb,var(--accent,var(--cyan)) 40%,transparent)}
+.tags{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,var(--cyan));border:1px solid color-mix(in srgb,var(--accent,var(--cyan)) 60%,transparent);padding:4px 8px;background:color-mix(in srgb,var(--accent,var(--cyan)) 6%,transparent)}
+.tag.status{color:var(--acid);border-color:var(--acid);background:rgba(124,255,74,.06)}
+
+.card h2{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:28px;color:var(--white);letter-spacing:-.01em;margin-bottom:8px;line-height:1.1;text-transform:uppercase}
+.card .codename{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,var(--cyan));margin-bottom:16px}
+.card .desc{font-family:"Inter Tight",sans-serif;font-size:14.5px;color:var(--white);opacity:.85;line-height:1.6;margin-bottom:18px;max-width:60ch}
+.card .meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase;display:flex;gap:18px;flex-wrap:wrap;padding-top:18px;border-top:1px dashed var(--line)}
+.card .meta em{font-style:normal;color:var(--accent,var(--cyan))}
+.card .go{display:inline-flex;align-items:center;gap:12px;margin-top:16px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--accent,var(--cyan));text-transform:uppercase;font-weight:700}
+.card .go::after{content:"→";transition:transform .3s}
+
+.d{--accent:var(--orange)}
+.n{--accent:var(--cyan)}
+.o{--accent:var(--amber)}
+
+.legacy{margin-top:64px;padding-top:28px;border-top:1px solid var(--line);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--mute);text-transform:uppercase;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.legacy a{color:var(--mute);opacity:.7;transition:.2s}
+.legacy a:hover{color:var(--cyan);opacity:1}
+.legacy .sep{color:var(--line-hot)}
+
+footer{margin-top:48px;padding-top:28px;border-top:1px solid var(--line);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--mute);text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+footer a{color:var(--cyan)}
+footer a:hover{color:var(--mag)}
+
+@media (max-width:760px){.wrap{padding:50px 22px 80px}.card-head{flex-direction:column}.id{font-size:42px}.card h2{font-size:22px}}
 </style>
 </head>
 <body>
+<div class="grid-bg"></div>
 <div class="wrap">
-  <p class="eyebrow">MMXXVI · Concept Renderer · Volume VII</p>
-  <h1>Three fidelity passes.<br/><em>One monumental direction.</em></h1>
-  <p class="lede">The Endurance Logs, reimagined as a working archive of Christopher Nolan cinema. These three mockups chart a single direction — the IMAX Cathedral — through its simple, production, and deep-cinema revisions. Each opens as a standalone experience.</p>
+  <p class="brand">ROOT@ENDURANCE // CONCEPT RENDERER v2.0 // LAYER-3</p>
+  <h1>TERMINAL<br/>ARCHIVE <em>//</em> THREE VARIANTS</h1>
+  <p class="lede">&gt; Vision: pitch black. Neon. Brutalist typography. Sci-fi console.</p>
+  <p class="sub">Three distinct directions for the Endurance Logs archive, each leaning hard into terminal / sci-fi aesthetics. Pick one to push deep into production fidelity. All three run standalone — no server, open and explore.</p>
 
   <div class="rule"></div>
 
   <div class="grid">
-    <a class="card v3" href="/mockups-static/cathedral-v3.html">
+    <a class="card d" href="./deckard-archive.html">
       <div class="card-head">
-        <span class="num">III</span>
-        <span class="tag">Deep Fidelity · Latest</span>
+        <span class="id">01</span>
+        <div class="tags">
+          <span class="tag">BLADE RUNNER 2049</span>
+          <span class="tag status">DECKARD-9</span>
+        </div>
       </div>
-      <h2>Cathedral v3 — full cinema</h2>
-      <p class="sub">Projector-boot countdown, custom film-reticle cursor with contextual verbs, aisle spotlight, monumental gravity-drop title, organ pipes in the crypt, and the AMEN keyboard easter egg. The full working piece.</p>
+      <div class="codename">OPERATION · DECKARD ARCHIVE</div>
+      <h2>Atmospheric Noir</h2>
+      <p class="desc">Pitch black stage. Amber haze drifting across the void. Brutalist numerals resolving through smog. A coordinate readout. A waveform console at the base of the screen. Classified stamps rotated at angles. Sparse, slow, cinematic — a film noir investigator's archive with one magenta flare on a single CLASSIFIED entry.</p>
       <div class="meta">
-        <span>Projector boot · 5·4·3·2·1</span>
-        <span>Custom cursor HUD</span>
-        <span>Type AMEN for final reel</span>
-        <span>Press ? for glossary</span>
+        <span>Amber <em>#FF7B2C</em></span>
+        <span>Cyan <em>LIVE</em></span>
+        <span>Magenta <em>CRITICAL</em></span>
+        <span>Persistent Waveform Console</span>
       </div>
-      <span class="open">Open Cathedral v3</span>
+      <span class="go">Open Deckard Archive</span>
     </a>
 
-    <a class="card" href="/mockups-static/local-mockups-v2.html#cathedral">
+    <a class="card n" href="./neon-grid.html">
       <div class="card-head">
-        <span class="num">II</span>
-        <span class="tag">Production Pass</span>
+        <span class="id">02</span>
+        <div class="tags">
+          <span class="tag">GHOST IN THE SHELL</span>
+          <span class="tag status">LIVE CMD</span>
+        </div>
       </div>
-      <h2>Cathedral v2 — production grade</h2>
-      <p class="sub">Rose window, eight Roman-numeral sections, ritual calendar ticket-board, director chapel with silhouette, drop-cap essays, patron circle, crypt footer with inscription. Also includes Observatory v2 via the toggle.</p>
+      <div class="codename">OPERATION · NEON GRID</div>
+      <h2>Cyberpunk Terminal</h2>
+      <p class="desc">TRON wireframe floor on perspective. Matrix data rain in acid green. Glitch text on hover. Nodes as clickable hex panels with chromatic aberration. A working command line at the bottom — type HELP, LS, ACCESS INT-2014, DECRYPT GARGANTUA. A breach protocol plays when you click a film. Hex grid live-breathing in the sidebar.</p>
       <div class="meta">
-        <span>Real film data</span>
-        <span>Custom SVG ornaments</span>
-        <span>Toggle Observatory ↔ Cathedral</span>
+        <span>Cyan <em>#00F0FF</em></span>
+        <span>Magenta <em>#FF00AA</em></span>
+        <span>Acid Green <em>DATA</em></span>
+        <span>Real Command Line</span>
       </div>
-      <span class="open">Open Cathedral v2</span>
+      <span class="go">Open Neon Grid</span>
     </a>
 
-    <a class="card" href="/mockups-static/local-mockups.html#cathedral">
+    <a class="card o" href="./deep-ops.html">
       <div class="card-head">
-        <span class="num">I</span>
-        <span class="tag">First Pass · Archival</span>
+        <span class="id">03</span>
+        <div class="tags">
+          <span class="tag">ZERO DARK THIRTY</span>
+          <span class="tag status">NODE-07 LIVE</span>
+        </div>
       </div>
-      <h2>Cathedral v1 — initial concept</h2>
-      <p class="sub">The first full-page concept. Hero, vaults, ritual calendar, editorial pulpit, patron block, footer. Kept for lineage and comparison.</p>
-      <div class="meta"><span>Simple layout</span><span>Legacy reference</span></div>
-      <span class="open">Open Cathedral v1</span>
+      <div class="codename">OPERATION · DEEP OPS</div>
+      <h2>Tactical Console</h2>
+      <p class="desc">Three-panel intelligence console. Classification stripe at the top (//TOP SECRET//SCI//NOFORN//). Film index on the left with clearance pills. Selected dossier in the center — timestamped transcripts with redaction bars that peel back on hover. Metadata, personnel, cross-references, and map reticle on the right. Incoming signal toasts slide in from the corner. Dense, analytical, surveillance-state.</p>
+      <div class="meta">
+        <span>Amber <em>#FFB23F</em></span>
+        <span>Red <em>CRITICAL</em></span>
+        <span>Ice Blue <em>META</em></span>
+        <span>Hover redactions</span>
+      </div>
+      <span class="go">Open Deep Ops Console</span>
     </a>
   </div>
 
+  <div class="legacy">
+    <span>LEGACY CONCEPTS</span><span class="sep">//</span>
+    <a href="./cathedral-v3.html">Cathedral v3</a><span class="sep">·</span>
+    <a href="./local-mockups-v2.html">v2 observatory/cathedral</a><span class="sep">·</span>
+    <a href="./local-mockups.html">v1 first pass</a>
+  </div>
+
   <footer>
-    <span>Endurance Logs // Concept Renderer</span>
+    <span>◆ ENDURANCE LOGS · CONCEPT RENDERER · v2.0</span>
     <a href="/">← Return to live archive</a>
   </footer>
 </div>

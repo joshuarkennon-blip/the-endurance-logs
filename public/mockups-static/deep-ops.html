@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NODE-07 // DEEP OPS // Endurance Logs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800;900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+<style>
+:root{
+  --bg:#06070A;--panel:#0E1014;--panel-2:#14171D;
+  --line:#1F242E;--line-hot:#2A2F3A;
+  --amber:#FFB23F;--amber-dim:#8A5E1C;--amber-faint:#3E2B10;
+  --red:#FF3355;--ice:#7ABFFF;--ice-dim:#3D5E80;
+  --white:#F2EEE4;--mute:#6B7180;--black:#000;
+  --f-cond:"Barlow Condensed",ui-sans-serif,sans-serif;
+  --f-ui:"Inter Tight",ui-sans-serif,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--white);font-family:var(--f-ui);height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+body{display:grid;grid-template-rows:40px 28px 1fr 56px;grid-template-columns:300px 1fr 340px;grid-template-areas:"chrome chrome chrome" "class class class" "index dossier meta" "ticker ticker ticker"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer;text-align:left;width:100%}
+.cap{text-transform:uppercase;letter-spacing:.2em}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line-hot)}
+
+/* Noise + vignette */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.06;mix-blend-mode:overlay;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:98;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.55))}
+
+/* Chrome */
+.chrome{grid-area:chrome;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#0A0C10,#0E1014);font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.chrome .L{display:flex;gap:18px;align-items:center}
+.chrome .brand{color:var(--white);font-weight:700}
+.chrome .brand em{font-style:normal;color:var(--amber)}
+.chrome .C{display:flex;gap:22px;align-items:center;justify-content:center}
+.chrome .C em{font-style:normal;color:var(--amber)}
+.chrome .R{display:flex;gap:14px;align-items:center;justify-content:flex-end}
+.chrome .live{display:flex;align-items:center;gap:6px;color:var(--red)}
+.chrome .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);animation:pulse 1.4s ease-in-out infinite}
+.chrome .op{color:var(--ice)}
+.chrome .btn{border:1px solid var(--line);padding:5px 8px;font-size:9px;color:var(--white);letter-spacing:.22em}
+.chrome .btn:hover{border-color:var(--amber);color:var(--amber)}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* Classification */
+.class-stripe{grid-area:class;display:grid;grid-template-columns:72px 1fr 72px;align-items:center;background:#000;color:var(--amber);border-top:1px solid var(--amber);border-bottom:1px solid var(--amber);font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;height:28px;overflow:hidden}
+.class-stripe.flash{animation:classFlash 240ms steps(4,end)}
+@keyframes classFlash{0%,100%{background:#000;color:var(--amber);border-color:var(--amber)}50%{background:#000;color:var(--red);border-color:var(--red)}}
+.class-stripe .hatch{height:100%;background:repeating-linear-gradient(135deg,var(--amber) 0 6px,#000 6px 12px)}
+.class-stripe span.txt{text-align:center;overflow:hidden;white-space:nowrap}
+
+/* Index panel */
+.panel{overflow:hidden;position:relative}
+.index{grid-area:index;border-right:1px solid var(--line);background:linear-gradient(180deg,#0A0C10,#06070A);display:grid;grid-template-rows:40px 40px 1fr}
+.index .head{padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.28em;color:var(--amber);text-transform:uppercase}
+.index .head em{font-style:normal;color:var(--mute);font-family:var(--f-mono);font-weight:500;font-size:10px;letter-spacing:.18em}
+.index .filter{padding:0 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase;overflow-x:auto}
+.index .filter button{width:auto;padding:4px 8px;border:1px solid var(--line);color:var(--mute);transition:.2s}
+.index .filter button:hover{border-color:var(--amber-dim);color:var(--white)}
+.index .filter button.on{background:var(--amber-faint);border-color:var(--amber);color:var(--amber)}
+.index .list{overflow-y:auto}
+.filmrow{display:grid;grid-template-columns:60px 68px 1fr 8px;gap:10px;align-items:center;padding:10px 14px;min-height:64px;border-bottom:1px solid var(--line);position:relative;transition:background .2s}
+.filmrow:hover{background:#0A0E14}
+.filmrow.active{background:#0E1218;box-shadow:inset 2px 0 0 var(--amber)}
+.filmrow.active .dot{opacity:1}
+.filmrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px rgba(255,178,63,.75);animation:pulse 1.8s ease-in-out infinite;opacity:.15}
+.filmrow.critical .dot{background:var(--red);box-shadow:0 0 10px rgba(255,51,85,.8)}
+.filmrow.critical.active{box-shadow:inset 2px 0 0 var(--red)}
+.class-pill{display:inline-block;padding:3px 6px;border:1px solid;font-family:var(--f-mono);font-weight:700;font-size:9px;letter-spacing:.18em;text-transform:uppercase;line-height:1;border-radius:2px;text-align:center}
+.class-pill.ts{color:var(--amber);border-color:var(--amber);background:#1A0E00}
+.class-pill.sci{color:var(--red);border-color:var(--red);background:#1A0005}
+.class-pill.conf{color:var(--ice);border-color:var(--ice);background:#001018}
+.class-pill.uncl{color:var(--mute);border-color:var(--mute);background:transparent}
+.filmrow .code{font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.04em;color:var(--amber)}
+.filmrow .title{font-family:var(--f-cond);font-weight:800;font-size:15px;letter-spacing:.02em;line-height:1.05;text-transform:uppercase;color:var(--white)}
+.filmrow .title em{font-style:normal;display:block;font-family:var(--f-mono);font-weight:400;font-size:10px;color:var(--mute);margin-top:3px;letter-spacing:.06em;text-transform:none}
+
+/* Dossier */
+.dossier{grid-area:dossier;position:relative;overflow-y:auto;padding:24px 28px 40px}
+.dossier::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 23px,rgba(255,178,63,.035) 23px 24px),
+    repeating-linear-gradient(90deg,transparent 0 23px,rgba(255,178,63,.035) 23px 24px)}
+.dossier::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;mix-blend-mode:multiply;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.18) 2px 3px)}
+.watermark{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-family:var(--f-cond);font-weight:900;font-size:240px;letter-spacing:.02em;color:var(--amber);opacity:.06;pointer-events:none;text-transform:uppercase;z-index:0;animation:wmDrift 40s ease-in-out infinite}
+@keyframes wmDrift{0%,100%{transform:translate(-50%,-50%) rotate(-18deg)}50%{transform:translate(calc(-50% + 10px),calc(-50% - 4px)) rotate(-17deg)}}
+
+.dossier-head{position:relative;z-index:2;margin-bottom:18px}
+.dossier-head .kicker{font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;color:var(--mute);text-transform:uppercase;margin-bottom:6px}
+.dossier-head h1{font-family:var(--f-cond);font-weight:800;font-size:clamp(36px,4.6vw,48px);letter-spacing:-.01em;line-height:.95;text-transform:uppercase}
+.dossier-head .subtitle{font-family:var(--f-ui);font-weight:500;font-size:13px;color:var(--ice);letter-spacing:.02em;margin-top:6px;text-transform:uppercase}
+.dossier-head .meta-row{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;margin-top:10px;display:flex;gap:20px;flex-wrap:wrap}
+.dossier-head .meta-row em{font-style:normal;color:var(--amber)}
+
+.waveform{position:relative;z-index:2;margin-top:14px;height:120px;background:#0A0B0F;border:1px solid var(--line);display:flex;align-items:flex-end;gap:2px;padding:10px 12px;overflow:hidden}
+.waveform::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent 0 19px,rgba(255,178,63,.04) 19px 20px),repeating-linear-gradient(90deg,transparent 0 19px,rgba(255,178,63,.04) 19px 20px)}
+.waveform span{width:3px;background:var(--amber);opacity:.82;position:relative;z-index:2}
+.waveform span.ghost{background:rgba(255,178,63,.25)}
+.waveform .playhead{position:absolute;top:0;bottom:0;width:1px;background:var(--red);box-shadow:0 0 6px var(--red);z-index:3}
+.waveform .tc{position:absolute;top:8px;font-family:var(--f-mono);font-size:9px;color:var(--amber-dim);letter-spacing:.1em}
+.waveform .tc1{left:12px} .waveform .tc2{right:12px}
+
+.transcript{position:relative;z-index:2;margin-top:20px;display:flex;flex-direction:column;gap:8px}
+.t-line{display:grid;grid-template-columns:108px 1fr;gap:14px;padding:7px 0 7px 12px;border-left:2px solid transparent;font-family:var(--f-mono);font-size:12.5px;line-height:1.75;color:var(--white)}
+.t-line time{color:var(--amber);font-weight:700;font-size:11px;letter-spacing:.04em}
+.t-line.critical{border-left-color:var(--red);box-shadow:0 0 0 1px rgba(255,51,85,.15);background:rgba(255,51,85,.03);padding-right:12px;animation:critPulse 2.4s ease-in-out infinite}
+.t-line.critical time{color:var(--red)}
+@keyframes critPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,51,85,.15)}50%{box-shadow:0 0 0 1px rgba(255,51,85,.35),0 0 16px rgba(255,51,85,.15)}}
+.redact{background:#000;color:#000;padding:0 6px;transition:all .22s cubic-bezier(.2,.8,.2,1);cursor:crosshair;user-select:none;display:inline-block;box-shadow:0 0 0 1px var(--line)}
+.redact:hover{background:transparent;color:var(--amber);box-shadow:0 0 0 1px var(--amber-dim)}
+.stamp-redacted{display:inline-block;font-family:var(--f-ui);font-weight:700;font-size:10px;letter-spacing:.2em;color:var(--red);border:1.5px solid var(--red);padding:2px 6px;transform:rotate(-7deg);text-transform:uppercase}
+.footnotes{position:relative;z-index:2;margin-top:22px;padding-top:14px;border-top:1px dashed var(--line);font-family:var(--f-ui);font-style:italic;font-size:11px;color:var(--mute);line-height:1.5}
+.footnotes div + div{margin-top:6px}
+
+/* Meta */
+.meta{grid-area:meta;border-left:1px solid var(--line);background:linear-gradient(180deg,#0A0C10,#06070A);overflow-y:auto}
+.meta-section{border-bottom:1px solid var(--line);padding:14px 16px}
+.meta-section h4{font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.28em;color:var(--amber);text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between}
+.meta-section h4 em{font-style:normal;color:var(--mute);font-family:var(--f-mono);font-weight:500;font-size:10px;letter-spacing:.14em}
+.map{height:180px;background:#0A0B0F;border:1px solid var(--line);position:relative;overflow:hidden}
+.map::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line-hot) 1px,transparent 1px),linear-gradient(90deg,var(--line-hot) 1px,transparent 1px);background-size:16px 16px;opacity:.8}
+.map .reticle{position:absolute;top:45%;left:56%;width:28px;height:28px;transform:translate(-50%,-50%);color:var(--amber)}
+.map .reticle::before,.map .reticle::after{content:"";position:absolute;background:currentColor}
+.map .reticle::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-50%)}
+.map .reticle::after{top:50%;left:0;right:0;height:1px;transform:translateY(-50%)}
+.map .reticle i{position:absolute;left:50%;top:50%;width:16px;height:16px;transform:translate(-50%,-50%);border:1px solid currentColor;border-radius:50%}
+.map .tag{position:absolute;top:45%;left:56%;transform:translate(14px,-14px);font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;background:rgba(0,0,0,.6);padding:2px 6px;border:1px solid var(--amber-dim)}
+.map .tag.blink{animation:pulse 1.2s ease-in-out infinite}
+.map .crosshair-v{position:absolute;top:0;bottom:0;left:56%;width:1px;background:rgba(255,178,63,.25)}
+.map .crosshair-h{position:absolute;left:0;right:0;top:45%;height:1px;background:rgba(255,178,63,.25)}
+
+.kv{display:grid;grid-template-columns:92px 1fr;gap:6px;padding:5px 0;border-bottom:1px dashed var(--line);font-family:var(--f-mono);font-size:11px}
+.kv:last-child{border-bottom:0}
+.kv dt{font-weight:700;font-size:10.5px;color:var(--ice);letter-spacing:.14em;text-transform:uppercase}
+.kv dd{color:var(--white);letter-spacing:.02em}
+
+.person{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;padding:10px 10px;background:var(--panel-2);border:1px solid var(--line);font-family:var(--f-ui);font-size:12px;margin-bottom:6px;position:relative}
+.person .sigil{color:var(--amber)}
+.person .name{font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.02em;text-transform:uppercase}
+.person .name em{font-style:normal;display:block;font-family:var(--f-mono);font-weight:400;font-size:10px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+.person .status{font-family:var(--f-mono);font-size:9px;letter-spacing:.2em;padding:3px 6px;border:1px solid;text-transform:uppercase}
+.person .status.ok{color:var(--amber);border-color:var(--amber)}
+.person .status.lost{color:var(--red);border-color:var(--red)}
+.person .status.term{color:var(--red);border-color:var(--red);background:repeating-linear-gradient(-45deg,#000 0 4px,rgba(255,51,85,.15) 4px 5px)}
+.person .status.ded{color:var(--mute);border-color:var(--mute)}
+
+.xref{display:block;padding:7px 0;font-family:var(--f-mono);font-size:11.5px;color:var(--white);border-bottom:1px dashed var(--line);letter-spacing:.02em}
+.xref:last-child{border-bottom:0}
+.xref:hover{color:var(--amber)}
+.xref code{color:var(--amber);font-family:var(--f-mono);font-weight:700;letter-spacing:.08em;margin-right:6px}
+
+.custody .kv dt{color:var(--amber)}
+.custody .kv dd{color:var(--mute)}
+
+/* Ticker */
+.ticker{grid-area:ticker;position:relative;overflow:hidden;background:linear-gradient(180deg,#0A0C10,#06070A);border-top:1px solid var(--line);display:flex;align-items:center;padding:0 18px;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);height:56px}
+.ticker .prefix{flex:0 0 auto;color:var(--white);padding-right:14px;font-weight:700}
+.ticker .prefix::before{content:"◉ ";color:var(--red);animation:pulse 1.4s ease-in-out infinite}
+.ticker-wrap{flex:1;overflow:hidden;position:relative;white-space:nowrap}
+.ticker-track{display:inline-block;animation:tickerRun 70s linear infinite;padding-left:100%}
+@keyframes tickerRun{to{transform:translateX(-100%)}}
+
+/* Incoming toast */
+.toast{position:fixed;top:84px;right:24px;width:360px;background:#0A0B0F;border:1px solid var(--red);padding:14px 16px;z-index:50;font-family:var(--f-mono);font-size:12px;color:var(--white);box-shadow:0 20px 40px rgba(0,0,0,.6);transform:translateX(420px);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.toast.on{transform:translateX(0)}
+.toast .hd{display:flex;justify-content:space-between;font-weight:700;font-size:10px;letter-spacing:.22em;color:var(--red);text-transform:uppercase;margin-bottom:8px}
+.toast .msg{line-height:1.55;color:var(--white);font-size:11.5px}
+.toast .msg em{font-style:normal;color:var(--amber)}
+
+/* Boot overlay */
+#boot{position:fixed;inset:0;z-index:999;background:rgba(6,7,10,.96);display:grid;place-items:center;font-family:var(--f-mono);text-align:center}
+#boot .lines{font-size:12px;line-height:1.8;color:var(--amber);letter-spacing:.04em;text-align:left;min-width:460px}
+#boot .lines div{opacity:0;animation:lineIn .1s steps(1,end) forwards}
+@keyframes lineIn{to{opacity:1}}
+#boot.done{animation:bootOut .4s ease forwards}
+@keyframes bootOut{to{opacity:0;pointer-events:none}}
+
+/* Small screens (below 960 show fallback) */
+@media (max-width:960px){
+  body{grid-template-columns:1fr;grid-template-rows:40px 28px 1fr auto 56px;grid-template-areas:"chrome" "class" "dossier" "index" "ticker"}
+  .index{border-right:0;border-top:1px solid var(--line)}
+  .meta{display:none}
+  .index .list{max-height:260px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<!-- Boot -->
+<div id="boot">
+  <div class="lines" id="boot-lines"></div>
+</div>
+
+<!-- Chrome -->
+<header class="chrome">
+  <div class="L">
+    <span class="brand">◈ <em>ENDURANCE</em> / NODE-07</span>
+    <span>SID:0x4A7F-11C2</span>
+  </div>
+  <div class="C">
+    <span>MISSIONS ARCHIVED · <em>08 / 08</em></span>
+    <span id="clock">21:47:03 UTC</span>
+  </div>
+  <div class="R">
+    <span class="live">LIVE</span>
+    <span class="op">OP:COOPER.J</span>
+    <button class="btn">LOCK</button>
+    <button class="btn">EXFIL</button>
+  </div>
+</header>
+
+<!-- Classification stripe -->
+<div class="class-stripe" id="classStripe">
+  <div class="hatch"></div>
+  <span class="txt">//TOP SECRET//SCI//NOFORN//ORCON — HANDLE VIA TALENT KEYHOLE CHANNELS ONLY — DO NOT DISSEMINATE — COPY 03 OF 07 — UNAUTHORIZED DISCLOSURE SUBJECT TO CRIMINAL SANCTIONS 18 U.S.C. §798//</span>
+  <div class="hatch"></div>
+</div>
+
+<!-- Index -->
+<aside class="panel index">
+  <div class="head">◢ FILE INDEX <em>08 ENTRIES</em></div>
+  <div class="filter">
+    <button class="on">ALL</button>
+    <button>TS</button>
+    <button>SCI</button>
+    <button>CONF</button>
+    <button>UNCL</button>
+  </div>
+  <div class="list" id="filmlist">
+    <button class="filmrow" data-film="MEM-2000"><span class="class-pill uncl">UNCLAS</span><span class="code">MEM-2000</span><span class="title">Memento<em>2000 · Rev. chronology</em></span><span class="dot"></span></button>
+    <button class="filmrow" data-film="BB-2005"><span class="class-pill conf">CONF</span><span class="code">BB-2005</span><span class="title">Batman Begins<em>2005 · Fear protocol</em></span><span class="dot"></span></button>
+    <button class="filmrow" data-film="TDK-2008"><span class="class-pill ts">TS</span><span class="code">TDK-2008</span><span class="title">The Dark Knight<em>2008 · Chaos audit</em></span><span class="dot"></span></button>
+    <button class="filmrow" data-film="INC-2010"><span class="class-pill sci">SCI</span><span class="code">INC-2010</span><span class="title">Inception<em>2010 · Dream architecture</em></span><span class="dot"></span></button>
+    <button class="filmrow" data-film="TDKR-2012"><span class="class-pill conf">CONF</span><span class="code">TDKR-2012</span><span class="title">Dark Knight Rises<em>2012 · Legacy transfer</em></span><span class="dot"></span></button>
+    <button class="filmrow active" data-film="INT-2014"><span class="class-pill ts">TS//SCI</span><span class="code">INT-2014</span><span class="title">Interstellar<em>2014 · Gravity liturgy</em></span><span class="dot"></span></button>
+    <button class="filmrow critical" data-film="TEN-2020"><span class="class-pill sci">TS//SCI</span><span class="code">TEN-2020</span><span class="title">Tenet<em>2020 · Entropy loop</em></span><span class="dot"></span></button>
+    <button class="filmrow critical" data-film="OPP-2023"><span class="class-pill sci">TS//NOFORN</span><span class="code">OPP-2023</span><span class="title">Oppenheimer<em>2023 · Critical mass</em></span><span class="dot"></span></button>
+  </div>
+</aside>
+
+<!-- Dossier -->
+<article class="panel dossier" id="dossierPanel">
+  <div class="watermark">CLASSIFIED</div>
+
+  <header class="dossier-head">
+    <div class="kicker">FILE · <span id="d-code">INT-2014</span> · DECLASSIFIED 2024.09.12</div>
+    <h1 id="d-title">INTERSTELLAR</h1>
+    <div class="subtitle" id="d-sub">RECOVERED COOPER TRANSMISSIONS · LAZARUS MISSION LOG · 2067 STRATA</div>
+    <div class="meta-row"><span>RUNTIME <em>02:49:12</em></span><span>ORIGIN <em>CAPE CANAVERAL</em></span><span>RECOVERY <em>KIP-OBS-07</em></span><span>SIG <em>NOMINAL</em></span></div>
+  </header>
+
+  <div class="waveform" id="wf">
+    <span class="tc tc1">00:00:00</span>
+    <span class="tc tc2">02:49:12</span>
+    <span class="playhead" id="playhead" style="left:42%"></span>
+  </div>
+
+  <ol class="transcript" id="transcript">
+    <li class="t-line"><time>[02:14:07 UTC]</time><span>SUBJECT: INT-2014 / CLEARANCE: <b class="redact">GAMMA-9</b> / CONFIRMED: THE GRAVITY EQUATION WAS <b class="redact">SOLVED BY MURPH</b> BEFORE LAUNCH.</span></li>
+    <li class="t-line"><time>[02:14:33 UTC]</time><span>OPERATIVE BRAND, A. REPORTS TESSERACT CONSTRUCT OBSERVED AT COORD <b class="redact">██.████°S / ███.████°E</b>. FIVE-DIMENSIONAL GEOMETRY CONFIRMED.</span></li>
+    <li class="t-line critical"><time>[02:15:02 UTC]</time><span><span class="stamp-redacted">CRITICAL</span> MURPH (M., AGE 10 AT T0) IS CONFIRMED ENTITY "GHOST" — MORSE SIGNAL ORIGIN: <b class="redact">SELF</b>.</span></li>
+    <li class="t-line"><time>[02:15:41 UTC]</time><span>ENDURANCE TELEMETRY LOST AT T+<b class="redact">████:██</b> — LAST VECTOR: GARGANTUA EVENT HORIZON −47KM.</span></li>
+    <li class="t-line"><time>[02:16:18 UTC]</time><span>RECOMMEND CROSS-REF TNT-2020 §4.2 — SEE "TEMPORAL PINCER / RETRO-CAUSAL COOPERATION".</span></li>
+    <li class="t-line"><time>[02:17:04 UTC]</time><span>NOTE (ANNOTATION): "DO NOT GO GENTLE" — REPEATED <b class="redact">███</b> TIMES ACROSS LOG.</span></li>
+    <li class="t-line"><time>[02:17:22 UTC]</time><span>RECOVERED FOOTAGE INDICATES SUBJECT COOPER, J. SURVIVED EVENT; LOCATION <b class="redact">████████████</b>.</span></li>
+  </ol>
+
+  <aside class="footnotes">
+    <div>* Chronology reconstructed from 5D tesseract data; confidence interval 0.87</div>
+    <div>* Morse translation verified by analyst K.M. on 2024.09.04 — audit trail attached</div>
+    <div>* Per §12-B, identity of "THEY" remains CLASSIFIED pending further contact</div>
+  </aside>
+</article>
+
+<!-- Meta -->
+<aside class="panel meta">
+  <div class="meta-section">
+    <h4>◢ MAP / COORD <em>LOCK</em></h4>
+    <div class="map">
+      <div class="crosshair-v"></div>
+      <div class="crosshair-h"></div>
+      <div class="reticle"><i></i></div>
+      <div class="tag blink">ACQUIRED</div>
+    </div>
+  </div>
+
+  <div class="meta-section">
+    <h4>◢ METADATA</h4>
+    <dl class="kv-wrap">
+      <div class="kv"><dt>COORD</dt><dd>40.7128°N / 74.0060°W → REDIRECT</dd></div>
+      <div class="kv"><dt>VECTOR</dt><dd>Δv 27.4 km/s · BEARING 284.1°</dd></div>
+      <div class="kv"><dt>STRATA</dt><dd>2067 / POST-BLIGHT</dd></div>
+      <div class="kv"><dt>AUTH</dt><dd>KEYHOLE-TALENT / ORCON</dd></div>
+      <div class="kv"><dt>CUSTODY</dt><dd>NASA/NORAD → KIP-OBS-07</dd></div>
+      <div class="kv"><dt>STATUS</dt><dd>ACTIVE · PARTIAL RECOVERY</dd></div>
+    </dl>
+  </div>
+
+  <div class="meta-section">
+    <h4>◢ PERSONNEL <em>05</em></h4>
+    <div class="person"><span class="sigil">▲</span><span class="name">COOPER, J.<em>Pilot · NASA / Lazarus</em></span><span class="status ok">ACTIVE</span></div>
+    <div class="person"><span class="sigil">▲</span><span class="name">BRAND, A.<em>Biologist · Lazarus</em></span><span class="status lost">LOST</span></div>
+    <div class="person"><span class="sigil">▲</span><span class="name">MURPH (COOPER)<em>NASA Lead · Plan A</em></span><span class="status ok">ACTIVE</span></div>
+    <div class="person"><span class="sigil">▲</span><span class="name">BRAND, DR.<em>Theorist · Plan A/B</em></span><span class="status ded">DECEASED</span></div>
+    <div class="person"><span class="sigil">▲</span><span class="name">MANN, DR.<em>Operative · Lazarus §12</em></span><span class="status term">TERMINATED</span></div>
+  </div>
+
+  <div class="meta-section">
+    <h4>◢ CROSS-REF</h4>
+    <a class="xref"><code>TEN-2020</code>TENET · TEMPORAL PINCER / RETRO-CAUSALITY</a>
+    <a class="xref"><code>INC-2010</code>INCEPTION · NESTED REALITY / KICK PROTOCOL</a>
+    <a class="xref"><code>OPP-2023</code>OPPENHEIMER · CHAIN REACTION / MORAL HAZARD</a>
+    <a class="xref"><code>MEM-2000</code>MEMENTO · REVERSE CHRONOLOGY CASEFILE</a>
+  </div>
+
+  <div class="meta-section custody">
+    <h4>◢ CUSTODY LOG</h4>
+    <dl>
+      <div class="kv"><dt>2014.11.07</dt><dd>ORIG · CAPE CANAVERAL</dd></div>
+      <div class="kv"><dt>2067.██.██</dt><dd>RECOV · KIP-OBS-07</dd></div>
+      <div class="kv"><dt>2024.09.04</dt><dd>DECRYPT · ANALYST K.M.</dd></div>
+      <div class="kv"><dt>2024.09.12</dt><dd>RELEASE · PARTIAL / NODE-07</dd></div>
+    </dl>
+  </div>
+</aside>
+
+<!-- Ticker -->
+<footer class="ticker">
+  <span class="prefix">INCOMING //</span>
+  <div class="ticker-wrap">
+    <span class="ticker-track">21:47:03 · TNT-2020 FRAGMENT LOCATED ⟋⟋ 21:46:41 · OPP-2023 STRAUSS FOIA UNSEALED ⟋⟋ 21:46:12 · INT-2014 BRAND TELEMETRY RESUMED ⟋⟋ 21:45:58 · ◉ CRITICAL — INC-2010 DREAM LAYER 4 BREACHED ⟋⟋ 21:45:30 · DNK-2017 MOLE CHANNEL CONVOY ACK ⟋⟋ 21:45:02 · PRS-2006 TESLA COIL RECOVERED · COLORADO ⟋⟋ 21:44:22 · MEM-2000 POLAROID AUTHENTICATED ⟋⟋</span>
+  </div>
+</footer>
+
+<!-- Incoming toast -->
+<div class="toast" id="toast">
+  <div class="hd"><span>◉ INCOMING SIGNAL</span><span id="toast-time">21:47:51 UTC</span></div>
+  <div class="msg">TNT-2020 / TEMPORAL PINCER ACTIVE<br/>NEW FRAGMENT LOCATED — COORD <em>████████</em> — ROUTING TO NODE-07</div>
+</div>
+
+<script>
+(function(){
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Boot */
+var bootEl = document.getElementById('boot');
+var lines = document.getElementById('boot-lines');
+var bootLines = [
+  '> HANDSHAKE OK',
+  '> KEYHOLE AUTH ........ ACCEPTED',
+  '> NODE-07 ONLINE',
+  '> DECRYPTING LAYER-3 .. 100%',
+  '> INGEST 08 FILES ..... OK',
+  '> ACCESS GRANTED'
+];
+function bootRun(){
+  if (reduce){ bootEl.remove(); return; }
+  bootLines.forEach(function(L,i){
+    setTimeout(function(){
+      var d=document.createElement('div'); d.textContent=L; d.style.animationDelay=(i*0.02)+'s'; lines.appendChild(d);
+    }, i*200);
+  });
+  setTimeout(function(){ bootEl.classList.add('done'); setTimeout(function(){bootEl.remove()},420); }, 1600);
+}
+bootEl.addEventListener('click', function(){ bootEl.remove(); });
+bootRun();
+
+/* Clock */
+function updClock(){
+  var d = new Date();
+  var h = String(d.getUTCHours()).padStart(2,'0');
+  var m = String(d.getUTCMinutes()).padStart(2,'0');
+  var s = String(d.getUTCSeconds()).padStart(2,'0');
+  var el = document.getElementById('clock');
+  if (el) el.textContent = h+':'+m+':'+s+' UTC';
+}
+updClock(); setInterval(updClock, 1000);
+
+/* Waveform */
+var wf = document.getElementById('wf');
+if (wf){
+  var seed = [];
+  for (var i=0;i<180;i++) seed.push(20 + ((Math.sin(i*0.3)+Math.cos(i*0.7))*30 + Math.random()*30));
+  seed.forEach(function(h,i){
+    var sp = document.createElement('span');
+    sp.style.height = Math.max(4, Math.min(95, h))+'%';
+    if (i < seed.length*0.42) sp.classList.add('ghost');
+    wf.appendChild(sp);
+  });
+}
+
+/* Film row switching + critical flash + redaction preview */
+var rows = document.querySelectorAll('.filmrow');
+var stripe = document.getElementById('classStripe');
+var dTitle = document.getElementById('d-title');
+var dCode = document.getElementById('d-code');
+var dSub = document.getElementById('d-sub');
+var filmData = {
+  'MEM-2000': {t:'MEMENTO', s:'LEONARD SHELBY · FIELD CASEBOOK · 113 MIN'},
+  'BB-2005': {t:'BATMAN BEGINS', s:'WAYNE, B. · IDENTITY CONSTRUCTION LOG'},
+  'TDK-2008': {t:'THE DARK KNIGHT', s:'JOKER PROTOCOL · SYSTEM STRESS TEST'},
+  'INC-2010': {t:'INCEPTION', s:'FISCHER CLASS-A · DREAM LAYER OPERATION'},
+  'TDKR-2012': {t:'THE DARK KNIGHT RISES', s:'BANE INSURRECTION / GOTHAM OCCUPATION'},
+  'INT-2014': {t:'INTERSTELLAR', s:'RECOVERED COOPER TRANSMISSIONS · LAZARUS MISSION LOG · 2067 STRATA'},
+  'TEN-2020': {t:'TENET', s:'PALINDROME PROTOCOL · ENTROPY INVERSION FILE'},
+  'OPP-2023': {t:'OPPENHEIMER', s:'MANHATTAN DISTRICT · HEARING TRANSCRIPTS · 1954'}
+};
+rows.forEach(function(r){
+  r.addEventListener('click', function(){
+    rows.forEach(function(x){x.classList.remove('active')});
+    r.classList.add('active');
+    var code = r.getAttribute('data-film');
+    dCode.textContent = code;
+    dTitle.textContent = filmData[code].t;
+    dSub.textContent = filmData[code].s;
+    if (r.classList.contains('critical')){
+      stripe.classList.remove('flash'); void stripe.offsetWidth; stripe.classList.add('flash');
+    }
+  });
+});
+
+/* Incoming toast rotation */
+var toast = document.getElementById('toast');
+function fireToast(){
+  if (reduce) return;
+  var tm = document.getElementById('toast-time');
+  var d = new Date();
+  tm.textContent = String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')+':'+String(d.getUTCSeconds()).padStart(2,'0')+' UTC';
+  toast.classList.add('on');
+  setTimeout(function(){ toast.classList.remove('on'); }, 5200);
+}
+setTimeout(fireToast, 8000);
+setInterval(function(){ if (Math.random()>0.5) fireToast(); }, 38000);
+
+/* Playhead drift */
+var ph = document.getElementById('playhead');
+if (ph && !reduce){
+  var p = 42;
+  setInterval(function(){
+    p = 30 + Math.sin(Date.now()/3200)*28 + 10;
+    ph.style.left = p.toFixed(2)+'%';
+  }, 240);
+}
+
+/* Amber flicker on borders every ~8s */
+if (!reduce){
+  setInterval(function(){
+    document.body.style.filter = 'brightness(1.12)';
+    setTimeout(function(){ document.body.style.filter=''; }, 45);
+    setTimeout(function(){ document.body.style.filter='brightness(1.08)'; }, 90);
+    setTimeout(function(){ document.body.style.filter=''; }, 135);
+  }, 8000);
+}
+
+})();
+</script>
+</body>
+</html>

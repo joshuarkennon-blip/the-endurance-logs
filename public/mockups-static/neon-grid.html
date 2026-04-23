@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NEON GRID // Endurance Logs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" />
+<style>
+:root{
+  --void:#020306;--void-2:#05070c;--panel:#0A0E14;--panel-hi:#0E141E;
+  --cyan:#00F0FF;--cyan-dim:#0099A8;--cyan-ghost:rgba(0,240,255,.12);
+  --mag:#FF00AA;--mag-dim:#8A0055;--acid:#7CFF4A;--acid-dim:#3A8020;
+  --white:#E6F7FF;--warn:#FFB800;--red:#FF3355;
+  --grid-line:rgba(0,240,255,.18);--grid-line-hot:rgba(0,240,255,.55);
+  --edge-cyan:0 0 0 1px var(--cyan),0 0 12px rgba(0,240,255,.45),inset 0 0 24px rgba(0,240,255,.06);
+  --edge-mag:0 0 0 1px var(--mag),0 0 12px rgba(255,0,170,.45),inset 0 0 24px rgba(255,0,170,.06);
+  --mono:"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace;
+  --mono-alt:"IBM Plex Mono","JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--void);color:var(--white);font-family:var(--mono);overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased}
+body{display:grid;grid-template-rows:36px 1fr 56px}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer;text-align:left}
+.cap{text-transform:uppercase;letter-spacing:.22em}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--cyan-ghost)}
+::-webkit-scrollbar-thumb:hover{background:var(--cyan-dim)}
+
+/* CRT layers */
+.scan{position:fixed;inset:0;pointer-events:none;z-index:9998;mix-blend-mode:screen;
+  background:repeating-linear-gradient(0deg,rgba(0,240,255,.04) 0 1px,transparent 1px 3px)}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:9997;box-shadow:inset 0 0 240px 80px rgba(0,0,0,.75)}
+#rain{position:fixed;inset:0;z-index:0;opacity:.12;pointer-events:none}
+
+/* Boot */
+#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;padding:40px 48px;overflow:hidden}
+#boot canvas{position:absolute;inset:0;opacity:.28}
+#boot .banner{font-family:var(--mono);font-weight:700;font-size:clamp(8px,1.15vw,14px);line-height:1;color:var(--cyan);white-space:pre;text-shadow:0 0 8px rgba(0,240,255,.45);text-align:center;margin:auto 0 12px;position:relative}
+#boot .blog{position:relative;font-family:var(--mono-alt);font-size:12px;line-height:1.55;color:var(--acid);max-height:220px;overflow:hidden;border-top:1px solid var(--cyan-ghost);padding-top:12px;margin-top:auto}
+#boot .blog div{opacity:0;animation:blogIn .12s steps(1,end) forwards}
+#boot .blog div.warn{color:var(--warn)}
+#boot .blog div.crit{color:var(--red);animation-duration:.06s}
+@keyframes blogIn{to{opacity:1}}
+#boot.done{animation:bootOut .6s cubic-bezier(.22,.61,.36,1) forwards}
+@keyframes bootOut{to{opacity:0;pointer-events:none}}
+
+/* Status bar */
+#statusbar{position:relative;z-index:10;display:flex;align-items:center;gap:22px;padding:0 22px;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan-dim);border-bottom:1px solid var(--cyan-ghost);background:linear-gradient(180deg,rgba(0,240,255,.03),rgba(0,0,0,.8))}
+#statusbar .brand{color:var(--cyan);font-weight:700;text-shadow:0 0 6px rgba(0,240,255,.5)}
+#statusbar .sep{color:var(--cyan-ghost)}
+#statusbar .warn{color:var(--warn)}
+#statusbar .crit{color:var(--red);animation:pulse 1.6s ease-in-out infinite}
+#statusbar .ack{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--acid)}
+#statusbar .ack::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acid);box-shadow:0 0 6px var(--acid);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* HUD */
+#hud{position:relative;z-index:5;display:grid;grid-template-columns:minmax(0,7fr) minmax(320px,3fr);gap:0;overflow:hidden}
+#canvas{position:relative;padding:28px 32px 20px;overflow-y:auto}
+#sidebar{border-left:1px solid var(--cyan);display:grid;grid-template-rows:1fr auto auto auto;gap:0;background:linear-gradient(180deg,rgba(0,240,255,.02),transparent)}
+
+/* Grid floor (TRON) */
+.grid-floor{position:absolute;inset:0;perspective:800px;pointer-events:none;z-index:0;overflow:hidden}
+.grid-floor::before{content:"";position:absolute;left:-20%;right:-20%;bottom:-40%;height:140%;
+  background:
+    linear-gradient(var(--grid-line) 1px,transparent 1px) 0 0/40px 40px,
+    linear-gradient(90deg,var(--grid-line) 1px,transparent 1px) 0 0/40px 40px;
+  transform:rotateX(68deg) translateZ(0);transform-origin:50% 100%;
+  mask-image:linear-gradient(to top,black 0%,black 40%,transparent 90%);
+  -webkit-mask-image:linear-gradient(to top,black 0%,black 40%,transparent 90%);
+  animation:gridMarch 4s linear infinite}
+@keyframes gridMarch{from{background-position:0 0,0 0}to{background-position:0 40px,0 40px}}
+
+/* Canvas header */
+.headline{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto;align-items:flex-end;gap:20px;padding:12px 0 28px;border-bottom:1px solid var(--cyan-ghost);margin-bottom:28px}
+.headline h1{font-family:var(--mono);font-weight:800;font-size:clamp(48px,7vw,104px);line-height:.9;letter-spacing:-.025em;text-transform:uppercase;color:var(--cyan);text-shadow:0 0 24px rgba(0,240,255,.42)}
+.headline h1 .sep{color:var(--mag);text-shadow:0 0 24px rgba(255,0,170,.45)}
+.headline .meta{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--cyan-dim);text-transform:uppercase;text-align:right;line-height:1.8}
+.headline .meta em{font-style:normal;color:var(--acid)}
+
+/* Nodes */
+.node-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-content:start}
+.node{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:148px;padding:14px 16px;background:linear-gradient(180deg,var(--panel-hi),var(--panel));border:1px solid var(--cyan);color:var(--white);font-family:var(--mono);transition:all .2s cubic-bezier(.22,.61,.36,1);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));box-shadow:var(--edge-cyan)}
+.node::before{content:"";position:absolute;top:0;right:0;width:14px;height:14px;background:linear-gradient(225deg,var(--mag) 0 50%,transparent 50%)}
+.node:hover{transform:translateY(-3px);border-color:var(--mag);box-shadow:var(--edge-mag);color:var(--cyan)}
+.node:hover .node-led{background:var(--mag);box-shadow:0 0 10px var(--mag)}
+.node-top{display:flex;align-items:center;gap:10px}
+.node-led{width:8px;height:8px;border-radius:50%;background:var(--acid);box-shadow:0 0 6px var(--acid);animation:pulse 1.8s ease-in-out infinite}
+.node-led.inv{background:var(--mag);box-shadow:0 0 8px var(--mag)}
+.node-code{font-size:11px;letter-spacing:.2em;color:var(--cyan-dim);text-transform:uppercase}
+.node-title{font-family:var(--mono);font-weight:800;font-size:18px;letter-spacing:.06em;line-height:1;text-transform:uppercase;margin-top:14px;text-shadow:0 0 6px rgba(0,240,255,.35);position:relative}
+.node-title::before,.node-title::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none;opacity:.75;mix-blend-mode:screen}
+.node-title::before{color:var(--mag);transform:translate(-2px,0);clip-path:polygon(0 0,100% 0,100% 45%,0 45%)}
+.node-title::after{color:var(--cyan);transform:translate(2px,0);clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%)}
+.node:hover .node-title::before{transform:translate(-4px,0)}
+.node:hover .node-title::after{transform:translate(4px,0)}
+.node-meta{margin-top:8px;font-size:10px;letter-spacing:.16em;color:var(--cyan-dim);text-transform:uppercase;line-height:1.5}
+.node-meta em{font-style:normal;color:var(--acid)}
+.node-ping{font-size:9px;color:var(--cyan-dim);letter-spacing:.2em;margin-top:10px;opacity:.7}
+
+/* Section heads */
+h2{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.24em;color:var(--cyan);text-transform:uppercase;margin:32px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--cyan-ghost);display:flex;align-items:center;gap:10px}
+h2::before{content:"◢";color:var(--mag)}
+
+/* Log entries */
+.logs{position:relative;z-index:2;display:flex;flex-direction:column;gap:6px;font-family:var(--mono-alt);font-size:12px;line-height:1.65;color:var(--white);padding:14px 16px;background:rgba(0,240,255,.02);border-left:2px solid var(--cyan);margin-bottom:28px}
+.logs .line{padding:2px 0;color:var(--acid)}
+.logs .line.tag{color:var(--cyan)}
+.logs .line.warn{color:var(--warn)}
+.logs .line.red{color:var(--red)}
+.logs .line .dim{color:var(--cyan-dim)}
+.logs .line.indent{padding-left:18px;color:var(--white);opacity:.9}
+
+/* Dossier card (expanded) */
+.dossier{position:relative;z-index:2;border:1px solid var(--cyan);background:linear-gradient(180deg,var(--panel-hi),var(--panel));padding:20px 24px;box-shadow:var(--edge-cyan);margin-bottom:28px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.dossier-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--cyan-ghost);font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--cyan-dim);text-transform:uppercase}
+.dossier-head .c{color:var(--mag)}
+.dossier h3{font-family:var(--mono);font-weight:800;font-size:26px;letter-spacing:.04em;color:var(--cyan);text-transform:uppercase;text-shadow:0 0 14px rgba(0,240,255,.4)}
+.dossier .dbody{margin-top:14px;font-family:var(--mono-alt);font-size:13px;line-height:1.7;color:var(--white);max-width:72ch}
+.dossier .dbody p + p{margin-top:10px}
+.dossier .dbody .tag{color:var(--acid)}
+.tag-classified{display:inline-block;padding:2px 8px;border:1px solid var(--mag);color:var(--mag);font:700 10px/1 var(--mono);letter-spacing:.25em;background:repeating-linear-gradient(-45deg,transparent 0 4px,rgba(255,0,170,.1) 4px 5px)}
+
+/* Sidebar */
+.sb-title{padding:14px 16px 6px;font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--cyan-dim);text-transform:uppercase;border-bottom:1px solid var(--cyan-ghost);display:flex;justify-content:space-between;align-items:center}
+.sb-title em{font-style:normal;color:var(--acid)}
+.sb-data{position:relative;min-height:200px;overflow:hidden;border-bottom:1px solid var(--cyan-ghost)}
+.sb-data canvas{position:absolute;inset:0;opacity:.85}
+.inspector{padding:16px;border-bottom:1px solid var(--cyan-ghost)}
+.inspector .kv{display:grid;grid-template-columns:80px 1fr;gap:8px;font-family:var(--mono);font-size:11px;padding:5px 0;border-bottom:1px dotted rgba(0,240,255,.08);align-items:baseline}
+.inspector .kv:last-child{border-bottom:0}
+.inspector .k{color:var(--cyan-dim);letter-spacing:.18em;text-transform:uppercase;font-size:10px}
+.inspector .v{color:var(--acid);letter-spacing:.04em}
+.inspector .bar{height:6px;background:rgba(0,240,255,.08);border:1px solid var(--cyan-dim);margin-top:12px;position:relative;overflow:hidden}
+.inspector .bar::after{content:"";position:absolute;inset:0;width:30%;background:linear-gradient(90deg,transparent,var(--cyan),var(--mag));animation:barSweep 1.2s linear infinite}
+@keyframes barSweep{from{transform:translateX(-100%)}to{transform:translateX(400%)}}
+.inspector .status{font-family:var(--mono);font-size:10px;color:var(--warn);letter-spacing:.22em;text-transform:uppercase;margin-top:10px}
+
+.hex-block{padding:14px 16px;border-bottom:1px solid var(--cyan-ghost)}
+.hex-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.05em}
+.hex-cell{color:var(--cyan-dim);text-align:center;padding:3px 0;transition:all .12s}
+.hex-cell.hot{color:var(--cyan);text-shadow:0 0 6px var(--cyan)}
+.hex-cell.breached{color:var(--mag);text-shadow:0 0 8px var(--mag)}
+
+.pingbar{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--cyan-dim);text-transform:uppercase}
+.bw{display:flex;gap:2px;align-items:flex-end;height:22px}
+.bw i{width:4px;background:var(--cyan);box-shadow:0 0 4px var(--cyan);transition:height .25s}
+.bw i.peak{background:var(--mag);box-shadow:0 0 4px var(--mag)}
+
+/* Command line */
+#cmdline{position:relative;z-index:12;height:56px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:0 22px;border-top:1px solid var(--cyan);background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.95));font-family:var(--mono);font-size:13px}
+#cmdline .prompt{color:var(--acid);font-weight:700;letter-spacing:.04em;white-space:nowrap}
+#cmdline input{width:100%;background:transparent;border:0;outline:0;color:var(--white);font:500 14px/1 var(--mono);letter-spacing:.04em;caret-color:var(--cyan);padding:4px 0}
+#cmdline .keys{display:flex;gap:8px;font-size:10px;letter-spacing:.22em;color:var(--cyan-dim);text-transform:uppercase}
+#cmdline .keys span{border:1px solid var(--cyan-ghost);padding:4px 8px}
+
+/* Cmdline echo overlay */
+.echo{position:fixed;left:22px;right:calc(33% + 22px);bottom:66px;max-height:40vh;overflow-y:auto;pointer-events:none;font-family:var(--mono);font-size:12px;line-height:1.55;z-index:11;display:flex;flex-direction:column-reverse;gap:2px}
+.echo div{color:var(--acid);padding:1px 0}
+.echo div.cmd{color:var(--cyan)}
+.echo div.err{color:var(--red)}
+.echo div.warn{color:var(--warn)}
+.echo div.dim{color:var(--cyan-dim)}
+
+/* Breach */
+#breach{position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.94);display:none;place-items:center;font-family:var(--mono)}
+#breach.on{display:grid;animation:breachIn .3s}
+@keyframes breachIn{from{opacity:0}to{opacity:1}}
+#breach .bwrap{text-align:center;max-width:640px;padding:32px}
+#breach h4{font-size:20px;letter-spacing:.3em;color:var(--cyan);margin-bottom:18px;text-transform:uppercase;text-shadow:0 0 14px rgba(0,240,255,.5)}
+#breach .stream{font-weight:700;font-size:18px;line-height:1.7;color:var(--cyan);letter-spacing:.05em;text-shadow:0 0 8px rgba(0,240,255,.4);white-space:pre-wrap}
+#breach .stream .hit{color:var(--mag);text-shadow:0 0 10px var(--mag)}
+#breach .grant{margin-top:24px;font-size:32px;font-weight:800;letter-spacing:.12em;color:var(--mag);text-shadow:0 0 20px var(--mag);text-transform:uppercase;opacity:0}
+#breach.granted .grant{opacity:1;animation:glitch 1.2s infinite}
+@keyframes glitch{0%,96%,100%{transform:translate(0)}2%{transform:translate(-2px,1px)}5%{transform:translate(2px,-1px)}}
+
+/* Responsive */
+@media (max-width:1100px){
+  #hud{grid-template-columns:1fr}
+  #sidebar{border-left:0;border-top:1px solid var(--cyan)}
+  .echo{right:22px}
+  .node-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:700px){
+  #statusbar{font-size:9px;gap:10px;padding:0 12px;overflow-x:auto;white-space:nowrap}
+  .node-grid{grid-template-columns:1fr}
+  #cmdline{padding:0 12px;font-size:12px}
+  #cmdline .keys{display:none}
+  .headline h1{font-size:48px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}.grid-floor::before{animation:none}}
+</style>
+</head>
+<body>
+
+<canvas id="rain"></canvas>
+<div class="scan"></div>
+<div class="vignette"></div>
+
+<!-- Boot -->
+<div id="boot">
+  <canvas id="bootrain"></canvas>
+  <pre class="banner" id="boot-banner"></pre>
+  <div class="blog" id="boot-log"></div>
+</div>
+
+<!-- Status bar -->
+<header id="statusbar">
+  <span class="brand">◆ ROOT@ENDURANCE</span>
+  <span class="sep">//</span>
+  <span>UPLINK: <strong style="color:var(--acid)">NOMINAL</strong></span>
+  <span class="sep">//</span>
+  <span>LAYER-3</span>
+  <span class="sep">//</span>
+  <span style="color:var(--cyan)" id="sb-ping">23ms</span>
+  <span class="sep">//</span>
+  <span class="warn" id="sb-warn">⚠ TEMPORAL DESYNC — SECTOR 7 OFFLINE</span>
+  <span class="ack">ACK</span>
+</header>
+
+<!-- HUD -->
+<div id="hud">
+
+  <!-- Canvas (main grid) -->
+  <section id="canvas">
+    <div class="grid-floor"></div>
+
+    <div class="headline">
+      <h1>ENDURANCE<span class="sep"> // </span>LOGS</h1>
+      <div class="meta">
+        ROOT@ENDURANCE<br/>
+        NODE STATUS · <em>8 ONLINE</em><br/>
+        SESSION · 0x8A19F2<br/>
+        CLEARANCE · <em>LAYER-3</em>
+      </div>
+    </div>
+
+    <h2>ACTIVE NODES</h2>
+    <div class="node-grid" id="nodes">
+      <button class="node" data-film="MEM-2000">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">MEM-2000</span></div>
+        <span class="node-title" data-text="MEMENTO">MEMENTO</span>
+        <span class="node-meta">YR 2000 · LOG <em>1A</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+      <button class="node" data-film="BB-2005">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">BB-2005</span></div>
+        <span class="node-title" data-text="BATMAN BEGINS">BATMAN BEGINS</span>
+        <span class="node-meta">YR 2005 · LOG <em>2B</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+      <button class="node" data-film="TDK-2008">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">TDK-2008</span></div>
+        <span class="node-title" data-text="DARK KNIGHT">DARK KNIGHT</span>
+        <span class="node-meta">YR 2008 · LOG <em>3C</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+      <button class="node" data-film="INC-2010">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">INC-2010</span></div>
+        <span class="node-title" data-text="INCEPTION">INCEPTION</span>
+        <span class="node-meta">YR 2010 · LOG <em>4C</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+      <button class="node" data-film="TDKR-2012">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">TDKR-2012</span></div>
+        <span class="node-title" data-text="DKR">DK RISES</span>
+        <span class="node-meta">YR 2012 · LOG <em>5D</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+      <button class="node" data-film="INT-2014">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">INT-2014</span></div>
+        <span class="node-title" data-text="INTERSTELLAR">INTERSTELLAR</span>
+        <span class="node-meta">YR 2014 · LOG <em>7A</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+      <button class="node" data-film="TEN-2020">
+        <div class="node-top"><span class="node-led inv"></span><span class="node-code">TEN-2020</span></div>
+        <span class="node-title" data-text="TENET">TENET</span>
+        <span class="node-meta">YR 2020 · LOG <em>9B</em> · <em style="color:var(--mag)">INVERTED</em></span>
+        <span class="node-ping">◣◢◣◢◣◢</span>
+      </button>
+      <button class="node" data-film="OPP-2023">
+        <div class="node-top"><span class="node-led"></span><span class="node-code">OPP-2023</span></div>
+        <span class="node-title" data-text="OPPENHEIMER">OPPENHEIMER</span>
+        <span class="node-meta">YR 2023 · LOG <em>8E</em> · 04 SECTIONS</span>
+        <span class="node-ping">◢◣◢◣◢◣</span>
+      </button>
+    </div>
+
+    <h2>RECENT TRANSMISSIONS</h2>
+    <div class="logs" id="logs">
+      <div class="line tag">[03:14:72] INT-2014 :: GRAVITY EQUATION :: SEE ANNEX 7A</div>
+      <div class="line indent">SOURCE.......: ENDURANCE-LOG-7A</div>
+      <div class="line indent">STATUS.......: <span class="dim">DECLASSIFIED</span> · CLEARANCE: <span style="color:var(--acid)">LAYER-3</span></div>
+      <div class="line indent">PAYLOAD......: Brand solved the equation before Cooper launched.</div>
+      <div class="line indent">               Plan A was never viable. Plan B was always the plan.</div>
+      <div class="line indent">               The lie kept humanity building.</div>
+      <div class="line indent">CHECKSUM.....: <span class="dim">0x7A3F9E2C</span></div>
+      <div class="line">&nbsp;</div>
+      <div class="line tag">[02:18:04] INC-2010 :: MAL AS LOAD-BEARING ARCHITECTURE</div>
+      <div class="line indent">SOURCE.......: ENDURANCE-LOG-4C</div>
+      <div class="line indent">STATUS.......: <span class="dim">DECLASSIFIED</span> · CLEARANCE: <span style="color:var(--acid)">LAYER-2</span></div>
+      <div class="line indent">PAYLOAD......: Grief does not resolve. It integrates.</div>
+      <div class="line indent">               Cobb cannot build dreams without summoning Mal.</div>
+      <div class="line indent">               She is not a haunting. She is a structural compromise.</div>
+      <div class="line indent">CHECKSUM.....: <span class="dim">0x4C82A1F3</span></div>
+      <div class="line">&nbsp;</div>
+      <div class="line warn">[09:11:56] TEN-2020 :: SATOR SQUARE // PALINDROME PROTOCOL</div>
+      <div class="line indent">SOURCE.......: ENDURANCE-LOG-9B</div>
+      <div class="line indent">STATUS.......: <span style="color:var(--mag)">INVERTED</span> · CLEARANCE: <span style="color:var(--acid)">LAYER-3</span></div>
+      <div class="line indent">PAYLOAD......: SATOR. AREPO. TENET. OPERA. ROTAS.</div>
+      <div class="line indent">               2000-year-old Roman palindrome recovered at Pompeii.</div>
+      <div class="line indent">               The film was hiding its structure in stone.</div>
+      <div class="line indent">CHECKSUM.....: <span class="dim">0x9B1CD4A7</span></div>
+    </div>
+
+    <h2>SELECTED DOSSIER</h2>
+    <div class="dossier">
+      <div class="dossier-head">
+        <span>◢ INT-2014 · GRAVITY LITURGY</span>
+        <span class="tag-classified">LAYER-3</span>
+      </div>
+      <h3>INTERSTELLAR // 2014</h3>
+      <div class="dbody">
+        <p>Corn, then ice, then a library behind the wall of the world. Subject Cooper left a daughter on a porch and came back through a bookshelf. <span class="tag">Every agent who reviewed the tape filed a clean report.</span> Only one of them cried.</p>
+        <p>The equation was already solved. Brand knew. Every rocket launched, every death absorbed, every small hopeful thing the mission performed — all of it runs downstream of a calculation one man had finished and chose to bury. <span class="tag">Love is not, strictly, an instrument. But it reads like one.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div>
+      <div class="sb-title">◢ DATA STREAM <em>LIVE</em></div>
+      <div class="sb-data"><canvas id="sidebar-rain"></canvas></div>
+    </div>
+    <div class="inspector">
+      <div class="sb-title" style="padding:0 0 10px 0;border-bottom:0">◢ INSPECTOR <em id="insp-code">INT-2014</em></div>
+      <div class="kv"><span class="k">CODE</span><span class="v" id="kv-code">INT-2014</span></div>
+      <div class="kv"><span class="k">YEAR</span><span class="v" id="kv-year">2014</span></div>
+      <div class="kv"><span class="k">LOG</span><span class="v" id="kv-log">7A</span></div>
+      <div class="kv"><span class="k">CKSUM</span><span class="v" id="kv-cksum">0x7A3F9E2C</span></div>
+      <div class="kv"><span class="k">LAYER</span><span class="v">3 of 3</span></div>
+      <div class="bar" aria-label="connecting"></div>
+      <div class="status">◉ CONNECTING ██████████ 82%</div>
+    </div>
+    <div class="hex-block">
+      <div class="sb-title" style="padding:0 0 10px 0;border-bottom:0">◢ HEX GRID <em>8×8</em></div>
+      <div class="hex-grid" id="hexgrid"></div>
+    </div>
+    <div class="pingbar">
+      <span>BW</span>
+      <div class="bw" id="bw"></div>
+      <span>PING <strong style="color:var(--acid)">23ms</strong></span>
+    </div>
+  </aside>
+
+</div>
+
+<!-- Echo log (above command line) -->
+<div class="echo" id="echo"></div>
+
+<!-- Command line -->
+<footer id="cmdline">
+  <span class="prompt">root@endurance:~$</span>
+  <input id="cmd" autocomplete="off" spellcheck="false" placeholder="type HELP — try LS, ACCESS INT-2014, DECRYPT GARGANTUA, WHOAMI, CLEAR" />
+  <div class="keys"><span>HELP</span><span>LS</span><span>ACCESS</span><span>CLEAR</span></div>
+</footer>
+
+<!-- Breach overlay -->
+<div id="breach">
+  <div class="bwrap">
+    <h4>◢ BREACH PROTOCOL</h4>
+    <div class="stream" id="breach-stream"></div>
+    <div class="grant" id="breach-grant">ACCESS GRANTED</div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============ BOOT ============ */
+var bootEl = document.getElementById('boot');
+var bootBanner = document.getElementById('boot-banner');
+var bootLog = document.getElementById('boot-log');
+var bannerText =
+'  ╔══════════════════════════════════════════════════════════════╗\n'+
+'  ║  ███████╗███╗   ██╗██████╗ ██╗   ██╗██████╗  █████╗ ███╗   ██╗  ║\n'+
+'  ║  ██╔════╝████╗  ██║██╔══██╗██║   ██║██╔══██╗██╔══██╗████╗  ██║  ║\n'+
+'  ║  █████╗  ██╔██╗ ██║██║  ██║██║   ██║██████╔╝███████║██╔██╗ ██║  ║\n'+
+'  ║  ██╔══╝  ██║╚██╗██║██║  ██║██║   ██║██╔══██╗██╔══██║██║╚██╗██║  ║\n'+
+'  ║  ███████╗██║ ╚████║██████╔╝╚██████╔╝██║  ██║██║  ██║██║ ╚████║  ║\n'+
+'  ║  ╚══════╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝  ║\n'+
+'  ║                                                                ║\n'+
+'  ║            /  / /  L O G S  /  /   ARCHIVE v1.0                ║\n'+
+'  ╚══════════════════════════════════════════════════════════════╝';
+bootBanner.textContent = bannerText;
+
+var bootLines = [
+  '[00:00.00] POST >> MEMORY OK ......... 0xFFFE',
+  '[00:00.12] POST >> GRID FLOOR SYNC ... OK',
+  '[00:00.24] MOUNTING /archive/nolan ... OK',
+  '[00:00.38] VERIFYING KEYS ............ 0x8A19F2E4',
+  '[00:00.51] UPLINK TO ENDURANCE ....... ESTABLISHED',
+  '[00:00.74] DECRYPTING LAYER-3 ........ ██████░░░░ 63%',
+  '[00:01.01] DECRYPTING LAYER-3 ........ ██████████ 100%',
+  '[00:01.14] LOADING 8 NODES ........... OK',
+  {t:'[00:01.28] WARN: TEMPORAL DRIFT DETECTED ON SECTOR 7A',cls:'warn'},
+  '[00:01.41] OVERRIDE ACCEPTED // CLEARANCE: ROOT',
+  '[00:01.58] ACCESS GRANTED.',
+  '[00:01.62] > _'
+];
+function bootRun(){
+  if (reduce){ bootEl.remove(); startApp(); return; }
+  // boot rain
+  var rc = document.getElementById('bootrain');
+  rc.width = innerWidth; rc.height = innerHeight;
+  var rctx = rc.getContext('2d');
+  var cols = Math.floor(rc.width/12);
+  var drops = Array(cols).fill(0).map(function(){return Math.random()*rc.height});
+  var rafB;
+  function rainFrame(){
+    rctx.fillStyle = 'rgba(0,0,0,.15)';
+    rctx.fillRect(0,0,rc.width,rc.height);
+    rctx.font = '14px JetBrains Mono';
+    for (var i=0;i<cols;i++){
+      var ch = String.fromCharCode(0x30A0 + Math.random()*96 | 0);
+      rctx.fillStyle = '#7CFF4A';
+      rctx.fillText(ch, i*12, drops[i]);
+      drops[i] += 14;
+      if (drops[i] > rc.height && Math.random()>.975) drops[i] = 0;
+    }
+    rafB = requestAnimationFrame(rainFrame);
+  }
+  rainFrame();
+  // print lines
+  bootLines.forEach(function(l,i){
+    setTimeout(function(){
+      var d = document.createElement('div');
+      if (typeof l==='string'){ d.textContent = l; }
+      else { d.textContent = l.t; d.className = l.cls||''; }
+      bootLog.appendChild(d);
+      bootLog.scrollTop = bootLog.scrollHeight;
+    }, 80*i + 200);
+  });
+  setTimeout(function(){
+    cancelAnimationFrame(rafB);
+    bootEl.classList.add('done');
+    setTimeout(function(){ bootEl.remove(); startApp(); }, 620);
+  }, 2400);
+}
+bootEl.addEventListener('click', function(){ bootEl.remove(); startApp(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape' && document.getElementById('boot')) { bootEl.remove(); startApp(); } });
+bootRun();
+
+/* ============ APP ============ */
+function startApp(){
+  startMainRain();
+  startSidebarRain();
+  startHex();
+  startBW();
+  wireNodes();
+  wireCmd();
+  startTitleGlitchJitter();
+}
+
+/* Main background rain */
+function startMainRain(){
+  if (reduce) return;
+  var c = document.getElementById('rain');
+  var ctx = c.getContext('2d');
+  function size(){ c.width = innerWidth; c.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  var cols = Math.floor(c.width/14);
+  var drops = Array(cols).fill(0).map(function(){return Math.random()*c.height});
+  window.__rainSpeed = 1;
+  function frame(){
+    ctx.fillStyle = 'rgba(0,0,0,.08)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.font = '14px IBM Plex Mono';
+    for (var i=0;i<cols;i++){
+      var ch = String.fromCharCode(0x30A0 + Math.random()*96 | 0);
+      ctx.fillStyle = '#7CFF4A';
+      ctx.fillText(ch, i*14, drops[i]);
+      drops[i] += 14 * window.__rainSpeed;
+      if (drops[i] > c.height && Math.random()>.975) drops[i] = 0;
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* Sidebar data rain */
+function startSidebarRain(){
+  var c = document.getElementById('sidebar-rain');
+  if (!c) return;
+  var ctx = c.getContext('2d');
+  function size(){ var r = c.parentElement.getBoundingClientRect(); c.width = r.width; c.height = Math.max(180, r.height); }
+  size(); addEventListener('resize', size);
+  if (reduce){ ctx.fillStyle='#7CFF4A'; ctx.font='12px IBM Plex Mono'; for(var i=0;i<20;i++){ ctx.fillText('01001010 10101110 0F', 8, 20+i*14);} return;}
+  var cols = Math.floor(c.width/10);
+  var drops = Array(cols).fill(0).map(function(){return Math.random()*c.height});
+  function frame(){
+    ctx.fillStyle = 'rgba(0,0,0,.14)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.font = '12px IBM Plex Mono';
+    for (var i=0;i<cols;i++){
+      var ch = Math.random()>.5 ? String.fromCharCode(0x30A0 + Math.random()*96 | 0) : (Math.random()>.5?'0':'1');
+      var head = Math.abs(drops[i] - c.height/2) < 12;
+      ctx.fillStyle = head ? '#E6F7FF' : '#7CFF4A';
+      ctx.fillText(ch, i*10, drops[i]);
+      drops[i] += 12 * (window.__rainSpeed||1);
+      if (drops[i] > c.height && Math.random()>.97) drops[i] = 0;
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* Hex grid 8x8 */
+function startHex(){
+  var grid = document.getElementById('hexgrid');
+  var cells = [];
+  function randHex(){ var h='0123456789ABCDEF'; return h[Math.random()*16|0]+h[Math.random()*16|0]; }
+  for (var i=0;i<64;i++){
+    var d = document.createElement('div');
+    d.className = 'hex-cell';
+    d.textContent = randHex();
+    grid.appendChild(d);
+    cells.push(d);
+  }
+  // highlight a random sequence (the target)
+  var target = [];
+  while (target.length<6){ var k=(Math.random()*64)|0; if (target.indexOf(k)<0) target.push(k); }
+  target.forEach(function(i){ cells[i].classList.add('hot'); });
+
+  if (reduce) return;
+  setInterval(function(){
+    // random flicker
+    for (var i=0;i<2;i++){
+      var k = (Math.random()*64)|0;
+      cells[k].textContent = randHex();
+    }
+  }, 320);
+  setInterval(function(){
+    // column scan magenta
+    var col = (Math.random()*8)|0;
+    for (var r=0;r<8;r++){
+      (function(idx){
+        setTimeout(function(){
+          cells[idx].classList.add('breached');
+          setTimeout(function(){ cells[idx].classList.remove('breached'); }, 200);
+        }, r*50);
+      })(r*8+col);
+    }
+  }, 8000);
+}
+
+/* Bandwidth meter */
+function startBW(){
+  var bw = document.getElementById('bw');
+  for (var i=0;i<14;i++){ var s=document.createElement('i'); s.style.height=(20+Math.random()*80)+'%'; bw.appendChild(s); }
+  if (reduce) return;
+  setInterval(function(){
+    bw.querySelectorAll('i').forEach(function(i){
+      var h = 10+Math.random()*100;
+      i.style.height = h+'%';
+      i.classList.toggle('peak', h>80);
+    });
+  }, 380);
+}
+
+/* Title glitch jitter pulses periodically via class toggle (subtle) */
+function startTitleGlitchJitter(){
+  var els = document.querySelectorAll('.node-title');
+  if (reduce) return;
+  setInterval(function(){
+    var n = els[(Math.random()*els.length)|0];
+    if (!n) return;
+    n.style.transform = 'translateX('+((Math.random()-.5)*3).toFixed(1)+'px)';
+    setTimeout(function(){ n.style.transform=''; }, 80);
+  }, 1400);
+}
+
+/* Node click → breach protocol */
+function wireNodes(){
+  document.querySelectorAll('.node').forEach(function(n){
+    n.addEventListener('click', function(){
+      var code = n.getAttribute('data-film');
+      runBreach(code);
+      // update inspector
+      var title = n.querySelector('.node-title').textContent;
+      var year = (title.includes('RISES')?'2012':(n.querySelector('.node-meta').textContent.match(/\d{4}/)||['----'])[0]);
+      document.getElementById('insp-code').textContent = code;
+      document.getElementById('kv-code').textContent = code;
+      document.getElementById('kv-year').textContent = year;
+    });
+    // Data rain slow on hover
+    n.addEventListener('pointerenter', function(){ window.__rainSpeed = 0.2; });
+    n.addEventListener('pointerleave', function(){ window.__rainSpeed = 1; });
+  });
+}
+
+function runBreach(code){
+  var box = document.getElementById('breach');
+  var stream = document.getElementById('breach-stream');
+  box.classList.remove('granted');
+  stream.innerHTML = '';
+  box.classList.add('on');
+  if (reduce){
+    stream.innerHTML = 'HANDSHAKE OK :: KEY EXCHANGE 0x'+randHex(8)+' :: ';
+    box.classList.add('granted');
+    document.getElementById('breach-grant').textContent = 'ACCESS GRANTED :: '+code;
+    setTimeout(function(){ box.classList.remove('on'); }, 1400);
+    return;
+  }
+  var lines = [
+    'HANDSHAKE ......... OK',
+    'KEY EXCHANGE ...... 0x'+randHex(8),
+    'VERIFYING LAYER-3 . '+randHex(12),
+    'PAYLOAD 04 SECTIONS / 6.2KB',
+    'UNSEALING '+code
+  ];
+  var i = 0;
+  function typeLine(line, done){
+    var buf = '';
+    var j = 0;
+    var iv = setInterval(function(){
+      if (j>=line.length){ clearInterval(iv); stream.innerHTML += '<br/>'; done(); return; }
+      buf += line[j]; j++;
+      var html = line.slice(0,j).replace(/(0x[0-9A-F]+)/g,'<span class="hit">$1</span>');
+      // rewrite last line
+      var parts = stream.innerHTML.split('<br/>');
+      parts[parts.length-1] = html;
+      stream.innerHTML = parts.join('<br/>');
+    }, 24);
+  }
+  (function next(){
+    if (i>=lines.length){
+      document.getElementById('breach-grant').textContent = 'ACCESS GRANTED :: '+code;
+      box.classList.add('granted');
+      setTimeout(function(){ box.classList.remove('on'); }, 1200);
+      return;
+    }
+    var L = lines[i++];
+    typeLine(L, next);
+  })();
+}
+
+function randHex(n){ var s='0123456789ABCDEF',o=''; for(var i=0;i<n;i++) o+=s[(Math.random()*16)|0]; return o; }
+
+/* Command line */
+function wireCmd(){
+  var input = document.getElementById('cmd');
+  var echo = document.getElementById('echo');
+  var hist = []; var hi = -1;
+  function print(text, cls){ var d=document.createElement('div'); d.textContent=text; if(cls)d.className=cls; echo.prepend(d); }
+  function exec(raw){
+    var cmd = raw.trim();
+    if (!cmd) return;
+    print('root@endurance:~$ '+raw, 'cmd');
+    hist.unshift(raw); hi = -1;
+    var parts = cmd.toUpperCase().split(/\s+/);
+    var head = parts[0];
+    switch(head){
+      case 'HELP':
+        print('  AVAILABLE COMMANDS:');
+        print('    LS / DIR           list archive nodes');
+        print('    ACCESS <CODE>      open dossier (e.g. ACCESS INT-2014)');
+        print('    DECRYPT <KEYWORD>  probe for signals below layer 3');
+        print('    WHOAMI             session details');
+        print('    CLEAR              flush buffer');
+        print('    EXIT               terminate session');
+        break;
+      case 'LS': case 'DIR':
+        ['MEM-2000 MEMENTO              LAYER-3   RDY',
+         'BB-2005  BATMAN BEGINS        LAYER-2   RDY',
+         'TDK-2008 THE DARK KNIGHT      LAYER-3   RDY',
+         'INC-2010 INCEPTION            LAYER-3   RDY',
+         'TDKR-2012 DARK KNIGHT RISES   LAYER-2   RDY',
+         'INT-2014 INTERSTELLAR         LAYER-3   RDY',
+         'TEN-2020 TENET                LAYER-3   INV*',
+         'OPP-2023 OPPENHEIMER          LAYER-3   RDY'
+        ].forEach(function(L){ print('  [●] '+L,'dim'); });
+        print('  * INV = INVERTED. READ BACKWARDS.','warn');
+        break;
+      case 'ACCESS':
+        var code = parts[1];
+        if (!code){ print('bash: ACCESS: missing argument','err'); break; }
+        print('>> BREACH PROTOCOL INITIATED');
+        print('>> HANDSHAKE ......... OK');
+        print('>> KEY EXCHANGE ...... 0x'+randHex(8)+' :: VERIFIED');
+        print('>> PAYLOAD 04 SECTIONS // 6.2KB // LAYER-3');
+        print('>> ACCESS GRANTED.');
+        runBreach(code);
+        break;
+      case 'WHOAMI':
+        print('  user ......... root');
+        print('  session ...... 0x8A19F2');
+        print('  clearance .... LAYER-3');
+        print('  uplink ....... ENDURANCE/NOMINAL');
+        break;
+      case 'DECRYPT':
+        var kw = parts.slice(1).join(' ');
+        if (kw==='GARGANTUA'){
+          print('>> KEY: '+randHex(12));
+          print('>> DOI 10.1088/0264-9381/32/6/065001');
+          print('>> JAMES, O. ET AL. (2015). GRAVITATIONAL LENSING BY SPINNING BLACK HOLES.');
+          print('>> CLASSICAL AND QUANTUM GRAVITY, 32(6).');
+        } else {
+          print('>> KEYWORD NOT IN DICTIONARY: '+(kw||'(empty)'), 'warn');
+        }
+        break;
+      case 'CLEAR':
+        echo.innerHTML = '';
+        break;
+      case 'EXIT':
+        print('>> SESSION TERMINATED. RECONNECT ANY TIME.','dim');
+        break;
+      case 'AMEN':
+        print('>> █████ AMEN ███████','warn');
+        print('>> ROLL CREDITS','dim');
+        break;
+      default:
+        print('bash: '+head+': command not found','err');
+    }
+  }
+  input.addEventListener('keydown', function(e){
+    if (e.key==='Enter'){ exec(input.value); input.value=''; }
+    else if (e.key==='ArrowUp'){ if(hist[++hi]) input.value = hist[hi]; else hi--; e.preventDefault(); }
+    else if (e.key==='ArrowDown'){ if(hi>0){ hi--; input.value = hist[hi]; } else { hi=-1; input.value=''; } e.preventDefault(); }
+  });
+  input.focus();
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('button') && !e.target.closest('a')) input.focus();
+  });
+  // welcome
+  print('Type HELP to list commands.','dim');
+}
+
+})();
+</script>
+</body>
+</html>
