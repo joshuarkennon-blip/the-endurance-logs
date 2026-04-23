@@ -129,7 +129,7 @@ export default function CollectPage() {
 
           <div className="mb-10 border-b border-console-border pb-8">
             <p className="text-[10px] tracking-[0.35em] text-console-muted uppercase mb-2">ENDURANCE // ACQUISITION LOG</p>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-[0.12em] text-console-glow mb-3">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-[0.12em] text-console-glow mb-3 neon-text-plasma">
               ACQUIRE THE ARCHIVE
             </h1>
             <p className="text-[13px] md:text-[14px] text-console-text leading-relaxed">

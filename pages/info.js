@@ -98,7 +98,7 @@ export default function InfoPage() {
             <p className="text-[10px] tracking-[0.35em] text-console-muted uppercase mb-2">
               ENDURANCE // METADATA
             </p>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-[0.12em] text-console-glow mb-3">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-[0.12em] text-console-glow mb-3 neon-text-plasma">
               SOURCES & INFO
             </h1>
             <p className="text-[13px] md:text-[14px] text-console-text leading-relaxed">

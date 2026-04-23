@@ -895,33 +895,68 @@ export default function LogScreen({ film, isLoading, onLoadComplete, onEject, pl
       )}
 
       {!film ? (
-        <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
+        <div className="flex flex-col items-center justify-center h-full gap-5 px-6 text-center">
           <div>
-            <div className="text-5xl md:text-6xl mb-4 opacity-30">◈</div>
-            <p className="text-[13px] md:text-[14px] tracking-[0.3em] text-console-muted uppercase">No Disc Loaded</p>
-            <p className="text-[11px] md:text-[12px] text-console-muted mt-2 tracking-wider">
+            <div
+              className="text-5xl md:text-6xl mb-5"
+              style={{
+                color: '#22d3ee',
+                textShadow: '0 0 2px #22d3ee, 0 0 12px rgba(34,211,238,0.55), 0 0 26px rgba(34,211,238,0.25)',
+                opacity: 0.82,
+              }}
+            >
+              ◈
+            </div>
+            <p
+              className="text-[13px] md:text-[15px] tracking-[0.36em] uppercase font-bold"
+              style={{ color: '#7df0ff', textShadow: '0 0 1px #22d3ee, 0 0 6px rgba(34,211,238,0.35)' }}
+            >
+              No Disc Loaded
+            </p>
+            <p className="text-[11px] md:text-[12px] text-console-muted mt-3 tracking-[0.18em]">
               <span className="hidden md:inline">Select a log from the archive and drag to this console</span>
               <span className="md:hidden">Tap a disc in the Archive to load a log</span>
             </p>
           </div>
-          <div className="max-w-xl space-y-2 border-t border-console-border pt-4">
-            <p className="text-[10px] md:text-[11px] tracking-[0.24em] text-console-muted uppercase">Nolan Throughline</p>
+          <div
+            className="max-w-xl space-y-2.5 pt-5 mt-1"
+            style={{
+              borderTop: '1px solid rgba(34,211,238,0.24)',
+              boxShadow: '0 -1px 0 rgba(255,255,255,0.03)',
+            }}
+          >
+            <p
+              className="text-[10px] md:text-[11px] tracking-[0.3em] uppercase font-bold"
+              style={{ color: '#ffd466', textShadow: '0 0 6px rgba(245,176,65,0.3)' }}
+            >
+              // Nolan Throughline
+            </p>
             <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
               These films run as systems under pressure: time distortion, memory failure, institutional decay, and moral trade-offs made under constraint.
             </p>
             <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
               Different genre wrappers, same core engine: build a framework to survive uncertainty, then pay the hidden cost that framework creates.
             </p>
-            <p className="text-[12px] md:text-[13px] text-console-text leading-relaxed">
+            <p
+              className="text-[12px] md:text-[13px] leading-relaxed italic"
+              style={{ color: '#6dffb5' }}
+            >
               Recurring signal: structure is argument.
             </p>
           </div>
-          <div className="w-2 h-3 bg-console-muted animate-pulse mt-2" />
+          <div
+            className="w-2 h-3 mt-2 animate-pulse"
+            style={{ background: '#22d3ee', boxShadow: '0 0 8px rgba(34,211,238,0.55)' }}
+          />
           <div className="absolute bottom-4 left-0 right-0 px-4 md:px-6">
-            <div className="flex justify-between text-[10px] md:text-[11px] text-console-muted">
-              <span>ENDURANCE // STANDBY</span>
-              <span>SIG: NOMINAL</span>
-              <span className="hidden md:inline">PWR: ONLINE</span>
+            <div className="flex justify-between text-[10px] md:text-[11px] tracking-widest">
+              <span style={{ color: '#7891a8' }}>ENDURANCE <span style={{ color: '#4a5a70' }}>//</span> STANDBY</span>
+              <span>
+                <span style={{ color: '#4a5a70' }}>SIG:</span> <span style={{ color: '#14f195', textShadow: '0 0 6px rgba(20,241,149,0.4)' }}>NOMINAL</span>
+              </span>
+              <span className="hidden md:inline">
+                <span style={{ color: '#4a5a70' }}>PWR:</span> <span style={{ color: '#14f195' }}>ONLINE</span>
+              </span>
             </div>
           </div>
         </div>

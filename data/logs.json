@@ -4,19 +4,36 @@
     "title": "INTERSTELLAR",
     "year": "2014",
     "code": "INT-2014",
-    "color": "#4a7c9e",
-    "glowColor": "#6ab4dc",
+    "color": "#0b4f8a",
+    "glowColor": "#38d6ff",
     "tagline": "Refuse the fade. Push deeper.",
     "thumbnail": "🌌",
-    "themes": ["Love as a Dimension", "Time Dilation", "Gravity & Physics", "Survival"],
+    "themes": [
+      "Love as a Dimension",
+      "Time Dilation",
+      "Gravity & Physics",
+      "Survival"
+    ],
     "transmission": "ENDURANCE-LOG-7A",
     "dossier": {
       "opening": "This transmission concerns the most radical proposition embedded in Cooper Station's founding narrative: that love is not a sentiment, but a quantifiable force—a vector capable of transcending spacetime.",
       "sections": [
-        { "heading": "LOVE AS THE FIFTH DIMENSION", "body": "Brand's speech in the second act is often dismissed as emotional compromise in a film otherwise committed to hard science. This reading is superficial. The film's final reveal—that Cooper communicates with Murph across decades via gravitational anomalies—retroactively validates Brand's thesis. Love, here, functions as the only mechanism capable of navigating a tesseract. The beings who constructed the dimensional shortcut did not do so with logic. They did so by following a signal that logic cannot explain. Cooper finds the correct moment in spacetime not through calculation, but through recognition. The watch. The dust. His daughter's room. Love is the index." },
-        { "heading": "TIME DILATION: THE PHYSICS OF GRIEF", "body": "Miller's planet operates under extreme relativistic time dilation. One hour on its surface equals seven years on the Endurance. This is not metaphor—it is general relativity made narrative. When the crew returns to the ship, Romilly has aged 23 years. Cooper receives decades of video messages in minutes. The sequence is Nolan at his most technically precise and emotionally brutal. The physics of grief: loss delivered at the speed of relativity. Nolan uses dilation not as spectacle but as rupture—each skipped year is a wound that cannot be sutured by apology or explanation." },
-        { "heading": "THE GRAVITY EQUATION", "body": "Professor Brand's life work—the gravity equation—is the film's central MacGuffin, and its most honest lie. Brand solves it decades before he tells anyone. He knew. The equation required data from inside a singularity. He knew no one could retrieve it and return. He kept humanity building, kept Cooper flying, on a premise he had already proven false. The gravity equation is therefore not a physics problem—it is a story about how institutions maintain hope through necessary deception. NASA did not send Cooper to save the world. It sent him to save the idea that the world could be saved." },
-        { "heading": "GARGANTUA: ACCURATE DARKNESS", "body": "The black hole Gargantua was rendered in collaboration with physicist Kip Thorne. The visual effects team wrote new ray-tracing software to simulate how light would actually bend around a rotating black hole of that mass. The result was so scientifically accurate it produced publishable physics papers. Nolan insisted on accuracy even where audiences would never know the difference. Gargantua is not a symbol. It is an object. Its silence is its meaning." }
+        {
+          "heading": "LOVE AS THE FIFTH DIMENSION",
+          "body": "Brand's speech in the second act is often dismissed as emotional compromise in a film otherwise committed to hard science. This reading is superficial. The film's final reveal—that Cooper communicates with Murph across decades via gravitational anomalies—retroactively validates Brand's thesis. Love, here, functions as the only mechanism capable of navigating a tesseract. The beings who constructed the dimensional shortcut did not do so with logic. They did so by following a signal that logic cannot explain. Cooper finds the correct moment in spacetime not through calculation, but through recognition. The watch. The dust. His daughter's room. Love is the index."
+        },
+        {
+          "heading": "TIME DILATION: THE PHYSICS OF GRIEF",
+          "body": "Miller's planet operates under extreme relativistic time dilation. One hour on its surface equals seven years on the Endurance. This is not metaphor—it is general relativity made narrative. When the crew returns to the ship, Romilly has aged 23 years. Cooper receives decades of video messages in minutes. The sequence is Nolan at his most technically precise and emotionally brutal. The physics of grief: loss delivered at the speed of relativity. Nolan uses dilation not as spectacle but as rupture—each skipped year is a wound that cannot be sutured by apology or explanation."
+        },
+        {
+          "heading": "THE GRAVITY EQUATION",
+          "body": "Professor Brand's life work—the gravity equation—is the film's central MacGuffin, and its most honest lie. Brand solves it decades before he tells anyone. He knew. The equation required data from inside a singularity. He knew no one could retrieve it and return. He kept humanity building, kept Cooper flying, on a premise he had already proven false. The gravity equation is therefore not a physics problem—it is a story about how institutions maintain hope through necessary deception. NASA did not send Cooper to save the world. It sent him to save the idea that the world could be saved."
+        },
+        {
+          "heading": "GARGANTUA: ACCURATE DARKNESS",
+          "body": "The black hole Gargantua was rendered in collaboration with physicist Kip Thorne. The visual effects team wrote new ray-tracing software to simulate how light would actually bend around a rotating black hole of that mass. The result was so scientifically accurate it produced publishable physics papers. Nolan insisted on accuracy even where audiences would never know the difference. Gargantua is not a symbol. It is an object. Its silence is its meaning."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 124.7° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -26,12 +43,30 @@
       "dream_glow": "#e8b84a",
       "opening": "What follows is recovered from the production archive. Construction logs, director transmissions, and field notes from the making of the film itself.",
       "sections": [
-        { "heading": "THE CORN", "body": "Nolan planted over 500 acres of corn in Alberta, Canada for the film's opening act—and then sold it back to the farmers at a profit after shooting wrapped. He refused to use CGI farming fields. The corn took four months to reach full height, dictating the shooting schedule. The production started principal photography on August 6, 2013, specifically calibrated to when the crops would peak. This is characteristic Nolan: the image had to have weight because it was real weight." },
-        { "heading": "HANS ZIMMER: THE LETTER", "body": "Nolan gave Zimmer a single piece of paper before they discussed the film. No title. No plot. Just a short story about a father who has to leave his child to complete an important job. Two lines of dialogue: 'I'll come back.' 'When?' Zimmer wrote one piece of music overnight—piano and organ. 'I really just wrote about what it meant to be a father,' he said. That piece became the score's emotional spine. Nolan then revealed it was a space film. The organ stayed. Zimmer recorded the principal organ parts on a 1926 four-manual Harrison & Harrison instrument at Temple Church, London, specifically because its pipes resembled spacecraft afterburners." },
-        { "heading": "THE RANGER & THE ENDURANCE: BUILT, NOT RENDERED", "body": "The Ranger spacecraft was constructed at 80% life-scale—12 tons, mounted ten feet off the ground on a complex piston rig. Production designer Nathan Crowley spent months building physical cockpit interiors, working from actual NASA shuttle research. The actors sat in real seats with real instrument panels. Crowley's conviction: 'People have forgotten the other ways to do visual effects. If you build from real materials and extend from a genuine landscape, the image has a sense of weight that would otherwise be missing.' The majority of TARS and CASE robot shots were achieved in-camera with performers inside the rigs, with minimal digital cleanup." },
-        { "heading": "KIP THORNE'S TWO RULES", "body": "Theoretical physicist Kip Thorne agreed to consult under two conditions: nothing would violate established physical law, and all speculation would spring from real science. Nolan accepted—provided these rules didn't interfere with the filmmaking. The collaboration resulted in the first cinematically accurate depiction of a gravitational lensing black hole. The rendering software was so physically precise it generated two peer-reviewed papers in astrophysics journals. Thorne received an executive producer credit and subsequently wrote 'The Science of Interstellar' to unpack what the film got right, and why." },
-        { "heading": "SHOOTING IN IMAX", "body": "Hoyte van Hoytema shot the film on 35mm Panavision anamorphic and IMAX 70mm—one of only a handful of productions to use both formats simultaneously. The IMAX cameras weighed 50kg each. Iceland doubled for both Miller's planet and Mann's planet. Van Hoytema's approach was to treat space as an interior environment—contained, pressured, claustrophobic—rather than the vast emptiness of most space films. The wormhole sequence was designed so that the camera passes through it at the same speed and angle as the ship, making the audience viscerally present rather than observational." },
-        { "heading": "MATT DAMON: THE UNCREDITED CASTING", "body": "Damon's casting as Dr. Mann was kept secret until the film's release. He was brought on in late August 2013 and filmed his scenes in Iceland within a tightly controlled information blackout. Nolan's reasoning: Mann's betrayal lands harder when the audience's goodwill toward the actor hasn't been pre-poisoned by knowing he's playing a villain. The casting uses audience trust in Damon as a dramatic instrument—the same warmth that made his prior roles beloved makes Mann's breakdown genuinely shocking." }
+        {
+          "heading": "THE CORN",
+          "body": "Nolan planted over 500 acres of corn in Alberta, Canada for the film's opening act—and then sold it back to the farmers at a profit after shooting wrapped. He refused to use CGI farming fields. The corn took four months to reach full height, dictating the shooting schedule. The production started principal photography on August 6, 2013, specifically calibrated to when the crops would peak. This is characteristic Nolan: the image had to have weight because it was real weight."
+        },
+        {
+          "heading": "HANS ZIMMER: THE LETTER",
+          "body": "Nolan gave Zimmer a single piece of paper before they discussed the film. No title. No plot. Just a short story about a father who has to leave his child to complete an important job. Two lines of dialogue: 'I'll come back.' 'When?' Zimmer wrote one piece of music overnight—piano and organ. 'I really just wrote about what it meant to be a father,' he said. That piece became the score's emotional spine. Nolan then revealed it was a space film. The organ stayed. Zimmer recorded the principal organ parts on a 1926 four-manual Harrison & Harrison instrument at Temple Church, London, specifically because its pipes resembled spacecraft afterburners."
+        },
+        {
+          "heading": "THE RANGER & THE ENDURANCE: BUILT, NOT RENDERED",
+          "body": "The Ranger spacecraft was constructed at 80% life-scale—12 tons, mounted ten feet off the ground on a complex piston rig. Production designer Nathan Crowley spent months building physical cockpit interiors, working from actual NASA shuttle research. The actors sat in real seats with real instrument panels. Crowley's conviction: 'People have forgotten the other ways to do visual effects. If you build from real materials and extend from a genuine landscape, the image has a sense of weight that would otherwise be missing.' The majority of TARS and CASE robot shots were achieved in-camera with performers inside the rigs, with minimal digital cleanup."
+        },
+        {
+          "heading": "KIP THORNE'S TWO RULES",
+          "body": "Theoretical physicist Kip Thorne agreed to consult under two conditions: nothing would violate established physical law, and all speculation would spring from real science. Nolan accepted—provided these rules didn't interfere with the filmmaking. The collaboration resulted in the first cinematically accurate depiction of a gravitational lensing black hole. The rendering software was so physically precise it generated two peer-reviewed papers in astrophysics journals. Thorne received an executive producer credit and subsequently wrote 'The Science of Interstellar' to unpack what the film got right, and why."
+        },
+        {
+          "heading": "SHOOTING IN IMAX",
+          "body": "Hoyte van Hoytema shot the film on 35mm Panavision anamorphic and IMAX 70mm—one of only a handful of productions to use both formats simultaneously. The IMAX cameras weighed 50kg each. Iceland doubled for both Miller's planet and Mann's planet. Van Hoytema's approach was to treat space as an interior environment—contained, pressured, claustrophobic—rather than the vast emptiness of most space films. The wormhole sequence was designed so that the camera passes through it at the same speed and angle as the ship, making the audience viscerally present rather than observational."
+        },
+        {
+          "heading": "MATT DAMON: THE UNCREDITED CASTING",
+          "body": "Damon's casting as Dr. Mann was kept secret until the film's release. He was brought on in late August 2013 and filmed his scenes in Iceland within a tightly controlled information blackout. Nolan's reasoning: Mann's betrayal lands harder when the audience's goodwill toward the actor hasn't been pre-poisoned by knowing he's playing a villain. The casting uses audience trust in Damon as a dramatic instrument—the same warmth that made his prior roles beloved makes Mann's breakdown genuinely shocking."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AFI CATALOG, EMPIRE MAGAZINE, THE SCIENCE OF INTERSTELLAR (THORNE, 2014), SIGGRAPH 2015"
     },
@@ -41,12 +76,30 @@
       "dream_glow": "#4a9ede",
       "opening": "You have gone further than most. What follows are transmissions recovered from the deepest layer of the archive — details so embedded in the signal that most viewers never surface them.",
       "sections": [
-        { "heading": "THE TICKING CLOCK YOU NEVER NOTICED", "body": "On Miller's planet, the ocean wave sounds include a rhythmic ticking. That tick occurs every 1.25 seconds. Each tick represents one full Earth day passing for the people waiting on the Endurance above. It is not an ambient sound effect. It is a clock. Nolan encoded the time dilation directly into the audio landscape—the sound design is doing physics. Most audiences feel it as tension without ever registering what they are actually counting." },
-        { "heading": "THE ENDURANCE IS A CLOCK FACE", "body": "The Endurance space station's twelve-module ring design was not chosen for engineering plausibility alone. It is a clock face. Twelve segments, circular rotation, viewed from above. Nolan put the film's central theme—the tyranny and elasticity of time—into the architecture of the ship itself. The Endurance is time made structural." },
-        { "heading": "NOT ONE ANIMAL", "body": "Watch the entire film. You will not see a single animal. Not a bird, not an insect, not livestock, not a pet. The absence is total and intentional. Nolan removed all non-human life from the frame before the crew even leaves Earth. He communicated the scale of humanity's extinction crisis without a single line of dialogue about it. The world has already ended for everything except us. The empty skies tell you everything." },
-        { "heading": "COOPER'S FIRST NAME", "body": "Cooper's first name—Joseph—is spoken exactly once in the entire film. It appears in a single archival document glimpsed briefly on screen. He is referred to exclusively as 'Cooper' throughout. This mirrors the deliberate anonymity Nolan uses for protagonists across his work. The Protagonist in Tenet has no name at all. Cooper has one, but it is buried. These characters are defined by function, not biography." },
-        { "heading": "THE SCIENTIFIC PAPERS GARGANTUA CREATED", "body": "The Gargantua rendering team, led by VFX supervisor Paul Franklin, wrote entirely new gravitational lensing simulation code. The output was so physically accurate that physicist Kip Thorne used the render data to write two separate peer-reviewed papers: one on the optics of gravitational lensing by spinning black holes, published in Classical and Quantum Gravity (2015). Hollywood produced a legitimate contribution to astrophysics literature as a side effect of making a blockbuster film." },
-        { "heading": "BRAND KNEW PLAN A WAS IMPOSSIBLE BEFORE COOPER LAUNCHED", "body": "Professor Brand solved his own equation before the events of the film begin. He knew Plan A—launching humanity off Earth—required quantum data from inside a singularity, which was physically unretrievable. He chose not to tell anyone. Every rocket launch, every sacrifice, every death in the name of Plan A happened while Brand sat on proof that it would never work. Plan B—seeding a new world—was always the only plan. Brand's deathbed confession is not regret. It is a permission slip he waited until it was safe to sign." }
+        {
+          "heading": "THE TICKING CLOCK YOU NEVER NOTICED",
+          "body": "On Miller's planet, the ocean wave sounds include a rhythmic ticking. That tick occurs every 1.25 seconds. Each tick represents one full Earth day passing for the people waiting on the Endurance above. It is not an ambient sound effect. It is a clock. Nolan encoded the time dilation directly into the audio landscape—the sound design is doing physics. Most audiences feel it as tension without ever registering what they are actually counting."
+        },
+        {
+          "heading": "THE ENDURANCE IS A CLOCK FACE",
+          "body": "The Endurance space station's twelve-module ring design was not chosen for engineering plausibility alone. It is a clock face. Twelve segments, circular rotation, viewed from above. Nolan put the film's central theme—the tyranny and elasticity of time—into the architecture of the ship itself. The Endurance is time made structural."
+        },
+        {
+          "heading": "NOT ONE ANIMAL",
+          "body": "Watch the entire film. You will not see a single animal. Not a bird, not an insect, not livestock, not a pet. The absence is total and intentional. Nolan removed all non-human life from the frame before the crew even leaves Earth. He communicated the scale of humanity's extinction crisis without a single line of dialogue about it. The world has already ended for everything except us. The empty skies tell you everything."
+        },
+        {
+          "heading": "COOPER'S FIRST NAME",
+          "body": "Cooper's first name—Joseph—is spoken exactly once in the entire film. It appears in a single archival document glimpsed briefly on screen. He is referred to exclusively as 'Cooper' throughout. This mirrors the deliberate anonymity Nolan uses for protagonists across his work. The Protagonist in Tenet has no name at all. Cooper has one, but it is buried. These characters are defined by function, not biography."
+        },
+        {
+          "heading": "THE SCIENTIFIC PAPERS GARGANTUA CREATED",
+          "body": "The Gargantua rendering team, led by VFX supervisor Paul Franklin, wrote entirely new gravitational lensing simulation code. The output was so physically accurate that physicist Kip Thorne used the render data to write two separate peer-reviewed papers: one on the optics of gravitational lensing by spinning black holes, published in Classical and Quantum Gravity (2015). Hollywood produced a legitimate contribution to astrophysics literature as a side effect of making a blockbuster film."
+        },
+        {
+          "heading": "BRAND KNEW PLAN A WAS IMPOSSIBLE BEFORE COOPER LAUNCHED",
+          "body": "Professor Brand solved his own equation before the events of the film begin. He knew Plan A—launching humanity off Earth—required quantum data from inside a singularity, which was physically unretrievable. He chose not to tell anyone. Every rocket launch, every sacrifice, every death in the name of Plan A happened while Brand sat on proof that it would never work. Plan B—seeding a new world—was always the only plan. Brand's deathbed confession is not regret. It is a permission slip he waited until it was safe to sign."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -56,19 +109,36 @@
     "title": "INCEPTION",
     "year": "2010",
     "code": "INC-2010",
-    "color": "#7a5c9e",
-    "glowColor": "#b08cdc",
+    "color": "#5a1f8f",
+    "glowColor": "#c77dff",
     "tagline": "The battlefield is cognitive architecture.",
     "thumbnail": "🌀",
-    "themes": ["Dream Logic", "Subconscious Architecture", "Grief", "Shared Dreaming"],
+    "themes": [
+      "Dream Logic",
+      "Subconscious Architecture",
+      "Grief",
+      "Shared Dreaming"
+    ],
     "transmission": "ENDURANCE-LOG-4C",
     "dossier": {
       "opening": "This log concerns a technology of psychological intrusion—and the man who could not stop dreaming of his wife. The architecture of the subconscious is not metaphor in this world. It is infrastructure.",
       "sections": [
-        { "heading": "DREAM LOGIC AS GRAMMAR", "body": "The rules of Nolan's dream-world are presented as givens: each dream level runs slower, the dreamer's subconscious populates the space with projections, kicks propagate upward through levels. These rules are consistent but not explained in-universe—they are accepted the way a native speaker accepts grammar without studying it. This is the film's first trick. By the time an audience questions the logic, they are already inside it. The architecture holds not because it is scientifically valid, but because Nolan deploys it with total conviction and zero irony." },
-        { "heading": "THE SUBCONSCIOUS AS DEFENSE SYSTEM", "body": "Fischer's mind has been militarized. This is the film's most overlooked detail. His projections—the trained immune response of a subconscious that has been tampered with before—attack the team not out of malice but out of architecture. The mind, like any compromised system, develops countermeasures. Cobb's team enters not a sleeping mind but a fortified installation. The action sequences are therefore security responses, not antagonism. Fischer is not a villain. He is a system doing exactly what it was designed to do." },
-        { "heading": "MAL: THE GHOST IN THE MACHINE", "body": "Mal Cobb is dead. She is also omnipresent. Her appearances in Cobb's subconscious represent the film's most honest admission: grief does not resolve. It architecturally integrates. Cobb cannot build dreams without Mal appearing because she is now load-bearing—she is part of the foundation of how he thinks. His guilt over convincing her that her world was a dream—and her subsequent suicide to 'wake up'—has collapsed into a permanent subconscious fixture. Mal is not a haunting. She is a structural compromise." },
-        { "heading": "THE SPINNING TOP: DELIBERATE AMBIGUITY", "body": "The final frame cuts before the top falls or wobbles. Nolan has confirmed this was intentional—not because the answer is unknowable, but because the question is wrong. The film's real totem is Cobb's wedding ring, present only in dreams, absent in waking life. Watch his hand in each scene. The top is misdirection. Nolan gives you the answer in plain sight and then points your attention elsewhere. It is, structurally, an inception performed on the audience." }
+        {
+          "heading": "DREAM LOGIC AS GRAMMAR",
+          "body": "The rules of Nolan's dream-world are presented as givens: each dream level runs slower, the dreamer's subconscious populates the space with projections, kicks propagate upward through levels. These rules are consistent but not explained in-universe—they are accepted the way a native speaker accepts grammar without studying it. This is the film's first trick. By the time an audience questions the logic, they are already inside it. The architecture holds not because it is scientifically valid, but because Nolan deploys it with total conviction and zero irony."
+        },
+        {
+          "heading": "THE SUBCONSCIOUS AS DEFENSE SYSTEM",
+          "body": "Fischer's mind has been militarized. This is the film's most overlooked detail. His projections—the trained immune response of a subconscious that has been tampered with before—attack the team not out of malice but out of architecture. The mind, like any compromised system, develops countermeasures. Cobb's team enters not a sleeping mind but a fortified installation. The action sequences are therefore security responses, not antagonism. Fischer is not a villain. He is a system doing exactly what it was designed to do."
+        },
+        {
+          "heading": "MAL: THE GHOST IN THE MACHINE",
+          "body": "Mal Cobb is dead. She is also omnipresent. Her appearances in Cobb's subconscious represent the film's most honest admission: grief does not resolve. It architecturally integrates. Cobb cannot build dreams without Mal appearing because she is now load-bearing—she is part of the foundation of how he thinks. His guilt over convincing her that her world was a dream—and her subsequent suicide to 'wake up'—has collapsed into a permanent subconscious fixture. Mal is not a haunting. She is a structural compromise."
+        },
+        {
+          "heading": "THE SPINNING TOP: DELIBERATE AMBIGUITY",
+          "body": "The final frame cuts before the top falls or wobbles. Nolan has confirmed this was intentional—not because the answer is unknowable, but because the question is wrong. The film's real totem is Cobb's wedding ring, present only in dreams, absent in waking life. Watch his hand in each scene. The top is misdirection. Nolan gives you the answer in plain sight and then points your attention elsewhere. It is, structurally, an inception performed on the audience."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 89.2° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -78,12 +148,30 @@
       "dream_glow": "#c09cec",
       "opening": "Ten years of development. Sixty days of principal photography across six countries. One rotating hallway built for real. What follows are the construction notes.",
       "sections": [
-        { "heading": "TEN YEARS IN DEVELOPMENT", "body": "Nolan first conceived Inception at the very beginning of his career—nearly a decade before cameras rolled. He described it as 'a heist movie set in the architecture of the mind,' and spent years developing the internal logic until it was airtight. Warner Bros. greenlit the project after The Dark Knight's $1 billion gross, giving Nolan a $160 million budget and virtually no studio interference. The script went through no table reads. Nolan gave cast members only the pages relevant to their character—no one received the full screenplay before shooting began." },
-        { "heading": "THE ROTATING HALLWAY: BUILT ENTIRELY FOR REAL", "body": "The hotel corridor fight sequence required a 100-foot hallway set built to rotate 360 degrees on a gimbal rig. Construction took three months. The set weighed several hundred tons. Six cameras were mounted at various points inside it, several of which rotated with the set itself. Joseph Gordon-Levitt performed nearly all his own stunts, training for months in the rotating environment. The three-week shoot in the hallway required actors and crew to work in constantly shifting gravitational orientation. Nolan's direction: shoot it so the audience never quite figures out the trick. Every cut changes angle, rig, and orientation." },
-        { "heading": "PARIS FOLDING: 'THE CITY BEGINS TO FOLD IN HALF'", "body": "That is the complete stage direction Nolan wrote in the script for the Paris folding sequence. No further description. The visual effects team spent months developing the fold geometry, ensuring that the reflection of the real Paris on the rising city surface was optically accurate. Wally Pfister shot the entire sequence handheld in full daylight—an extraordinary demand on VFX integration. Nolan's vision: 'Something glacial, with clear modernist architecture, but with chunks of it breaking off into the sea like icebergs.' The resulting shot took over a year to complete in post-production." },
-        { "heading": "ZERO GRAVITY: PRACTICAL SOLUTION", "body": "For zero-gravity sequences, two identical hallway rigs were constructed—one horizontal (capable of rotating 360°), one vertical. In the vertical rig, actors were lowered toward the camera on invisible wires, creating the visual impression of floating weightlessness. There was no CGI gravity removal. Gordon-Levitt trained specifically in wire-harness movement to make his body behave as it would in zero-g. Nolan insisted: the audience should feel the weight of absence of weight. Computer-generated weightlessness, he argued, always looks like a choice the filmmaker made. This looks like physics." },
-        { "heading": "SIX COUNTRIES, SIXTY DAYS", "body": "Principal photography covered Japan, France, England, Morocco, Canada, and the United States. The film shot at the Hôtel Meurice in Paris, the Tangier medina, and a Japanese castle exterior. Each location was chosen for architectural specificity—Nolan wanted the dream-spaces to feel like real places that had been distorted, not invented. Cinematographer Wally Pfister won the Academy Award for Best Cinematography for the film. Pfister later stated that the challenge was making each location feel simultaneously familiar and wrong—geographically real, psychologically displaced." },
-        { "heading": "THE SCORE: ZIMMER'S SLOWED TIME", "body": "Hans Zimmer's score was built around a slowed-down version of Édith Piaf's 'Non, je ne regrette rien'—the song used as the kick signal in the film. At each dream level, time runs slower, which means the song plays slower. Zimmer extracted the harmonic DNA of the Piaf track and stretched it across the score at varying tempos corresponding to each dream depth. The BRAAAM sound, now ubiquitous in film trailers, originated here—a single low horn note processed, layered, and stretched. Zimmer has since expressed mild regret that it became a cliché, noting it was designed to be used exactly once." }
+        {
+          "heading": "TEN YEARS IN DEVELOPMENT",
+          "body": "Nolan first conceived Inception at the very beginning of his career—nearly a decade before cameras rolled. He described it as 'a heist movie set in the architecture of the mind,' and spent years developing the internal logic until it was airtight. Warner Bros. greenlit the project after The Dark Knight's $1 billion gross, giving Nolan a $160 million budget and virtually no studio interference. The script went through no table reads. Nolan gave cast members only the pages relevant to their character—no one received the full screenplay before shooting began."
+        },
+        {
+          "heading": "THE ROTATING HALLWAY: BUILT ENTIRELY FOR REAL",
+          "body": "The hotel corridor fight sequence required a 100-foot hallway set built to rotate 360 degrees on a gimbal rig. Construction took three months. The set weighed several hundred tons. Six cameras were mounted at various points inside it, several of which rotated with the set itself. Joseph Gordon-Levitt performed nearly all his own stunts, training for months in the rotating environment. The three-week shoot in the hallway required actors and crew to work in constantly shifting gravitational orientation. Nolan's direction: shoot it so the audience never quite figures out the trick. Every cut changes angle, rig, and orientation."
+        },
+        {
+          "heading": "PARIS FOLDING: 'THE CITY BEGINS TO FOLD IN HALF'",
+          "body": "That is the complete stage direction Nolan wrote in the script for the Paris folding sequence. No further description. The visual effects team spent months developing the fold geometry, ensuring that the reflection of the real Paris on the rising city surface was optically accurate. Wally Pfister shot the entire sequence handheld in full daylight—an extraordinary demand on VFX integration. Nolan's vision: 'Something glacial, with clear modernist architecture, but with chunks of it breaking off into the sea like icebergs.' The resulting shot took over a year to complete in post-production."
+        },
+        {
+          "heading": "ZERO GRAVITY: PRACTICAL SOLUTION",
+          "body": "For zero-gravity sequences, two identical hallway rigs were constructed—one horizontal (capable of rotating 360°), one vertical. In the vertical rig, actors were lowered toward the camera on invisible wires, creating the visual impression of floating weightlessness. There was no CGI gravity removal. Gordon-Levitt trained specifically in wire-harness movement to make his body behave as it would in zero-g. Nolan insisted: the audience should feel the weight of absence of weight. Computer-generated weightlessness, he argued, always looks like a choice the filmmaker made. This looks like physics."
+        },
+        {
+          "heading": "SIX COUNTRIES, SIXTY DAYS",
+          "body": "Principal photography covered Japan, France, England, Morocco, Canada, and the United States. The film shot at the Hôtel Meurice in Paris, the Tangier medina, and a Japanese castle exterior. Each location was chosen for architectural specificity—Nolan wanted the dream-spaces to feel like real places that had been distorted, not invented. Cinematographer Wally Pfister won the Academy Award for Best Cinematography for the film. Pfister later stated that the challenge was making each location feel simultaneously familiar and wrong—geographically real, psychologically displaced."
+        },
+        {
+          "heading": "THE SCORE: ZIMMER'S SLOWED TIME",
+          "body": "Hans Zimmer's score was built around a slowed-down version of Édith Piaf's 'Non, je ne regrette rien'—the song used as the kick signal in the film. At each dream level, time runs slower, which means the song plays slower. Zimmer extracted the harmonic DNA of the Piaf track and stretched it across the score at varying tempos corresponding to each dream depth. The BRAAAM sound, now ubiquitous in film trailers, originated here—a single low horn note processed, layered, and stretched. Zimmer has since expressed mild regret that it became a cliché, noting it was designed to be used exactly once."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: WIKIPEDIA PRODUCTION NOTES, IMDB TRIVIA, NO FILM SCHOOL, STUDIOBINDER, WALLY PFISTER INTERVIEW (SBIFF)"
     },
@@ -93,12 +181,30 @@
       "dream_glow": "#9a7ccc",
       "opening": "Deeper than the production. Deeper than the craft. These are the signals encoded in the film itself — patterns that only emerge when you know where to look.",
       "sections": [
-        { "heading": "THE CAST SPELLS D.R.E.A.M.S.", "body": "The first initials of the core team spell DREAMS: Dom, Robert, Eames, Arthur, Mal, Saito. Add the three supporting characters — Peter, Ariadne, Yusuf — and the full acronym extends to DREAMS PAY. This is not coincidence. Nolan constructed the naming deliberately. The film about selling access to dreams is populated entirely by characters whose names announce exactly what they are doing." },
-        { "heading": "COBB MEANS DREAM", "body": "In Sanskrit, Urdu, Hindi, and Punjabi, 'Cobb' translates directly to 'dream.' Nolan named his protagonist — the man trapped inside dreams, who cannot stop dreaming of his dead wife, whose entire identity has become entangled with the dream-state — after the concept itself. The name is the condition." },
-        { "heading": "THE CREW ARE A FILM SET", "body": "Every member of Cobb's team maps precisely onto a film production role: Arthur is the producer (logistics, budgets, keeps the operation running), Ariadne is the production designer (builds the physical spaces), Eames is the actor (performs characters, wears other faces), Yusuf is the technical crew (the chemistry, the equipment), and Saito is the studio executive (funds everything, holds final authority). Fischer is the audience — the person the entire apparatus is designed to manipulate into feeling something that was engineered. Inception is Nolan's most explicit film about what cinema actually does." },
-        { "heading": "THE LICENSE PLATES SAY THE ALTERNATE STATE", "body": "During the Paris chase sequence, every visible car license plate reads 'The Alternate State' where the state name would normally appear. It is on screen for less than two seconds. No character references it. No plot point turns on it. Nolan embedded a descriptor of the entire film's world into street traffic and kept moving." },
-        { "heading": "THE HOTEL ROOM NUMBER IS THE TRAIN NUMBER", "body": "The train that crashes through the city street in the first dream level bears the number 3502. Cobb and Mal's hotel room in the dream below — where Mal hid her totem and Cobb destroyed it — is also numbered 3502. The train and the room are the same object. The intrusion of the real into the dream and the original wound are numerically identical. Nolan encoded the causality of Mal's death into a prop number." },
-        { "heading": "THE BRAAM WAS DESIGNED TO NEVER BE USED AGAIN", "body": "Zimmer built the BRAAAM — the low, processed horn drop that now appears in virtually every action film trailer — specifically for a single deployment in this film. He has since called its adoption by the industry 'slightly mortifying.' The sound was constructed to feel like the subconscious lurching — a physical drop in the chest. Its power relied entirely on novelty. The moment it became a trailer convention, it became exactly what Inception argued against: a manipulative signal stripped of meaning by overuse." }
+        {
+          "heading": "THE CAST SPELLS D.R.E.A.M.S.",
+          "body": "The first initials of the core team spell DREAMS: Dom, Robert, Eames, Arthur, Mal, Saito. Add the three supporting characters — Peter, Ariadne, Yusuf — and the full acronym extends to DREAMS PAY. This is not coincidence. Nolan constructed the naming deliberately. The film about selling access to dreams is populated entirely by characters whose names announce exactly what they are doing."
+        },
+        {
+          "heading": "COBB MEANS DREAM",
+          "body": "In Sanskrit, Urdu, Hindi, and Punjabi, 'Cobb' translates directly to 'dream.' Nolan named his protagonist — the man trapped inside dreams, who cannot stop dreaming of his dead wife, whose entire identity has become entangled with the dream-state — after the concept itself. The name is the condition."
+        },
+        {
+          "heading": "THE CREW ARE A FILM SET",
+          "body": "Every member of Cobb's team maps precisely onto a film production role: Arthur is the producer (logistics, budgets, keeps the operation running), Ariadne is the production designer (builds the physical spaces), Eames is the actor (performs characters, wears other faces), Yusuf is the technical crew (the chemistry, the equipment), and Saito is the studio executive (funds everything, holds final authority). Fischer is the audience — the person the entire apparatus is designed to manipulate into feeling something that was engineered. Inception is Nolan's most explicit film about what cinema actually does."
+        },
+        {
+          "heading": "THE LICENSE PLATES SAY THE ALTERNATE STATE",
+          "body": "During the Paris chase sequence, every visible car license plate reads 'The Alternate State' where the state name would normally appear. It is on screen for less than two seconds. No character references it. No plot point turns on it. Nolan embedded a descriptor of the entire film's world into street traffic and kept moving."
+        },
+        {
+          "heading": "THE HOTEL ROOM NUMBER IS THE TRAIN NUMBER",
+          "body": "The train that crashes through the city street in the first dream level bears the number 3502. Cobb and Mal's hotel room in the dream below — where Mal hid her totem and Cobb destroyed it — is also numbered 3502. The train and the room are the same object. The intrusion of the real into the dream and the original wound are numerically identical. Nolan encoded the causality of Mal's death into a prop number."
+        },
+        {
+          "heading": "THE BRAAM WAS DESIGNED TO NEVER BE USED AGAIN",
+          "body": "Zimmer built the BRAAAM — the low, processed horn drop that now appears in virtually every action film trailer — specifically for a single deployment in this film. He has since called its adoption by the industry 'slightly mortifying.' The sound was constructed to feel like the subconscious lurching — a physical drop in the chest. Its power relied entirely on novelty. The moment it became a trailer convention, it became exactly what Inception argued against: a manipulative signal stripped of meaning by overuse."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -108,19 +214,36 @@
     "title": "TENET",
     "year": "2020",
     "code": "TEN-2020",
-    "color": "#9e5c4a",
-    "glowColor": "#dc8c6a",
+    "color": "#8f2d14",
+    "glowColor": "#ff7a3d",
     "tagline": "Causality locks first. Understanding arrives later.",
     "thumbnail": "⏳",
-    "themes": ["Fatalism", "Temporal Inversion", "Pincer Movements", "Entropy"],
+    "themes": [
+      "Fatalism",
+      "Temporal Inversion",
+      "Pincer Movements",
+      "Entropy"
+    ],
     "transmission": "ENDURANCE-LOG-9B",
     "dossier": {
       "opening": "This log concerns a war fought backwards and forwards simultaneously, and the only unbreakable law in its universe: what has happened cannot be unmade. Only understood differently.",
       "sections": [
-        { "heading": "INVERSION: ENTROPY AS WEAPON", "body": "Tenet's central conceit—inverting entropy to move backwards through time—is not presented as magic. It is presented as physics taken to its logical extreme. Inverted objects have reversed entropy: a bullet returns to a gun, a car un-crashes. The film's genius is treating this as industrial capacity rather than miracle. Someone built the algorithm. Someone manufactured the turnstiles. The future went to war by mailing weapons to the past. Inversion is logistics, not sorcery." },
-        { "heading": "THE TEMPORAL PINCER MOVEMENT", "body": "The film's climax involves a military operation executed simultaneously forward and backward in time. Two teams at the same location: one moving through the battle chronologically, one experiencing it in reverse. They communicate by pre-arranged signal. The Protagonist does not understand the full operation until he has lived it—because he can only understand the reverse half after he has already completed the forward half. The battle is its own briefing. This is Nolan's most formally rigorous sequence: a narrative structure where comprehension and experience cannot be simultaneous." },
-        { "heading": "FATALISM WITHOUT DESPAIR", "body": "The film repeats a hard rule: events are fixed, interpretation is not. Characters cannot rewrite the past; they can only locate themselves correctly inside it. The Protagonist doesn't fail to stop Sator so much as complete the loop that defeats him. Neil's final gate decision lands as completion, not melodrama. Tenet frames foreknowledge as burdened clarity rather than hopelessness." },
-        { "heading": "THE PROTAGONIST: DELIBERATE ANONYMITY", "body": "The lead character has no name. This is not oversight. It is architecture. He is a function—the initiating force in a closed loop. Giving him a name would suggest an interior life that exists prior to the mission. But the film reveals that the mission made him: he will found Tenet, which will recruit him, which will complete the loop. He is the organization that built him. The anonymity is the only honest thing to call someone who is, structurally, a self-causing effect." }
+        {
+          "heading": "INVERSION: ENTROPY AS WEAPON",
+          "body": "Tenet's central conceit—inverting entropy to move backwards through time—is not presented as magic. It is presented as physics taken to its logical extreme. Inverted objects have reversed entropy: a bullet returns to a gun, a car un-crashes. The film's genius is treating this as industrial capacity rather than miracle. Someone built the algorithm. Someone manufactured the turnstiles. The future went to war by mailing weapons to the past. Inversion is logistics, not sorcery."
+        },
+        {
+          "heading": "THE TEMPORAL PINCER MOVEMENT",
+          "body": "The film's climax involves a military operation executed simultaneously forward and backward in time. Two teams at the same location: one moving through the battle chronologically, one experiencing it in reverse. They communicate by pre-arranged signal. The Protagonist does not understand the full operation until he has lived it—because he can only understand the reverse half after he has already completed the forward half. The battle is its own briefing. This is Nolan's most formally rigorous sequence: a narrative structure where comprehension and experience cannot be simultaneous."
+        },
+        {
+          "heading": "FATALISM WITHOUT DESPAIR",
+          "body": "The film repeats a hard rule: events are fixed, interpretation is not. Characters cannot rewrite the past; they can only locate themselves correctly inside it. The Protagonist doesn't fail to stop Sator so much as complete the loop that defeats him. Neil's final gate decision lands as completion, not melodrama. Tenet frames foreknowledge as burdened clarity rather than hopelessness."
+        },
+        {
+          "heading": "THE PROTAGONIST: DELIBERATE ANONYMITY",
+          "body": "The lead character has no name. This is not oversight. It is architecture. He is a function—the initiating force in a closed loop. Giving him a name would suggest an interior life that exists prior to the mission. But the film reveals that the mission made him: he will found Tenet, which will recruit him, which will complete the loop. He is the organization that built him. The anonymity is the only honest thing to call someone who is, structurally, a self-causing effect."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 201.4° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -130,11 +253,26 @@
       "dream_glow": "#dc8c6a",
       "opening": "The most logistically audacious Nolan production on record. Filmed across seven countries. A real 747 purchased and destroyed. Action sequences choreographed forwards and backwards simultaneously.",
       "sections": [
-        { "heading": "THE 747: IMPULSE BUYING AT SCALE", "body": "Nolan originally planned a combination of miniatures, VFX, and set pieces for the Freeport heist sequence. On location in Victorville, California—a storage facility for decommissioned aircraft—he looked at the rows of retired planes and made a different decision. The production bought a decommissioned 1981 Cathay Pacific Cargo Boeing 747-200F for less than the cost of building and digitally rendering the sequence. The plane, registration B-HMD, was repainted in the fictional livery of 'Norskfreight.' A tow rope was attached through the building set and to tow trucks. SFX supervisor Scott Fisher reinstalled the 747's brakes to stop it at exactly the right point. The explosion destroyed the aircraft completely. Robert Pattinson later remarked: 'You wouldn't have thought there was any reality where you'd do a scene where they just have an actual 747 to blow up.'" },
-        { "heading": "SHOOTING FORWARD AND BACKWARD SIMULTANEOUSLY", "body": "For sequences involving inverted and forward-moving characters in the same frame, Nolan's approach was not to shoot once and reverse in post—it was to choreograph both directions of action simultaneously and shoot them on separate passes. Stunt coordinators developed two complete fight vocabularies for each sequence: one for the forward actor, one for the inverted actor, each of which had to look physically credible when viewed in the correct temporal direction. The resulting composites required both elements to match perfectly in reverse. Ludwig Göransson's score was similarly constructed in multiple temporal directions, with some cues designed to be coherent forwards, backwards, or both." },
-        { "heading": "SEVEN COUNTRIES, ZERO GREEN SCREEN", "body": "Principal photography covered Estonia, Denmark, India, Italy, Norway, the United Kingdom, and the United States. Nolan shot the opera house sequence in Tallinn, the Amalfi Coast chase in Italy, and the climactic battle in an unnamed desert standing in for Siberia. The Protagonist's Mumbai sequences were shot on location. Nolan's commitment to location shooting is absolute: no sequence in Tenet was shot against green screen. Every frame has a real environment behind it. The practical argument: VFX extensions are visible to audiences even when they can't articulate why. Real locations provide a perceptual anchor that sells the impossible." },
-        { "heading": "LUDWIG GÖRANSSON: THE NEW ZIMMER", "body": "For the first time since 1999's The Following, Nolan did not collaborate with Hans Zimmer. He brought on Ludwig Göransson—then best known for Black Panther and Childish Gambino's Awaken, My Love! Göransson spent over a year developing the score, creating new instruments and recording techniques specifically for the film. The signature sound involves physically reversing recorded audio and re-recording it, creating textures that are inherently bidirectional. The result is a score that sounds like it exists outside of time—not melodic in the traditional sense, but rhythmically and texturally anchored to the film's physics." },
-        { "heading": "THE FILM THAT REFUSED TO STREAM", "body": "Tenet was released in August 2020 during the COVID-19 pandemic, becoming the first major studio film to attempt a theatrical-only release in the middle of a global theater closure. Nolan's insistence on theatrical exhibition was not merely aesthetic—it was contractual and philosophical. He has been cinema's most vocal advocate against streaming distribution. The film grossed $363 million worldwide under extraordinary conditions. Nolan later described the experience as 'a great sadness' for what cinema had lost in the pandemic years, while maintaining that the theatrical experience remains the only legitimate context for the kind of filmmaking he does." }
+        {
+          "heading": "THE 747: IMPULSE BUYING AT SCALE",
+          "body": "Nolan originally planned a combination of miniatures, VFX, and set pieces for the Freeport heist sequence. On location in Victorville, California—a storage facility for decommissioned aircraft—he looked at the rows of retired planes and made a different decision. The production bought a decommissioned 1981 Cathay Pacific Cargo Boeing 747-200F for less than the cost of building and digitally rendering the sequence. The plane, registration B-HMD, was repainted in the fictional livery of 'Norskfreight.' A tow rope was attached through the building set and to tow trucks. SFX supervisor Scott Fisher reinstalled the 747's brakes to stop it at exactly the right point. The explosion destroyed the aircraft completely. Robert Pattinson later remarked: 'You wouldn't have thought there was any reality where you'd do a scene where they just have an actual 747 to blow up.'"
+        },
+        {
+          "heading": "SHOOTING FORWARD AND BACKWARD SIMULTANEOUSLY",
+          "body": "For sequences involving inverted and forward-moving characters in the same frame, Nolan's approach was not to shoot once and reverse in post—it was to choreograph both directions of action simultaneously and shoot them on separate passes. Stunt coordinators developed two complete fight vocabularies for each sequence: one for the forward actor, one for the inverted actor, each of which had to look physically credible when viewed in the correct temporal direction. The resulting composites required both elements to match perfectly in reverse. Ludwig Göransson's score was similarly constructed in multiple temporal directions, with some cues designed to be coherent forwards, backwards, or both."
+        },
+        {
+          "heading": "SEVEN COUNTRIES, ZERO GREEN SCREEN",
+          "body": "Principal photography covered Estonia, Denmark, India, Italy, Norway, the United Kingdom, and the United States. Nolan shot the opera house sequence in Tallinn, the Amalfi Coast chase in Italy, and the climactic battle in an unnamed desert standing in for Siberia. The Protagonist's Mumbai sequences were shot on location. Nolan's commitment to location shooting is absolute: no sequence in Tenet was shot against green screen. Every frame has a real environment behind it. The practical argument: VFX extensions are visible to audiences even when they can't articulate why. Real locations provide a perceptual anchor that sells the impossible."
+        },
+        {
+          "heading": "LUDWIG GÖRANSSON: THE NEW ZIMMER",
+          "body": "For the first time since 1999's The Following, Nolan did not collaborate with Hans Zimmer. He brought on Ludwig Göransson—then best known for Black Panther and Childish Gambino's Awaken, My Love! Göransson spent over a year developing the score, creating new instruments and recording techniques specifically for the film. The signature sound involves physically reversing recorded audio and re-recording it, creating textures that are inherently bidirectional. The result is a score that sounds like it exists outside of time—not melodic in the traditional sense, but rhythmically and texturally anchored to the film's physics."
+        },
+        {
+          "heading": "THE FILM THAT REFUSED TO STREAM",
+          "body": "Tenet was released in August 2020 during the COVID-19 pandemic, becoming the first major studio film to attempt a theatrical-only release in the middle of a global theater closure. Nolan's insistence on theatrical exhibition was not merely aesthetic—it was contractual and philosophical. He has been cinema's most vocal advocate against streaming distribution. The film grossed $363 million worldwide under extraordinary conditions. Nolan later described the experience as 'a great sadness' for what cinema had lost in the pandemic years, while maintaining that the theatrical experience remains the only legitimate context for the kind of filmmaking he does."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: SCREENRANT, INDIEWIRE, HOLLYWOOD REPORTER, GAMESRADAR, BOLD ENTRANCE PRODUCTION NOTES"
     },
@@ -144,12 +282,30 @@
       "dream_glow": "#cc6a3a",
       "opening": "The Sator Square is 2,000 years old. The film was hiding its entire structure in a Latin palindrome carved on ancient Roman ruins. Most people watched it without noticing.",
       "sections": [
-        { "heading": "THE SATOR SQUARE: A 2,000-YEAR-OLD PALINDROME", "body": "The film's entire character and location naming scheme derives from a single ancient Roman artifact: the Sator Square, a five-word Latin palindrome that reads identically in all four directions. The words are SATOR, AREPO, TENET, OPERA, ROTAS. In the film: Sator is the villain, Arepo is the art forger whose painting triggers the plot, Tenet is the organization, Opera is the location of the opening sequence, and Rotas is the security company at Oslo airport. Nolan built his entire narrative architecture on a stone carving discovered at Pompeii. The square dates to the first century AD." },
-        { "heading": "THE 747 IS ALSO A PALINDROME", "body": "The Boeing aircraft Nolan crashes in the Freeport sequence is a 747. 747 is a numeric palindrome. This is not accidental. The entire film operates on the logic of palindromes — things that read the same forwards and backwards. The plane was chosen specifically because its designation fit the film's structural grammar. Every major element in Tenet, down to the model number of the aircraft being destroyed, was selected to participate in the palindromic system." },
-        { "heading": "THE COLOR CODE IS ABSOLUTE", "body": "Throughout the film, red denotes objects and people moving forward in time. Blue denotes inverted objects and people moving backward. The system is applied without exception — watch hands, oxygen masks, rope colors, vehicle markings. Once you know it, you can track exactly who is inverted in any frame before the characters tell you. The film is simultaneously a thriller and a color-coded diagram of its own physics. Nolan embedded the answer key into the production design." },
-        { "heading": "THE FILM BEGINS AND ENDS AT THE SAME MOMENT", "body": "The opening opera house siege in Kyiv and the final battle in Siberia are temporally identical events. The Protagonist is present at both, moving forward through time. Neil is present at both, moving backward. The film's entire narrative — every journey, every revelation — takes place in the space between two simultaneous events. The story is not a line. It is a loop. The first scene and the last scene are the same scene, experienced from opposite ends of time." },
-        { "heading": "PATTINSON WAS DOING CHRISTOPHER HITCHENS", "body": "Robert Pattinson modeled Neil's voice and delivery on the late journalist and critic Christopher Hitchens — specifically Hitchens' quality of seeming intellectually amused by catastrophe. Neil knows his own ending. He has already watched himself die from the other direction. His ease, his wit, his apparent pleasure in absurdity are the comportment of a man who has already finished the story and is simply enjoying the reading of it. Pattinson built a character defined by temporal completion — someone for whom the present tense has no stakes, because he already knows the outcome." },
-        { "heading": "NEIL'S BACKPACK: THE RED THREAD", "body": "In the final battle, a figure with a distinctive red thread on their backpack saves the Protagonist's life and then dies at a locked gate. The Protagonist does not know who this is. The audience, watching for the first time, does not know. On a second viewing, you recognize the backpack: it is Neil's. He has inverted himself back to this moment specifically to save the Protagonist — completing a mission the Protagonist will only give him in the future. The red thread is on screen for seconds. It is doing the work of the entire film." }
+        {
+          "heading": "THE SATOR SQUARE: A 2,000-YEAR-OLD PALINDROME",
+          "body": "The film's entire character and location naming scheme derives from a single ancient Roman artifact: the Sator Square, a five-word Latin palindrome that reads identically in all four directions. The words are SATOR, AREPO, TENET, OPERA, ROTAS. In the film: Sator is the villain, Arepo is the art forger whose painting triggers the plot, Tenet is the organization, Opera is the location of the opening sequence, and Rotas is the security company at Oslo airport. Nolan built his entire narrative architecture on a stone carving discovered at Pompeii. The square dates to the first century AD."
+        },
+        {
+          "heading": "THE 747 IS ALSO A PALINDROME",
+          "body": "The Boeing aircraft Nolan crashes in the Freeport sequence is a 747. 747 is a numeric palindrome. This is not accidental. The entire film operates on the logic of palindromes — things that read the same forwards and backwards. The plane was chosen specifically because its designation fit the film's structural grammar. Every major element in Tenet, down to the model number of the aircraft being destroyed, was selected to participate in the palindromic system."
+        },
+        {
+          "heading": "THE COLOR CODE IS ABSOLUTE",
+          "body": "Throughout the film, red denotes objects and people moving forward in time. Blue denotes inverted objects and people moving backward. The system is applied without exception — watch hands, oxygen masks, rope colors, vehicle markings. Once you know it, you can track exactly who is inverted in any frame before the characters tell you. The film is simultaneously a thriller and a color-coded diagram of its own physics. Nolan embedded the answer key into the production design."
+        },
+        {
+          "heading": "THE FILM BEGINS AND ENDS AT THE SAME MOMENT",
+          "body": "The opening opera house siege in Kyiv and the final battle in Siberia are temporally identical events. The Protagonist is present at both, moving forward through time. Neil is present at both, moving backward. The film's entire narrative — every journey, every revelation — takes place in the space between two simultaneous events. The story is not a line. It is a loop. The first scene and the last scene are the same scene, experienced from opposite ends of time."
+        },
+        {
+          "heading": "PATTINSON WAS DOING CHRISTOPHER HITCHENS",
+          "body": "Robert Pattinson modeled Neil's voice and delivery on the late journalist and critic Christopher Hitchens — specifically Hitchens' quality of seeming intellectually amused by catastrophe. Neil knows his own ending. He has already watched himself die from the other direction. His ease, his wit, his apparent pleasure in absurdity are the comportment of a man who has already finished the story and is simply enjoying the reading of it. Pattinson built a character defined by temporal completion — someone for whom the present tense has no stakes, because he already knows the outcome."
+        },
+        {
+          "heading": "NEIL'S BACKPACK: THE RED THREAD",
+          "body": "In the final battle, a figure with a distinctive red thread on their backpack saves the Protagonist's life and then dies at a locked gate. The Protagonist does not know who this is. The audience, watching for the first time, does not know. On a second viewing, you recognize the backpack: it is Neil's. He has inverted himself back to this moment specifically to save the Protagonist — completing a mission the Protagonist will only give him in the future. The red thread is on screen for seconds. It is doing the work of the entire film."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -159,19 +315,36 @@
     "title": "MEMENTO",
     "year": "2000",
     "code": "MEM-2000",
-    "color": "#4a9e5c",
-    "glowColor": "#6adc8c",
+    "color": "#4a7a12",
+    "glowColor": "#baff29",
     "tagline": "Memory fractures first. Identity follows.",
     "thumbnail": "📸",
-    "themes": ["Memory Unreliability", "Non-Linear Chronology", "Identity", "Grief"],
+    "themes": [
+      "Memory Unreliability",
+      "Non-Linear Chronology",
+      "Identity",
+      "Grief"
+    ],
     "transmission": "ENDURANCE-LOG-1A",
     "dossier": {
       "opening": "This is the earliest log in the archive—Nolan's first fully realized demonstration of structure as meaning. The story of Leonard Shelby is inseparable from how it is told. Remove the non-linear chronology and you remove the film's argument.",
       "sections": [
-        { "heading": "ANTEROGRADE AMNESIA: THE UNRELIABLE NARRATOR AS ARCHITECTURE", "body": "Leonard cannot form new long-term memories. His experience of time is a series of present moments, each beginning without context. Nolan's structural decision—to present the film in reverse-chronological color sequences intercut with forward-chronological black-and-white—replicates this condition for the audience. We are as disoriented as Leonard. We are building our understanding backwards while he builds his forwards. We arrive at the beginning knowing what he does not: that the story is a loop, and he is its prisoner." },
-        { "heading": "TATTOOS AND POLAROIDS: EXTERNALIZING COGNITION", "body": "Leonard's system—Polaroid photographs with annotations, tattoos of facts he trusts completely—is an externalized nervous system. He cannot trust his mind, so he has distributed memory across his body and belongings. This is not adaptation. It is tragedy dressed as methodology. The tattoos are permanent. The photographs are selectable. Leonard has built an architecture that allows him to choose which facts to believe—and to discard evidence that contradicts the narrative he needs. His system is not a workaround. It is a machine for maintaining a useful lie." },
-        { "heading": "NATALIE AND TEDDY: WHO TO TRUST", "body": "The film withholds the information necessary to evaluate Natalie and Teddy until it is too late to change outcomes. Natalie manipulates Leonard by destroying her own notes and waiting for his memory to reset. Teddy—revealed to be the actual John G.—claims to have helped Leonard avenge his wife's real killer years ago. Both characters provide evidence for their reliability. Neither is trustworthy. Nolan places the audience in Leonard's epistemological position: you cannot know who to believe when the infrastructure of trust is your own failing memory." },
-        { "heading": "THE ENDING: THE CHOICE TO FORGET", "body": "The film's most devastating revelation: Leonard knows the system is corrupt. In the final—chronologically first—scene, he acknowledges that he has manipulated his own records before, that he may have been living in a self-sustaining loop of manufactured purpose. He chooses Teddy as his next target not because Teddy is guilty but because Leonard needs someone to be guilty. He then allows himself to forget his own confession. The choice to forget is the film's moral hinge. Memory, Nolan argues, is not a record. It is a story we tell ourselves. And Leonard has decided which story he needs." }
+        {
+          "heading": "ANTEROGRADE AMNESIA: THE UNRELIABLE NARRATOR AS ARCHITECTURE",
+          "body": "Leonard cannot form new long-term memories. His experience of time is a series of present moments, each beginning without context. Nolan's structural decision—to present the film in reverse-chronological color sequences intercut with forward-chronological black-and-white—replicates this condition for the audience. We are as disoriented as Leonard. We are building our understanding backwards while he builds his forwards. We arrive at the beginning knowing what he does not: that the story is a loop, and he is its prisoner."
+        },
+        {
+          "heading": "TATTOOS AND POLAROIDS: EXTERNALIZING COGNITION",
+          "body": "Leonard's system—Polaroid photographs with annotations, tattoos of facts he trusts completely—is an externalized nervous system. He cannot trust his mind, so he has distributed memory across his body and belongings. This is not adaptation. It is tragedy dressed as methodology. The tattoos are permanent. The photographs are selectable. Leonard has built an architecture that allows him to choose which facts to believe—and to discard evidence that contradicts the narrative he needs. His system is not a workaround. It is a machine for maintaining a useful lie."
+        },
+        {
+          "heading": "NATALIE AND TEDDY: WHO TO TRUST",
+          "body": "The film withholds the information necessary to evaluate Natalie and Teddy until it is too late to change outcomes. Natalie manipulates Leonard by destroying her own notes and waiting for his memory to reset. Teddy—revealed to be the actual John G.—claims to have helped Leonard avenge his wife's real killer years ago. Both characters provide evidence for their reliability. Neither is trustworthy. Nolan places the audience in Leonard's epistemological position: you cannot know who to believe when the infrastructure of trust is your own failing memory."
+        },
+        {
+          "heading": "THE ENDING: THE CHOICE TO FORGET",
+          "body": "The film's most devastating revelation: Leonard knows the system is corrupt. In the final—chronologically first—scene, he acknowledges that he has manipulated his own records before, that he may have been living in a self-sustaining loop of manufactured purpose. He chooses Teddy as his next target not because Teddy is guilty but because Leonard needs someone to be guilty. He then allows himself to forget his own confession. The choice to forget is the film's moral hinge. Memory, Nolan argues, is not a record. It is a story we tell ourselves. And Leonard has decided which story he needs."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 12.9° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -181,12 +354,30 @@
       "dream_glow": "#8adc9c",
       "opening": "Shot in 25 days. Budget: $4.5 million. Written in six weeks. The film that made the industry take Nolan seriously—and the one he made with almost nothing.",
       "sections": [
-        { "heading": "SIX WEEKS, $4.5 MILLION, 25 DAYS", "body": "Nolan wrote the Memento screenplay in six weeks. Pre-production lasted seven weeks. The film shot for only 25 days in Los Angeles—having originally been planned for Montreal before a location change. Newmarket Capital optioned the script and provided the budget. By comparison, his next film, Insomnia (2002), had a budget of $46 million. The constraints of Memento forced every creative decision to be ruthlessly efficient: no coverage shots, no safety takes, no waste. Nolan has credited the film's limitations as the source of its discipline." },
-        { "heading": "SHOOTING IN REVERSE: THE ACTORS' APPROACH", "body": "The color sequences of the film were shot in reverse chronological order—the same order in which they appear on screen. This was a deliberate directing choice: it allowed Guy Pearce to build Leonard's emotional state authentically, beginning with the most confused and disoriented version of the character and ending at the most lucid. Pearce has described the effect as profound—he genuinely didn't know the full emotional context of earlier scenes until he shot later ones, mirroring Leonard's own condition. The black-and-white sequences were shot chronologically and edited into the film's interlocking structure in post." },
-        { "heading": "THE POLAROID MARKETING CAMPAIGN", "body": "The film's distributor sent Polaroid photographs to random people as part of a guerrilla marketing campaign—images depicting a bloody, shirtless Leonard pointing at an unmarked spot on his chest. Recipients had no idea what they were receiving or why. The campaign predated viral marketing as a concept. It worked because it induced in its recipients the exact disorientation the film intended to create in its audience: a piece of evidence, stripped of context, that demands explanation. The marketing was the movie." },
-        { "heading": "THE SHORT STORY: JONATHAN NOLAN'S MEMENTO MORI", "body": "The film is based on a short story, 'Memento Mori,' written by Christopher's brother Jonathan Nolan for Esquire magazine. The story was published the same year the film was released. In it, the protagonist communicates with his future self through letters he leaves in his own handwriting—a slightly different mechanism than the tattoos and Polaroids of the film. Christopher Nolan adapted the concept while Jonathan was still finishing the story, meaning the film and the source material were developed almost simultaneously. Jonathan Nolan later co-wrote The Dark Knight trilogy and created the Westworld television series." },
-        { "heading": "SUNDANCE, REJECTION, AND VENICE", "body": "Memento was rejected by the Sundance Film Festival. It was subsequently submitted to the Venice Film Festival and the Toronto International Film Festival, where it received significant critical attention. Newmarket Films acquired North American distribution rights. The film grossed over $25 million in North America on a $4.5 million budget. It received Academy Award nominations for Best Original Screenplay and Best Film Editing—remarkable achievements for a first-time studio outing from a director who had previously made one micro-budget feature (Following, 1998) shot on weekends for £6,000. Sundance's rejection has since become one of the more cited examples of institutional gatekeeping missing the signal." },
-        { "heading": "GUY PEARCE: THE WRONG BODY", "body": "Pearce's physical transformation for the role was precise and deliberate: he bulked up significantly to portray Leonard's past self in the black-and-white sequences (shot later, representing an earlier, healthier Leonard) and leaned down for the color sequences. The tattoos were applied fresh each morning by a team of makeup artists—a process that took over two hours per day. Pearce has described the experience as the most psychologically demanding role of his career, specifically because of the reverse shooting order: he had to perform confusion before he understood what he was confused about." }
+        {
+          "heading": "SIX WEEKS, $4.5 MILLION, 25 DAYS",
+          "body": "Nolan wrote the Memento screenplay in six weeks. Pre-production lasted seven weeks. The film shot for only 25 days in Los Angeles—having originally been planned for Montreal before a location change. Newmarket Capital optioned the script and provided the budget. By comparison, his next film, Insomnia (2002), had a budget of $46 million. The constraints of Memento forced every creative decision to be ruthlessly efficient: no coverage shots, no safety takes, no waste. Nolan has credited the film's limitations as the source of its discipline."
+        },
+        {
+          "heading": "SHOOTING IN REVERSE: THE ACTORS' APPROACH",
+          "body": "The color sequences of the film were shot in reverse chronological order—the same order in which they appear on screen. This was a deliberate directing choice: it allowed Guy Pearce to build Leonard's emotional state authentically, beginning with the most confused and disoriented version of the character and ending at the most lucid. Pearce has described the effect as profound—he genuinely didn't know the full emotional context of earlier scenes until he shot later ones, mirroring Leonard's own condition. The black-and-white sequences were shot chronologically and edited into the film's interlocking structure in post."
+        },
+        {
+          "heading": "THE POLAROID MARKETING CAMPAIGN",
+          "body": "The film's distributor sent Polaroid photographs to random people as part of a guerrilla marketing campaign—images depicting a bloody, shirtless Leonard pointing at an unmarked spot on his chest. Recipients had no idea what they were receiving or why. The campaign predated viral marketing as a concept. It worked because it induced in its recipients the exact disorientation the film intended to create in its audience: a piece of evidence, stripped of context, that demands explanation. The marketing was the movie."
+        },
+        {
+          "heading": "THE SHORT STORY: JONATHAN NOLAN'S MEMENTO MORI",
+          "body": "The film is based on a short story, 'Memento Mori,' written by Christopher's brother Jonathan Nolan for Esquire magazine. The story was published the same year the film was released. In it, the protagonist communicates with his future self through letters he leaves in his own handwriting—a slightly different mechanism than the tattoos and Polaroids of the film. Christopher Nolan adapted the concept while Jonathan was still finishing the story, meaning the film and the source material were developed almost simultaneously. Jonathan Nolan later co-wrote The Dark Knight trilogy and created the Westworld television series."
+        },
+        {
+          "heading": "SUNDANCE, REJECTION, AND VENICE",
+          "body": "Memento was rejected by the Sundance Film Festival. It was subsequently submitted to the Venice Film Festival and the Toronto International Film Festival, where it received significant critical attention. Newmarket Films acquired North American distribution rights. The film grossed over $25 million in North America on a $4.5 million budget. It received Academy Award nominations for Best Original Screenplay and Best Film Editing—remarkable achievements for a first-time studio outing from a director who had previously made one micro-budget feature (Following, 1998) shot on weekends for £6,000. Sundance's rejection has since become one of the more cited examples of institutional gatekeeping missing the signal."
+        },
+        {
+          "heading": "GUY PEARCE: THE WRONG BODY",
+          "body": "Pearce's physical transformation for the role was precise and deliberate: he bulked up significantly to portray Leonard's past self in the black-and-white sequences (shot later, representing an earlier, healthier Leonard) and leaned down for the color sequences. The tattoos were applied fresh each morning by a team of makeup artists—a process that took over two hours per day. Pearce has described the experience as the most psychologically demanding role of his career, specifically because of the reverse shooting order: he had to perform confusion before he understood what he was confused about."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: WIKIPEDIA PRODUCTION NOTES, CREATIVE SCREENWRITING, MOMA CATALOG, NOLANLOCATIONS.COM, IMDB TRIVIA"
     },
@@ -196,12 +387,30 @@
       "dream_glow": "#4aac6a",
       "opening": "The film hid its director's voice inside an actor's mouth. It planted an easter egg for a film made 20 years later. Its DVD unlocks a completely different movie if you solve a puzzle. These are the signals most viewers never found.",
       "sections": [
-        { "heading": "NOLAN DUBBED HIS OWN ACTOR WITHOUT TELLING HIM", "body": "When actor Joe Pantoliano delivered the line 'You don't have a clue, you freak,' Nolan wasn't satisfied with the final two words. Rather than reshoot, Nolan recorded his own voice delivering 'you freak' and cut it into the final film over Pantoliano's audio. Pantoliano did not discover this until an interview years later. Christopher Nolan's voice is in Memento. It is coming out of Teddy's mouth." },
-        { "heading": "THE DVD HIDES A COMPLETELY DIFFERENT FILM", "body": "The Limited Edition DVD of Memento contains a hidden easter egg accessible only by solving a puzzle within the menu system. If completed correctly, the viewer unlocks a version of the film that plays in full linear chronological order — the story told from beginning to end, the way it actually happened. Once unlocked, the disc disables fast-forward, rewind, and chapter-skip. You must watch it straight through, in the correct order, from start to finish. Nolan built a second film inside the first one and locked it behind a puzzle. Most people never found it." },
-        { "heading": "113 NARRATIVE JUMPS", "body": "The edit of Memento makes 113 distinct jumps in narrative chronology. The color sequences follow a reverse alphabetical system — labeled V through A — while the black-and-white sequences follow a forward numerical system — 1 through 22. The resulting pattern is: 1, V, 2, U, 3, T, 4, S, 5, R... The film's edit is simultaneously a story and a key to decoding itself. The sequence is embedded in the structure of the edit, not the dialogue." },
-        { "heading": "EMMA'S TATTOOS & NOLAN'S OWN CAR", "body": "The tattoo parlor Leonard frequents throughout the film is named Emma's Tattoos — a reference to Nolan's wife, producer Emma Thomas, who has produced every Nolan film since Following. Nolan also parked his own personal white Honda Civic in the lot beside Leonard's Jaguar. Both are on screen for multiple scenes. Nolan hid his marriage and his car inside the background of the film he was making about a man who cannot make new memories." },
-        { "heading": "THE FIRST SHOT IS AN EASTER EGG FOR TENET", "body": "Memento opens on an image of a Polaroid photograph being shaken — but the image is fading, not developing. The film is running backwards. In the same sequence, a bullet flies out of a dead man's skull and back into a gun. This shot — entropy reversed, causality inverted — is a direct preview of the central mechanic of Tenet, a film Nolan would not make for another 20 years. He embedded the concept of temporal inversion into the opening frames of Memento in 2000. Nolan has confirmed this was intentional." },
-        { "heading": "THE FILM THAT SUNDANCE REJECTED IS IN MoMA'S PERMANENT COLLECTION", "body": "After being passed over by Sundance, Memento was eventually selected for the permanent film collection of the Museum of Modern Art in New York — one of the most selective film archives in the world. MoMA cited the film's formal innovation and its status as a landmark of non-linear narrative cinema. The same film that festival gatekeepers dismissed in 2000 is now preserved alongside Citizen Kane and Vertigo as a defining work of the medium. Sundance's rejection slip is effectively a certificate of distinction." }
+        {
+          "heading": "NOLAN DUBBED HIS OWN ACTOR WITHOUT TELLING HIM",
+          "body": "When actor Joe Pantoliano delivered the line 'You don't have a clue, you freak,' Nolan wasn't satisfied with the final two words. Rather than reshoot, Nolan recorded his own voice delivering 'you freak' and cut it into the final film over Pantoliano's audio. Pantoliano did not discover this until an interview years later. Christopher Nolan's voice is in Memento. It is coming out of Teddy's mouth."
+        },
+        {
+          "heading": "THE DVD HIDES A COMPLETELY DIFFERENT FILM",
+          "body": "The Limited Edition DVD of Memento contains a hidden easter egg accessible only by solving a puzzle within the menu system. If completed correctly, the viewer unlocks a version of the film that plays in full linear chronological order — the story told from beginning to end, the way it actually happened. Once unlocked, the disc disables fast-forward, rewind, and chapter-skip. You must watch it straight through, in the correct order, from start to finish. Nolan built a second film inside the first one and locked it behind a puzzle. Most people never found it."
+        },
+        {
+          "heading": "113 NARRATIVE JUMPS",
+          "body": "The edit of Memento makes 113 distinct jumps in narrative chronology. The color sequences follow a reverse alphabetical system — labeled V through A — while the black-and-white sequences follow a forward numerical system — 1 through 22. The resulting pattern is: 1, V, 2, U, 3, T, 4, S, 5, R... The film's edit is simultaneously a story and a key to decoding itself. The sequence is embedded in the structure of the edit, not the dialogue."
+        },
+        {
+          "heading": "EMMA'S TATTOOS & NOLAN'S OWN CAR",
+          "body": "The tattoo parlor Leonard frequents throughout the film is named Emma's Tattoos — a reference to Nolan's wife, producer Emma Thomas, who has produced every Nolan film since Following. Nolan also parked his own personal white Honda Civic in the lot beside Leonard's Jaguar. Both are on screen for multiple scenes. Nolan hid his marriage and his car inside the background of the film he was making about a man who cannot make new memories."
+        },
+        {
+          "heading": "THE FIRST SHOT IS AN EASTER EGG FOR TENET",
+          "body": "Memento opens on an image of a Polaroid photograph being shaken — but the image is fading, not developing. The film is running backwards. In the same sequence, a bullet flies out of a dead man's skull and back into a gun. This shot — entropy reversed, causality inverted — is a direct preview of the central mechanic of Tenet, a film Nolan would not make for another 20 years. He embedded the concept of temporal inversion into the opening frames of Memento in 2000. Nolan has confirmed this was intentional."
+        },
+        {
+          "heading": "THE FILM THAT SUNDANCE REJECTED IS IN MoMA'S PERMANENT COLLECTION",
+          "body": "After being passed over by Sundance, Memento was eventually selected for the permanent film collection of the Museum of Modern Art in New York — one of the most selective film archives in the world. MoMA cited the film's formal innovation and its status as a landmark of non-linear narrative cinema. The same film that festival gatekeepers dismissed in 2000 is now preserved alongside Citizen Kane and Vertigo as a defining work of the medium. Sundance's rejection slip is effectively a certificate of distinction."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -211,19 +420,36 @@
     "title": "BATMAN BEGINS",
     "year": "2005",
     "code": "BB-2005",
-    "color": "#6b6f78",
-    "glowColor": "#9ca3b0",
+    "color": "#264a55",
+    "glowColor": "#6fb8c8",
     "tagline": "Identity is built in action, not declared in private.",
     "thumbnail": "🦇",
-    "themes": ["Fear as Control", "Moral Discipline", "Institutional Rot", "Identity Construction"],
+    "themes": [
+      "Fear as Control",
+      "Moral Discipline",
+      "Institutional Rot",
+      "Identity Construction"
+    ],
     "transmission": "ENDURANCE-LOG-2B",
     "dossier": {
       "opening": "This transmission tracks the origin of Batman as architecture, not accident. Bruce Wayne does not discover a self; he engineers one with obsessive intent.",
       "sections": [
-        { "heading": "FEAR AS INFRASTRUCTURE", "body": "The film's central system is fear. Crane weaponizes it chemically, Ra's al Ghul weaponizes it politically, and Bruce weaponizes it theatrically. Gotham's ruling class governs by fear of collapse; Batman interrupts that equilibrium by becoming a fear event the criminal ecosystem cannot price in. The Bat symbol is less emblem than delivery mechanism." },
-        { "heading": "THE LEAGUE'S LOGIC", "body": "The League of Shadows frames destruction as sanitation: when a city becomes irredeemably corrupt, it is to be reset by force. Begins takes this doctrine seriously enough to make it temporarily persuasive. Bruce's rejection matters because he does not deny Gotham's rot; he denies that annihilation is justice. The ethical hinge is method, not diagnosis." },
-        { "heading": "BATMAN AS PERFORMANCE", "body": "Christian Bale's Bruce calibrates three personae: private grief, public incompetence, and nocturnal myth. Nolan emphasizes process over destiny: armor prototypes, memory-cloth cowl, sonar planning, surveillance routes. Batman exists because Bruce treats identity like an iterative engineering problem and keeps shipping versions until one works." },
-        { "heading": "THE TRAIN THROUGH THE CITY", "body": "The elevated rail line is both plot engine and thesis image: a rusted civic system repurposed into a delivery channel for panic. Gotham's infrastructure carries its own undoing. Nolan repeatedly frames the city as a machine no one fully controls, then inserts Batman as a manual override in a failing control room." }
+        {
+          "heading": "FEAR AS INFRASTRUCTURE",
+          "body": "The film's central system is fear. Crane weaponizes it chemically, Ra's al Ghul weaponizes it politically, and Bruce weaponizes it theatrically. Gotham's ruling class governs by fear of collapse; Batman interrupts that equilibrium by becoming a fear event the criminal ecosystem cannot price in. The Bat symbol is less emblem than delivery mechanism."
+        },
+        {
+          "heading": "THE LEAGUE'S LOGIC",
+          "body": "The League of Shadows frames destruction as sanitation: when a city becomes irredeemably corrupt, it is to be reset by force. Begins takes this doctrine seriously enough to make it temporarily persuasive. Bruce's rejection matters because he does not deny Gotham's rot; he denies that annihilation is justice. The ethical hinge is method, not diagnosis."
+        },
+        {
+          "heading": "BATMAN AS PERFORMANCE",
+          "body": "Christian Bale's Bruce calibrates three personae: private grief, public incompetence, and nocturnal myth. Nolan emphasizes process over destiny: armor prototypes, memory-cloth cowl, sonar planning, surveillance routes. Batman exists because Bruce treats identity like an iterative engineering problem and keeps shipping versions until one works."
+        },
+        {
+          "heading": "THE TRAIN THROUGH THE CITY",
+          "body": "The elevated rail line is both plot engine and thesis image: a rusted civic system repurposed into a delivery channel for panic. Gotham's infrastructure carries its own undoing. Nolan repeatedly frames the city as a machine no one fully controls, then inserts Batman as a manual override in a failing control room."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 43.1° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -233,12 +459,30 @@
       "dream_glow": "#b4bac5",
       "opening": "Post-Batman & Robin reset protocol: practical builds, grounded crime texture, and a city assembled from multiple geographies to feel real and unstable at once.",
       "sections": [
-        { "heading": "THE REBOOT MANDATE", "body": "Warner tasked Nolan with rebuilding the franchise from first principles after the tonal collapse of the 1990s cycle. Nolan and David S. Goyer re-centered the story on causality: where tools come from, why tactics work, how myth is manufactured. Begins is designed as a systems reboot rather than sequel continuity." },
-        { "heading": "CHICAGO AS GOTHAM CORE", "body": "Principal photography used Chicago as Gotham's structural spine, with additional plates and set work blending Iceland and UK stages. The result is a city that feels lived-in and historically layered rather than expressionist fantasy. Street-level realism is part of the persuasion strategy: Batman must appear to occupy the same physics as everyone else." },
-        { "heading": "THE TUMBLER AS MILITARY HARDWARE", "body": "Production built functioning Tumbler vehicles, each weighing roughly 2.5 tons, to execute practical stunts including rooftop jumps. Framing Batman's vehicle as applied Wayne Enterprises R&D grounds spectacle in industrial plausibility. The car is ugly by design: an unfinished war machine repurposed by one man with a vendetta." },
-        { "heading": "BATSUIT ENGINEERING", "body": "Costume and stunt teams optimized mobility, cape behavior, and silhouette readability under low light. Nolan's rule set prioritized weight and friction over comic-book elasticity, making every movement feel constrained and expensive. Physical limitations become character language: Batman appears formidable because each action seems to cost effort." },
-        { "heading": "SCORE DUALITY: ZIMMER + HOWARD", "body": "Hans Zimmer and James Newton Howard split thematic labor between propulsion and emotional architecture. Rather than a single heroic melody, the score builds Batman from texture and pulse. This avoids triumphant certainty; the music sounds like an idea still stabilizing, which matches Bruce's incomplete identity state by film's end." },
-        { "heading": "PRACTICAL EFFECTS FIRST", "body": "Nolan favored in-camera action, miniature integration, and limited digital intervention to preserve impact. The Narrows climax combines large-scale set pieces with restrained CG extension so the fear-toxin chaos feels physically anchored. Begins established the trilogy's production doctrine: practical base layer, digital augmentation only where necessary." }
+        {
+          "heading": "THE REBOOT MANDATE",
+          "body": "Warner tasked Nolan with rebuilding the franchise from first principles after the tonal collapse of the 1990s cycle. Nolan and David S. Goyer re-centered the story on causality: where tools come from, why tactics work, how myth is manufactured. Begins is designed as a systems reboot rather than sequel continuity."
+        },
+        {
+          "heading": "CHICAGO AS GOTHAM CORE",
+          "body": "Principal photography used Chicago as Gotham's structural spine, with additional plates and set work blending Iceland and UK stages. The result is a city that feels lived-in and historically layered rather than expressionist fantasy. Street-level realism is part of the persuasion strategy: Batman must appear to occupy the same physics as everyone else."
+        },
+        {
+          "heading": "THE TUMBLER AS MILITARY HARDWARE",
+          "body": "Production built functioning Tumbler vehicles, each weighing roughly 2.5 tons, to execute practical stunts including rooftop jumps. Framing Batman's vehicle as applied Wayne Enterprises R&D grounds spectacle in industrial plausibility. The car is ugly by design: an unfinished war machine repurposed by one man with a vendetta."
+        },
+        {
+          "heading": "BATSUIT ENGINEERING",
+          "body": "Costume and stunt teams optimized mobility, cape behavior, and silhouette readability under low light. Nolan's rule set prioritized weight and friction over comic-book elasticity, making every movement feel constrained and expensive. Physical limitations become character language: Batman appears formidable because each action seems to cost effort."
+        },
+        {
+          "heading": "SCORE DUALITY: ZIMMER + HOWARD",
+          "body": "Hans Zimmer and James Newton Howard split thematic labor between propulsion and emotional architecture. Rather than a single heroic melody, the score builds Batman from texture and pulse. This avoids triumphant certainty; the music sounds like an idea still stabilizing, which matches Bruce's incomplete identity state by film's end."
+        },
+        {
+          "heading": "PRACTICAL EFFECTS FIRST",
+          "body": "Nolan favored in-camera action, miniature integration, and limited digital intervention to preserve impact. The Narrows climax combines large-scale set pieces with restrained CG extension so the fear-toxin chaos feels physically anchored. Begins established the trilogy's production doctrine: practical base layer, digital augmentation only where necessary."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AFI CATALOG, AMERICAN CINEMATOGRAPHER, EMPIRE INTERVIEWS, WB PRODUCTION NOTES"
     },
@@ -248,12 +492,30 @@
       "dream_glow": "#9aa2af",
       "opening": "Beneath the origin beats, Begins hides recurring Nolan obsessions: systems collapse, procedural improvisation, and identity as a designed artifact.",
       "sections": [
-        { "heading": "THE BAT SWARM IS A MEMORY ENGINE", "body": "Bruce's childhood fall through the well is replayed as trauma data, then recompiled into tactical language. Nolan turns a phobia into operating software. The swarm is not symbolic mood dressing; it is the moment fear becomes a reusable interface." },
-        { "heading": "GOTHAM'S WATER GRID AS ATTACK SURFACE", "body": "Ra's plan depends on infrastructure mapping and delayed deployment, not brute force. The microwave emitter and toxin distribution read like a city-scale exploit chain. Begins quietly anticipates modern cybersecurity logic: compromise plumbing, weaponize normal service pathways." },
-        { "heading": "BRUCE'S PUBLIC IDIOT ROUTINE", "body": "The playboy facade is not comic relief; it is counterintelligence. By signaling frivolity, Bruce lowers adversary scrutiny and widens operational freedom. The film repeatedly shows him spending reputation as a resource, which is one of the trilogy's most consistent strategic behaviors." },
-        { "heading": "ALFRED AS ETHICS FAILSAFE", "body": "Alfred functions as Bruce's human redundancy system. When mission logic drifts toward absolutism, Alfred reasserts human cost. Nolan gives Batman technical escalation tools but installs an interpersonal brake to keep the project from collapsing into League doctrine." },
-        { "heading": "THE FINAL TRAIN DECISION", "body": "Bruce's refusal to execute Ra's directly while engineering conditions for his death is ethically unresolved by design. The line 'I won't kill you, but I don't have to save you' is a policy statement, not a victory quote. Begins ends by codifying Batman's moral loophole." },
-        { "heading": "JOKER CARD AS SYSTEM ALERT", "body": "The closing tease is structurally precise: Gordon introduces escalation as a consequence, not sequel bait. Batman stabilizes one layer of Gotham and triggers a higher-order adversary. Cause-and-effect remains the governing rule." }
+        {
+          "heading": "THE BAT SWARM IS A MEMORY ENGINE",
+          "body": "Bruce's childhood fall through the well is replayed as trauma data, then recompiled into tactical language. Nolan turns a phobia into operating software. The swarm is not symbolic mood dressing; it is the moment fear becomes a reusable interface."
+        },
+        {
+          "heading": "GOTHAM'S WATER GRID AS ATTACK SURFACE",
+          "body": "Ra's plan depends on infrastructure mapping and delayed deployment, not brute force. The microwave emitter and toxin distribution read like a city-scale exploit chain. Begins quietly anticipates modern cybersecurity logic: compromise plumbing, weaponize normal service pathways."
+        },
+        {
+          "heading": "BRUCE'S PUBLIC IDIOT ROUTINE",
+          "body": "The playboy facade is not comic relief; it is counterintelligence. By signaling frivolity, Bruce lowers adversary scrutiny and widens operational freedom. The film repeatedly shows him spending reputation as a resource, which is one of the trilogy's most consistent strategic behaviors."
+        },
+        {
+          "heading": "ALFRED AS ETHICS FAILSAFE",
+          "body": "Alfred functions as Bruce's human redundancy system. When mission logic drifts toward absolutism, Alfred reasserts human cost. Nolan gives Batman technical escalation tools but installs an interpersonal brake to keep the project from collapsing into League doctrine."
+        },
+        {
+          "heading": "THE FINAL TRAIN DECISION",
+          "body": "Bruce's refusal to execute Ra's directly while engineering conditions for his death is ethically unresolved by design. The line 'I won't kill you, but I don't have to save you' is a policy statement, not a victory quote. Begins ends by codifying Batman's moral loophole."
+        },
+        {
+          "heading": "JOKER CARD AS SYSTEM ALERT",
+          "body": "The closing tease is structurally precise: Gordon introduces escalation as a consequence, not sequel bait. Batman stabilizes one layer of Gotham and triggers a higher-order adversary. Cause-and-effect remains the governing rule."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -263,19 +525,36 @@
     "title": "THE DARK KNIGHT",
     "year": "2008",
     "code": "TDK-2008",
-    "color": "#4a5a74",
-    "glowColor": "#88a9d6",
+    "color": "#2a1f7e",
+    "glowColor": "#5ba3ff",
     "tagline": "Rule systems fail fastest under pressure.",
     "thumbnail": "🃏",
-    "themes": ["Chaos vs Order", "Surveillance Ethics", "Sacrifice", "Moral Contagion"],
+    "themes": [
+      "Chaos vs Order",
+      "Surveillance Ethics",
+      "Sacrifice",
+      "Moral Contagion"
+    ],
     "transmission": "ENDURANCE-LOG-3C",
     "dossier": {
       "opening": "This transmission examines escalation. Batman's presence professionalizes both policing and crime, then summons an antagonist whose strategy is to dissolve the very idea of stable rules.",
       "sections": [
-        { "heading": "JOKER AS STRESS TEST", "body": "The Joker is less character than adversarial protocol. He probes institutions for contradiction, then forces visible failure. Every set piece is a live-fire audit: mob finance, police integrity, judicial process, media narratives, public trust. The question is never 'can he be stopped' but 'what breaks first while stopping him.'" },
-        { "heading": "HARVEY DENT'S FALL", "body": "Dent embodies the fantasy that lawful structures can absorb corruption without becoming it. His transformation into Two-Face demonstrates the fragility of that premise under concentrated trauma. Nolan treats moral collapse as incremental, procedural, and socially contagious." },
-        { "heading": "THE SONAR NETWORK", "body": "Lucius Fox's ethical objection to Batman's citywide sonar surveillance marks the film's sharpest line on emergency power. The system works tactically and fails civically. TDK argues that tools that save a night can still poison a city if normalized beyond that night." },
-        { "heading": "THE FERRY EXPERIMENT", "body": "The two-ferry climax is often read as optimism, but its deeper force is uncertainty. Civilians and prisoners both hesitate at the edge of atrocity, not because systems protected them, but because individuals improvised decency under impossible incentives. The film grants no stable framework for that outcome repeating." }
+        {
+          "heading": "JOKER AS STRESS TEST",
+          "body": "The Joker is less character than adversarial protocol. He probes institutions for contradiction, then forces visible failure. Every set piece is a live-fire audit: mob finance, police integrity, judicial process, media narratives, public trust. The question is never 'can he be stopped' but 'what breaks first while stopping him.'"
+        },
+        {
+          "heading": "HARVEY DENT'S FALL",
+          "body": "Dent embodies the fantasy that lawful structures can absorb corruption without becoming it. His transformation into Two-Face demonstrates the fragility of that premise under concentrated trauma. Nolan treats moral collapse as incremental, procedural, and socially contagious."
+        },
+        {
+          "heading": "THE SONAR NETWORK",
+          "body": "Lucius Fox's ethical objection to Batman's citywide sonar surveillance marks the film's sharpest line on emergency power. The system works tactically and fails civically. TDK argues that tools that save a night can still poison a city if normalized beyond that night."
+        },
+        {
+          "heading": "THE FERRY EXPERIMENT",
+          "body": "The two-ferry climax is often read as optimism, but its deeper force is uncertainty. Civilians and prisoners both hesitate at the edge of atrocity, not because systems protected them, but because individuals improvised decency under impossible incentives. The film grants no stable framework for that outcome repeating."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 71.6° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -285,12 +564,30 @@
       "dream_glow": "#9fbce6",
       "opening": "Scale increase protocol: larger practical stunts, expanded IMAX footprint, and villain performance engineered for volatility and precision.",
       "sections": [
-        { "heading": "HEATH LEDGER'S JOKER DESIGN", "body": "Ledger built the Joker from contradictory vectors: controlled vocal rhythm, unpredictable physicality, and improvised tactical beats. Makeup and wardrobe favored abrasion over stylization, reinforcing a sense of somebody assembled from damage and intention. Performance and production design converge on the same thesis: chaos is curated." },
-        { "heading": "IMAX AS NARRATIVE INTENSIFIER", "body": "TDK pioneered extensive use of IMAX cameras for major action sequences, including the opening heist and key city operations. Larger format wasn't used merely for spectacle; Nolan deploys it to increase spatial legibility during complex moral and tactical beats." },
-        { "heading": "REAL TRUCK FLIP", "body": "The semi-truck flip in downtown Chicago was executed practically using pneumatic rigging and controlled street engineering. Nolan's insistence on in-camera impact creates a tactile event impossible to fully fake. The scene reads as physically impossible and physically undeniable at once." },
-        { "heading": "CITY AS WARROOM", "body": "Production leaned heavily into real urban locations, blending Chicago detail with Gotham myth. Glass towers, service alleys, and civic interiors become strategic nodes in a city-wide contest. The geography remains coherent enough that tactics feel consequential." },
-        { "heading": "SCORE: SHEPARD-TONE ANXIETY", "body": "Zimmer and Howard used rising tonal structures and abrasive string textures to sustain unresolved tension. Joker-associated cues avoid melodic comfort and instead generate perpetual ascent, mirroring the character's logic: no endpoint, only escalation." },
-        { "heading": "PRACTICAL-DESTRUCTION BALANCE", "body": "Large effects moments—hospital collapse, armored convoy attacks, aerial extraction—combine practical execution with tightly scoped digital enhancement. The trilogy's production doctrine matures here: practical first for credibility, digital second for precision." }
+        {
+          "heading": "HEATH LEDGER'S JOKER DESIGN",
+          "body": "Ledger built the Joker from contradictory vectors: controlled vocal rhythm, unpredictable physicality, and improvised tactical beats. Makeup and wardrobe favored abrasion over stylization, reinforcing a sense of somebody assembled from damage and intention. Performance and production design converge on the same thesis: chaos is curated."
+        },
+        {
+          "heading": "IMAX AS NARRATIVE INTENSIFIER",
+          "body": "TDK pioneered extensive use of IMAX cameras for major action sequences, including the opening heist and key city operations. Larger format wasn't used merely for spectacle; Nolan deploys it to increase spatial legibility during complex moral and tactical beats."
+        },
+        {
+          "heading": "REAL TRUCK FLIP",
+          "body": "The semi-truck flip in downtown Chicago was executed practically using pneumatic rigging and controlled street engineering. Nolan's insistence on in-camera impact creates a tactile event impossible to fully fake. The scene reads as physically impossible and physically undeniable at once."
+        },
+        {
+          "heading": "CITY AS WARROOM",
+          "body": "Production leaned heavily into real urban locations, blending Chicago detail with Gotham myth. Glass towers, service alleys, and civic interiors become strategic nodes in a city-wide contest. The geography remains coherent enough that tactics feel consequential."
+        },
+        {
+          "heading": "SCORE: SHEPARD-TONE ANXIETY",
+          "body": "Zimmer and Howard used rising tonal structures and abrasive string textures to sustain unresolved tension. Joker-associated cues avoid melodic comfort and instead generate perpetual ascent, mirroring the character's logic: no endpoint, only escalation."
+        },
+        {
+          "heading": "PRACTICAL-DESTRUCTION BALANCE",
+          "body": "Large effects moments—hospital collapse, armored convoy attacks, aerial extraction—combine practical execution with tightly scoped digital enhancement. The trilogy's production doctrine matures here: practical first for credibility, digital second for precision."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AMERICAN CINEMATOGRAPHER, EMPIRE, THE ART AND MAKING OF THE DARK KNIGHT, WB FEATURETTES"
     },
@@ -300,12 +597,30 @@
       "dream_glow": "#7fa3d4",
       "opening": "TDK hides systemic arguments inside action geometry: who controls information, who accepts blame, and who gets to define legitimacy after catastrophe.",
       "sections": [
-        { "heading": "BANK HEIST AS GOVERNANCE MODEL", "body": "The opening heist functions as institutional prelude. Criminal labor is segmented, anonymized, and disposable, mirroring how larger systems treat operators under stress. Joker's betrayal ladder is a compressed model of extractive management." },
-        { "heading": "BATMAN'S FALSE BINARY", "body": "Bruce frames choices as protect Rachel or protect Dent; save one ferry or lose both; reveal identity or trigger deaths. Joker's core tactic is manufacturing binary constraints where no ethical binary exists, forcing Batman into suboptimal action regardless of intent." },
-        { "heading": "DENT ACT AS MEMORY FIREWALL", "body": "Gordon and Batman preserve Dent's image to maintain institutional legitimacy, effectively deploying a myth patch over systemic failure. The lie stabilizes governance in the short term while accruing deferred moral debt—debt Rises later collects in full." },
-        { "heading": "JOKER'S ORIGIN STORIES", "body": "Contradictory scar narratives are not mystery-box trivia; they are anti-forensic strategy. By flooding the record with unstable self-reporting, Joker denies institutions a usable profile and forces response to behavior only, never motive." },
-        { "heading": "FOX AS CIVIC CONSCIENCE", "body": "Fox's agreement to use the sonar machine once, then destroy it, creates a procedural boundary Batman cannot set for himself. Without Fox, Batman's toolkit trends toward permanent exception. The film quietly assigns constitutional thinking to a private executive." },
-        { "heading": "ENDING AS SACRIFICIAL POLITICS", "body": "Batman taking the blame for Dent's crimes is less martyrdom than public-safety calculus: one discredited vigilante can absorb a city's panic more effectively than a fallen district attorney. The move preserves order while corrupting truth—a trade the trilogy keeps interrogating." }
+        {
+          "heading": "BANK HEIST AS GOVERNANCE MODEL",
+          "body": "The opening heist functions as institutional prelude. Criminal labor is segmented, anonymized, and disposable, mirroring how larger systems treat operators under stress. Joker's betrayal ladder is a compressed model of extractive management."
+        },
+        {
+          "heading": "BATMAN'S FALSE BINARY",
+          "body": "Bruce frames choices as protect Rachel or protect Dent; save one ferry or lose both; reveal identity or trigger deaths. Joker's core tactic is manufacturing binary constraints where no ethical binary exists, forcing Batman into suboptimal action regardless of intent."
+        },
+        {
+          "heading": "DENT ACT AS MEMORY FIREWALL",
+          "body": "Gordon and Batman preserve Dent's image to maintain institutional legitimacy, effectively deploying a myth patch over systemic failure. The lie stabilizes governance in the short term while accruing deferred moral debt—debt Rises later collects in full."
+        },
+        {
+          "heading": "JOKER'S ORIGIN STORIES",
+          "body": "Contradictory scar narratives are not mystery-box trivia; they are anti-forensic strategy. By flooding the record with unstable self-reporting, Joker denies institutions a usable profile and forces response to behavior only, never motive."
+        },
+        {
+          "heading": "FOX AS CIVIC CONSCIENCE",
+          "body": "Fox's agreement to use the sonar machine once, then destroy it, creates a procedural boundary Batman cannot set for himself. Without Fox, Batman's toolkit trends toward permanent exception. The film quietly assigns constitutional thinking to a private executive."
+        },
+        {
+          "heading": "ENDING AS SACRIFICIAL POLITICS",
+          "body": "Batman taking the blame for Dent's crimes is less martyrdom than public-safety calculus: one discredited vigilante can absorb a city's panic more effectively than a fallen district attorney. The move preserves order while corrupting truth—a trade the trilogy keeps interrogating."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -315,19 +630,36 @@
     "title": "THE DARK KNIGHT RISES",
     "year": "2012",
     "code": "TDKR-2012",
-    "color": "#6e5b4a",
-    "glowColor": "#c9a27f",
+    "color": "#8a1e0a",
+    "glowColor": "#ff6a1f",
     "tagline": "A fire will rise.",
     "thumbnail": "🔥",
-    "themes": ["Revolution as Theater", "Pain and Recovery", "Legacy Transfer", "Mythic Closure"],
+    "themes": [
+      "Revolution as Theater",
+      "Pain and Recovery",
+      "Legacy Transfer",
+      "Mythic Closure"
+    ],
     "transmission": "ENDURANCE-LOG-5D",
     "dossier": {
       "opening": "Final transmission in the Gotham cycle. Rises reframes Batman not as permanent guardian but as a finite intervention with succession planning and symbolic afterlife.",
       "sections": [
-        { "heading": "BANE'S REVOLUTION SCRIPT", "body": "Bane stages populist uprising as controlled demolition. His rhetoric borrows from anti-elite revolt while his logistics serve total annihilation. Nolan depicts political spectacle as programmable: language of liberation, architecture of terror." },
-        { "heading": "THE PIT AS SYSTEM RESET", "body": "Bruce's imprisonment is built as functional decompression. The climb sequence externalizes rehabilitation: pain inventory, structural retraining, restored risk tolerance. The jump without the rope is not mysticism; it is behavioral recalibration under existential stakes." },
-        { "heading": "GOTHAM UNDER SIEGE", "body": "Rises expands from city corruption to city occupation. Courts, policing, infrastructure, and finance all get rewritten under emergency governance. The film's scale shift emphasizes that institutional failure is not event-based but layered and cumulative." },
-        { "heading": "BATMAN AS HANDOFF", "body": "The ending formalizes succession through Blake and codifies Batman as transferable civic myth. Bruce exits not because crime is solved, but because symbols outlive operators. Rises treats legacy as protocol, not sentiment." }
+        {
+          "heading": "BANE'S REVOLUTION SCRIPT",
+          "body": "Bane stages populist uprising as controlled demolition. His rhetoric borrows from anti-elite revolt while his logistics serve total annihilation. Nolan depicts political spectacle as programmable: language of liberation, architecture of terror."
+        },
+        {
+          "heading": "THE PIT AS SYSTEM RESET",
+          "body": "Bruce's imprisonment is built as functional decompression. The climb sequence externalizes rehabilitation: pain inventory, structural retraining, restored risk tolerance. The jump without the rope is not mysticism; it is behavioral recalibration under existential stakes."
+        },
+        {
+          "heading": "GOTHAM UNDER SIEGE",
+          "body": "Rises expands from city corruption to city occupation. Courts, policing, infrastructure, and finance all get rewritten under emergency governance. The film's scale shift emphasizes that institutional failure is not event-based but layered and cumulative."
+        },
+        {
+          "heading": "BATMAN AS HANDOFF",
+          "body": "The ending formalizes succession through Blake and codifies Batman as transferable civic myth. Bruce exits not because crime is solved, but because symbols outlive operators. Rises treats legacy as protocol, not sentiment."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 116.2° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -337,12 +669,30 @@
       "dream_glow": "#d5ae88",
       "opening": "Trilogy closeout at maximal scope: IMAX-heavy capture, large practical crowd choreography, and location design tuned for siege-state Gotham.",
       "sections": [
-        { "heading": "AERIAL OPENING PRACTICAL STUNT", "body": "The opening aircraft hijack was executed with real planes, in-air capture, and practical stunt coordination rather than full-CG simulation. Nolan's preference for tangible mechanics remains intact even at franchise scale." },
-        { "heading": "PIT SET + LOCATION STRATEGY", "body": "Pit sequences combine constructed vertical environments with exterior plate work to produce architectural vertigo. The set language shifts away from Gotham steel-and-glass toward stone and void, visually separating Bruce's recovery loop from city conflict." },
-        { "heading": "STADIUM COLLAPSE EFFECTS", "body": "The football stadium sequence uses practical field effects, coordinated extras, and digital extension to create systemic rupture. The key production choice is readability: audiences can track cause, panic spread, and tactical response frame by frame." },
-        { "heading": "WINTER GOTHAM", "body": "Production leveraged cold-weather urban environments to portray prolonged occupation. Snow and low-light palettes turn Gotham into a slow-burn battlefield where mobility and morale degrade over time." },
-        { "heading": "SCORE MOTIF: DESHI BASARA", "body": "Zimmer's recurring chant motif provides psychological continuity between pit recovery and city confrontation. The phrase operates as both diegetic memory and non-diegetic propulsion, linking personal ascent to civic release." },
-        { "heading": "CLOSURE ENGINEERING", "body": "Rises balances ending finality with universe continuity: practical finale spectacle, restrained ambiguity around Bruce's fate, and explicit successor framing. Production decisions prioritize emotional closure while preserving myth elasticity." }
+        {
+          "heading": "AERIAL OPENING PRACTICAL STUNT",
+          "body": "The opening aircraft hijack was executed with real planes, in-air capture, and practical stunt coordination rather than full-CG simulation. Nolan's preference for tangible mechanics remains intact even at franchise scale."
+        },
+        {
+          "heading": "PIT SET + LOCATION STRATEGY",
+          "body": "Pit sequences combine constructed vertical environments with exterior plate work to produce architectural vertigo. The set language shifts away from Gotham steel-and-glass toward stone and void, visually separating Bruce's recovery loop from city conflict."
+        },
+        {
+          "heading": "STADIUM COLLAPSE EFFECTS",
+          "body": "The football stadium sequence uses practical field effects, coordinated extras, and digital extension to create systemic rupture. The key production choice is readability: audiences can track cause, panic spread, and tactical response frame by frame."
+        },
+        {
+          "heading": "WINTER GOTHAM",
+          "body": "Production leveraged cold-weather urban environments to portray prolonged occupation. Snow and low-light palettes turn Gotham into a slow-burn battlefield where mobility and morale degrade over time."
+        },
+        {
+          "heading": "SCORE MOTIF: DESHI BASARA",
+          "body": "Zimmer's recurring chant motif provides psychological continuity between pit recovery and city confrontation. The phrase operates as both diegetic memory and non-diegetic propulsion, linking personal ascent to civic release."
+        },
+        {
+          "heading": "CLOSURE ENGINEERING",
+          "body": "Rises balances ending finality with universe continuity: practical finale spectacle, restrained ambiguity around Bruce's fate, and explicit successor framing. Production decisions prioritize emotional closure while preserving myth elasticity."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AMERICAN CINEMATOGRAPHER, EMPIRE, WB PRODUCTION NOTES, THE ART OF THE DARK KNIGHT TRILOGY"
     },
@@ -352,12 +702,30 @@
       "dream_glow": "#b88c67",
       "opening": "Rises embeds its sharpest arguments in timing, institutional memory, and delayed consequence from earlier films.",
       "sections": [
-        { "heading": "DENT ACT PAYBACK", "body": "Rises is structurally downstream of TDK's noble lie. Bane weaponizes the buried truth to collapse trust in every institution that benefited from it. The trilogy's central policy lesson lands here: deferred truth compounds, then detonates." },
-        { "heading": "BANE'S VOICE AS WEAPONIZED CLARITY", "body": "Bane's vocal mix is unusually prominent, making him sound intimate and inescapable even in crowd scenes. The design choice turns speech into control technology: he doesn't shout over chaos; he authors it." },
-        { "heading": "BRUCE'S BODY AS TIMELINE", "body": "Early medical scans and movement restrictions literalize cumulative franchise damage. Rises treats heroism as wear pattern, not invulnerability. Recovery is depicted as negotiated with time, pain, and diminishing margin." },
-        { "heading": "BLAKE'S LEGAL NAME REVEAL", "body": "The 'Robin' reveal works as code transmission, not fan-service punchline. It signals baton pass while keeping iconography abstract enough to avoid direct replication. Successor identity is modular by design." },
-        { "heading": "THE NUCLEAR CLOCK", "body": "The final act's ticking core mirrors Nolan's recurring temporal pressure systems. Public panic, tactical planning, and personal sacrifice all synchronize to a single countdown, turning narrative into explicit deadline management." },
-        { "heading": "ALFRED'S CAFE VISION", "body": "The Florence tableau resolves Alfred's long-running protective arc while preserving operational ambiguity around Bruce's survival. Whether read literally or symbolically, its function is identical: permission for closure without full demystification." }
+        {
+          "heading": "DENT ACT PAYBACK",
+          "body": "Rises is structurally downstream of TDK's noble lie. Bane weaponizes the buried truth to collapse trust in every institution that benefited from it. The trilogy's central policy lesson lands here: deferred truth compounds, then detonates."
+        },
+        {
+          "heading": "BANE'S VOICE AS WEAPONIZED CLARITY",
+          "body": "Bane's vocal mix is unusually prominent, making him sound intimate and inescapable even in crowd scenes. The design choice turns speech into control technology: he doesn't shout over chaos; he authors it."
+        },
+        {
+          "heading": "BRUCE'S BODY AS TIMELINE",
+          "body": "Early medical scans and movement restrictions literalize cumulative franchise damage. Rises treats heroism as wear pattern, not invulnerability. Recovery is depicted as negotiated with time, pain, and diminishing margin."
+        },
+        {
+          "heading": "BLAKE'S LEGAL NAME REVEAL",
+          "body": "The 'Robin' reveal works as code transmission, not fan-service punchline. It signals baton pass while keeping iconography abstract enough to avoid direct replication. Successor identity is modular by design."
+        },
+        {
+          "heading": "THE NUCLEAR CLOCK",
+          "body": "The final act's ticking core mirrors Nolan's recurring temporal pressure systems. Public panic, tactical planning, and personal sacrifice all synchronize to a single countdown, turning narrative into explicit deadline management."
+        },
+        {
+          "heading": "ALFRED'S CAFE VISION",
+          "body": "The Florence tableau resolves Alfred's long-running protective arc while preserving operational ambiguity around Bruce's survival. Whether read literally or symbolically, its function is identical: permission for closure without full demystification."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }
@@ -367,19 +735,36 @@
     "title": "OPPENHEIMER",
     "year": "2023",
     "code": "OPP-2023",
-    "color": "#8a5a42",
-    "glowColor": "#d69b74",
+    "color": "#7a4e0a",
+    "glowColor": "#ffb82d",
     "tagline": "Theory reached critical mass. Consequence became permanent.",
     "thumbnail": "☢️",
-    "themes": ["Scientific Responsibility", "State Power", "Moral Injury", "Security Theater"],
+    "themes": [
+      "Scientific Responsibility",
+      "State Power",
+      "Moral Injury",
+      "Security Theater"
+    ],
     "transmission": "ENDURANCE-LOG-8E",
     "dossier": {
       "opening": "This transmission concerns a man who solved one impossible problem and was then consumed by the political machinery built to weaponize the solution. Oppenheimer is not a biopic of genius. It is an audit of consequence.",
       "sections": [
-        { "heading": "TRINITY AS PROOF-OF-CONCEPT", "body": "The Trinity test sequence is framed as an engineering threshold and an existential rupture. Nolan withholds score and impact delay so the blast arrives as cognitive lag: first sight, then comprehension, then fear. The bomb is not treated as an endpoint. It is treated as the beginning of a system no one can later shut down." },
-        { "heading": "THE HEARING AS COUNTERATTACK", "body": "The 1954 security clearance hearing is the film's central battlefield. Publicly procedural and privately punitive, it functions as bureaucratic retaliation disguised as due process. Oppenheimer's enemies do not need to disprove his science; they only need to reframe his loyalty. Reputation becomes infrastructure, and the state turns it into a weapon." },
-        { "heading": "SUBJECTIVE VS. STRUCTURAL TIME", "body": "Nolan alternates between subjective memory flow and institutional chronology to show two incompatible realities: what Oppenheimer felt happened, and what the record can be made to say happened. The color/monochrome split is less about objective truth than power over narrative format. Whoever controls framing controls verdict." },
-        { "heading": "PROMETHEUS, MODERNIZED", "body": "The film repeatedly invokes the Prometheus analogy, but strips it of heroism. Knowledge transfer here does not liberate humanity; it formalizes permanent deterrence and permanent threat. Oppenheimer's achievement is real and irreversible, and the film's argument is that moral injury can coexist with technical success without resolving it." }
+        {
+          "heading": "TRINITY AS PROOF-OF-CONCEPT",
+          "body": "The Trinity test sequence is framed as an engineering threshold and an existential rupture. Nolan withholds score and impact delay so the blast arrives as cognitive lag: first sight, then comprehension, then fear. The bomb is not treated as an endpoint. It is treated as the beginning of a system no one can later shut down."
+        },
+        {
+          "heading": "THE HEARING AS COUNTERATTACK",
+          "body": "The 1954 security clearance hearing is the film's central battlefield. Publicly procedural and privately punitive, it functions as bureaucratic retaliation disguised as due process. Oppenheimer's enemies do not need to disprove his science; they only need to reframe his loyalty. Reputation becomes infrastructure, and the state turns it into a weapon."
+        },
+        {
+          "heading": "SUBJECTIVE VS. STRUCTURAL TIME",
+          "body": "Nolan alternates between subjective memory flow and institutional chronology to show two incompatible realities: what Oppenheimer felt happened, and what the record can be made to say happened. The color/monochrome split is less about objective truth than power over narrative format. Whoever controls framing controls verdict."
+        },
+        {
+          "heading": "PROMETHEUS, MODERNIZED",
+          "body": "The film repeatedly invokes the Prometheus analogy, but strips it of heroism. Knowledge transfer here does not liberate humanity; it formalizes permanent deterrence and permanent threat. Oppenheimer's achievement is real and irreversible, and the film's argument is that moral injury can coexist with technical success without resolving it."
+        }
       ],
       "closing_transmission": "END LOG // ENDURANCE COORDINATE: 173.3° // SIGNAL STRENGTH: NOMINAL // NEXT TRANSMISSION: UPON DISC CHANGE"
     },
@@ -389,12 +774,30 @@
       "dream_glow": "#d69b74",
       "opening": "Large-format historical reconstruction with practical detonation language, dense procedural dialogue, and courtroom architecture tuned for pressure.",
       "sections": [
-        { "heading": "IMAX 65MM BLACK-AND-WHITE", "body": "Oppenheimer became the first feature to photograph black-and-white sequences on IMAX 65mm stock, developed in partnership with Kodak and FotoKem. Nolan's format choice is functional, not ornamental: it gives institutional scenes a hard documentary authority while preserving large-format texture." },
-        { "heading": "PRACTICAL NUCLEAR VISUALIZATION", "body": "Rather than rely on full-CG spectacle, production used large-scale practical effects, fluid dynamics photography, miniature work, and in-camera light events to represent atomic imagery. The result keeps abstraction physically anchored: the audience feels material behavior, not synthetic simulation." },
-        { "heading": "LOS ALAMOS RECREATION", "body": "The team built extensive practical environments to recreate wartime Los Alamos operations and social hierarchy. Nolan stages science as logistics: chalkboards, procurement, military oversight, and scheduling pressure. Discovery is shown as organizational throughput as much as inspiration." },
-        { "heading": "SCORE AS NEURAL PRESSURE", "body": "Ludwig Goransson's violin-forward score operates like accelerating cognition under stress. Rhythmic ostinatos and dissonant swells mirror chain-reaction logic: local events trigger irreversible escalation. The music behaves like an internal reactor, not a traditional heroic cue system." },
-        { "heading": "HEARING ROOM GEOMETRY", "body": "Courtroom and hearing scenes are shot to emphasize confinement, witness alignment, and conversational crossfire. Blocking places Oppenheimer at the center of institutional triangulation, where testimony, memory, and policy collide. The visual grammar makes administrative procedure feel like siege warfare." },
-        { "heading": "ADAPTATION SCOPE", "body": "The screenplay adapts material from Kai Bird and Martin J. Sherwin's American Prometheus while compressing decades of scientific, military, and political context into a continuous pressure narrative. Nolan prioritizes causal links over encyclopedic breadth, keeping the focus on decision chains and fallout." }
+        {
+          "heading": "IMAX 65MM BLACK-AND-WHITE",
+          "body": "Oppenheimer became the first feature to photograph black-and-white sequences on IMAX 65mm stock, developed in partnership with Kodak and FotoKem. Nolan's format choice is functional, not ornamental: it gives institutional scenes a hard documentary authority while preserving large-format texture."
+        },
+        {
+          "heading": "PRACTICAL NUCLEAR VISUALIZATION",
+          "body": "Rather than rely on full-CG spectacle, production used large-scale practical effects, fluid dynamics photography, miniature work, and in-camera light events to represent atomic imagery. The result keeps abstraction physically anchored: the audience feels material behavior, not synthetic simulation."
+        },
+        {
+          "heading": "LOS ALAMOS RECREATION",
+          "body": "The team built extensive practical environments to recreate wartime Los Alamos operations and social hierarchy. Nolan stages science as logistics: chalkboards, procurement, military oversight, and scheduling pressure. Discovery is shown as organizational throughput as much as inspiration."
+        },
+        {
+          "heading": "SCORE AS NEURAL PRESSURE",
+          "body": "Ludwig Goransson's violin-forward score operates like accelerating cognition under stress. Rhythmic ostinatos and dissonant swells mirror chain-reaction logic: local events trigger irreversible escalation. The music behaves like an internal reactor, not a traditional heroic cue system."
+        },
+        {
+          "heading": "HEARING ROOM GEOMETRY",
+          "body": "Courtroom and hearing scenes are shot to emphasize confinement, witness alignment, and conversational crossfire. Blocking places Oppenheimer at the center of institutional triangulation, where testimony, memory, and policy collide. The visual grammar makes administrative procedure feel like siege warfare."
+        },
+        {
+          "heading": "ADAPTATION SCOPE",
+          "body": "The screenplay adapts material from Kai Bird and Martin J. Sherwin's American Prometheus while compressing decades of scientific, military, and political context into a continuous pressure narrative. Nolan prioritizes causal links over encyclopedic breadth, keeping the focus on decision chains and fallout."
+        }
       ],
       "closing_note": "PRODUCTION ARCHIVE CLOSED // SOURCE: AMERICAN PROMETHEUS (BIRD/SHERWIN), KODAK/FOTOKEM FORMAT NOTES, UNIVERSAL PRODUCTION MATERIALS, CAST/CREW INTERVIEWS"
     },
@@ -404,12 +807,30 @@
       "dream_glow": "#be7f57",
       "opening": "Below the official narrative are the mechanisms: language management, political choreography, and the problem of living after an irreversible success.",
       "sections": [
-        { "heading": "STRAUSS'S FRAME CONTROL", "body": "The Strauss thread demonstrates that policy conflict can be won by controlling witness order, social pressure, and selective disclosure. The film treats bureaucratic revenge as an engineered process with clear stages: isolate target, contaminate record, ratify outcome." },
-        { "heading": "THE VISIBLE-ONLY-TO-HIM BLAST", "body": "Nolan visualizes imagined detonation waves inside dialogue scenes to represent delayed psychological impact rather than literal event. Oppenheimer's mind runs catastrophe simulations in real time, even when rooms are quiet. Internal aftermath precedes public aftermath." },
-        { "heading": "SECURITY LANGUAGE AS CUDGEL", "body": "Terms like 'clearance,' 'risk,' and 'association' become flexible legal instruments. The film shows how ambiguous security vocabulary can be operationalized to punish dissent without proving disloyalty. Procedure supplies legitimacy while outcomes are preselected." },
-        { "heading": "FISSION TO FUSION ESCALATION", "body": "Postwar argument over the hydrogen bomb reframes Trinity as phase one, not finale. Oppenheimer's caution is interpreted as obstruction by hawkish actors who define momentum as patriotism. The strategic system rewards acceleration, not restraint." },
-        { "heading": "EINSTEIN POND MISDIRECTION", "body": "The recurring Einstein conversation functions as delayed-key storytelling. Characters project private assumptions onto an interaction they did not hear, and policy consequences follow from that projection. Misread signal becomes historical force." },
-        { "heading": "ENDING AS OPEN SYSTEM WARNING", "body": "The closing exchange shifts from personal legacy to planetary systems logic: once proliferation dynamics are active, no single actor can guarantee containment. The film ends not with closure, but with a model of permanent instability." }
+        {
+          "heading": "STRAUSS'S FRAME CONTROL",
+          "body": "The Strauss thread demonstrates that policy conflict can be won by controlling witness order, social pressure, and selective disclosure. The film treats bureaucratic revenge as an engineered process with clear stages: isolate target, contaminate record, ratify outcome."
+        },
+        {
+          "heading": "THE VISIBLE-ONLY-TO-HIM BLAST",
+          "body": "Nolan visualizes imagined detonation waves inside dialogue scenes to represent delayed psychological impact rather than literal event. Oppenheimer's mind runs catastrophe simulations in real time, even when rooms are quiet. Internal aftermath precedes public aftermath."
+        },
+        {
+          "heading": "SECURITY LANGUAGE AS CUDGEL",
+          "body": "Terms like 'clearance,' 'risk,' and 'association' become flexible legal instruments. The film shows how ambiguous security vocabulary can be operationalized to punish dissent without proving disloyalty. Procedure supplies legitimacy while outcomes are preselected."
+        },
+        {
+          "heading": "FISSION TO FUSION ESCALATION",
+          "body": "Postwar argument over the hydrogen bomb reframes Trinity as phase one, not finale. Oppenheimer's caution is interpreted as obstruction by hawkish actors who define momentum as patriotism. The strategic system rewards acceleration, not restraint."
+        },
+        {
+          "heading": "EINSTEIN POND MISDIRECTION",
+          "body": "The recurring Einstein conversation functions as delayed-key storytelling. Characters project private assumptions onto an interaction they did not hear, and policy consequences follow from that projection. Misread signal becomes historical force."
+        },
+        {
+          "heading": "ENDING AS OPEN SYSTEM WARNING",
+          "body": "The closing exchange shifts from personal legacy to planetary systems logic: once proliferation dynamics are active, no single actor can guarantee containment. The film ends not with closure, but with a model of permanent instability."
+        }
       ],
       "closing_note": "SIGNAL TERMINATED // LAYER 3 // NO FURTHER DEPTH AVAILABLE // ENDURANCE ARCHIVE SYSTEM v1.0"
     }

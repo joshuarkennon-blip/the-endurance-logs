@@ -532,7 +532,11 @@ export default function Console({ films, registerStopAll }) {
             <div className="space-y-0.5">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="h-[3px] w-full rounded-sm"
-                  style={{ backgroundColor: i < 6 ? '#4a7c9e' : '#1a1a25', opacity: i < 6 ? (1 - i * 0.08) : 0.3 }}
+                  style={{
+                    backgroundColor: i < 6 ? '#22d3ee' : '#141525',
+                    boxShadow: i < 6 ? '0 0 6px rgba(34,211,238,0.55)' : 'none',
+                    opacity: i < 6 ? (1 - i * 0.08) : 0.3,
+                  }}
                 />
               ))}
             </div>
@@ -542,7 +546,14 @@ export default function Console({ films, registerStopAll }) {
             <div className="grid grid-cols-2 gap-0.5">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="h-3 w-full"
-                  style={{ backgroundColor: i < 5 ? '#c8922a30' : '#1a1a25', border: '1px solid #2a2a3a' }}
+                  style={{
+                    backgroundColor: i < 5 ? 'rgba(245,176,65,0.32)' : '#141525',
+                    borderTop: '1px solid rgba(245,176,65,0.4)',
+                    borderBottom: '1px solid rgba(0,0,0,0.6)',
+                    borderLeft: '1px solid #1a1f33',
+                    borderRight: '1px solid #1a1f33',
+                    boxShadow: i < 5 ? 'inset 0 0 6px rgba(245,176,65,0.22)' : 'none',
+                  }}
                 />
               ))}
             </div>
@@ -610,7 +621,7 @@ export default function Console({ films, registerStopAll }) {
                 })
               }}
               className="console-btn w-full px-2 py-1 text-[9px]"
-              style={{ borderColor: '#6e5b4a', color: '#c9a27f' }}
+              style={{ borderColor: '#b91c1c', color: '#ff7a6b' }}
             >
               RESET SETTINGS
             </button>
