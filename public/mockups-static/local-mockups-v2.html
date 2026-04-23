@@ -1,0 +1,1426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Endurance Logs // Concept Mockups v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,700;1,6..96,900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+<style>
+  :root{
+    --bg-void:#07080a; --bg-panel:#0d1014; --bg-panel-hi:#12161c; --bg-chrome:#0a0c10;
+    --ink-primary:#e8e4d8; --ink-secondary:#a8a297; --ink-muted:#6b6459; --ink-dim:#3a3732;
+    --line-hair:rgba(232,228,216,0.08); --line-rule:rgba(232,228,216,0.18);
+    --signal-green:#8fb77a; --signal-amber:#d6a24a; --signal-red:#c6553d; --hud-cyan:#7fb9c9;
+    --obsidian:#0A0A0C; --obsidian-2:#111114; --charcoal:#1C1C20; --charcoal-2:#2A2A30;
+    --ivory:#F4EFE4; --ivory-dim:rgba(244,239,228,0.72); --ivory-mute:rgba(244,239,228,0.48);
+    --gold:#C9A24A; --gold-hi:#E8C772; --amber:#D69B74; --crimson:#9A2B2B;
+    --stain-violet:#7A5C9E; --stain-rust:#9E5C4A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg-void);color:var(--ink-primary);font-family:"Inter Tight",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace;letter-spacing:.04em}
+  .serif{font-family:"Fraunces",ui-serif,serif}
+  .bodoni{font-family:"Bodoni Moda",ui-serif,serif}
+  .cap{text-transform:uppercase;letter-spacing:.14em}
+  .muted{color:var(--ink-muted)} .secondary{color:var(--ink-secondary)}
+
+  /* Master switcher */
+  .master{position:sticky;top:0;z-index:500;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:10px 22px;border-bottom:1px solid var(--line-hair);background:rgba(7,8,10,.86);backdrop-filter:blur(14px)}
+  .master-brand{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#b9b4a6}
+  .master-brand em{color:var(--hud-cyan);font-style:normal}
+  .master-tabs{display:flex;gap:6px;flex-wrap:wrap}
+  .master-tabs button{border:1px solid var(--line-rule);padding:9px 16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#d6cfbe;transition:all .24s cubic-bezier(.2,.8,.2,1)}
+  .master-tabs button[aria-selected="true"]{background:var(--ink-primary);color:var(--bg-void);border-color:var(--ink-primary)}
+  .master-tabs button:hover{border-color:var(--hud-cyan);color:var(--ink-primary)}
+  .view{display:none}
+  .view.active{display:block}
+
+  /* ========= OBSERVATORY ========= */
+  .obs{position:relative;min-height:100vh;font-family:"Inter Tight",sans-serif;background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,240,210,.04),transparent 60%),
+    radial-gradient(ellipse 120% 80% at 50% 100%,rgba(30,20,10,.5),transparent 70%),
+    #07080a;}
+  .obs .nebula{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55;background:
+    radial-gradient(ellipse 720px 480px at 18% 26%,rgba(74,124,158,.14),transparent 72%),
+    radial-gradient(ellipse 620px 420px at 82% 70%,rgba(122,92,158,.12),transparent 72%),
+    radial-gradient(ellipse 480px 320px at 62% 20%,rgba(138,90,66,.10),transparent 72%);
+    animation:nebula-drift 240s linear infinite;}
+  @keyframes nebula-drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,20px)}}
+  .obs .grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.06;mix-blend-mode:overlay;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .obs .scanlines{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.45;mix-blend-mode:soft-light;
+    background:repeating-linear-gradient(0deg,rgba(232,228,216,.025) 0 1px,transparent 1px 3px)}
+  .obs .vignette{position:fixed;inset:0;pointer-events:none;z-index:3;box-shadow:inset 0 0 240px 80px rgba(0,0,0,.55)}
+
+  .obs-wrap{position:relative;z-index:10;max-width:1400px;margin:0 auto;padding:0 40px 120px}
+
+  /* Bridge chrome */
+  .bridge{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line-hair);margin-bottom:28px}
+  .bridge-brand{display:flex;align-items:center;gap:12px}
+  .bridge-brand-dot{width:8px;height:8px;border-radius:50%;background:var(--signal-green);box-shadow:0 0 6px var(--signal-green);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+  .bridge-brand-mark{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:#cbc4b2}
+  .bridge-nav{display:flex;gap:18px;justify-content:center}
+  .bridge-nav a{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--ink-secondary);padding:6px 0;border-bottom:1px solid transparent;transition:.2s}
+  .bridge-nav a:hover{color:var(--ink-primary);border-bottom-color:var(--hud-cyan)}
+  .bridge-status{justify-self:end;display:flex;gap:18px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--ink-muted);text-transform:uppercase}
+  .bridge-status span em{color:var(--ink-primary);font-style:normal}
+
+  /* Aperture hero */
+  .aperture{position:relative;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,1fr);gap:40px;align-items:center;min-height:86vh;padding:44px 0}
+  .aperture-brackets::before,.aperture-brackets::after{content:"";position:absolute;width:32px;height:32px;border:1px solid var(--line-rule);pointer-events:none}
+  .aperture-brackets::before{top:0;left:0;border-right:0;border-bottom:0}
+  .aperture-brackets::after{bottom:0;right:0;border-left:0;border-top:0}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink-muted);text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--line-rule)}
+  .aperture h1{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(42px,6.8vw,96px);line-height:.93;letter-spacing:-.015em;margin:18px 0 0;color:var(--ink-primary)}
+  .aperture h1 em{font-style:italic;color:#d6cfbe}
+  .aperture .lede{font-family:"Fraunces",serif;font-size:clamp(17px,1.4vw,21px);line-height:1.55;color:var(--ink-secondary);max-width:58ch;margin:22px 0 0}
+  .aperture .manifesto{font-size:14px;line-height:1.68;color:var(--ink-secondary);max-width:56ch;margin:18px 0 0;border-left:1px solid var(--line-hair);padding-left:16px}
+  .cta-row{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+  .btn{position:relative;border:1px solid var(--line-rule);padding:12px 20px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-primary);transition:.24s}
+  .btn:hover{border-color:var(--hud-cyan);background:rgba(127,185,201,.05)}
+  .btn.primary{background:var(--ink-primary);color:var(--bg-void);border-color:var(--ink-primary)}
+  .btn.primary:hover{background:var(--hud-cyan);border-color:var(--hud-cyan);color:var(--bg-void)}
+  .btn .arrow{margin-left:10px;display:inline-block;transition:transform .24s}
+  .btn:hover .arrow{transform:translateX(4px)}
+
+  .hud-row{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .hud-tile{position:relative;border:1px solid var(--line-hair);padding:12px 14px;background:rgba(13,16,20,.52)}
+  .hud-tile .lbl{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.22em;color:var(--ink-muted);text-transform:uppercase}
+  .hud-tile .val{font-family:"Fraunces",serif;font-size:22px;color:var(--ink-primary);margin-top:4px}
+  .hud-tile .sub{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-secondary);margin-top:6px;display:flex;gap:6px;align-items:center}
+  .hud-tile .led{width:6px;height:6px;border-radius:50%;background:var(--signal-green);box-shadow:0 0 4px var(--signal-green)}
+  .hud-tile .led.amber{background:var(--signal-amber);box-shadow:0 0 4px var(--signal-amber)}
+  .signal-bar{display:flex;gap:2px;margin-top:8px}
+  .signal-bar span{width:8px;height:14px;background:var(--line-hair)}
+  .signal-bar span.on{background:var(--signal-green);box-shadow:0 0 4px rgba(143,183,122,.5)}
+
+  /* Orbital aperture */
+  .orbit{position:relative;aspect-ratio:1;width:min(520px,92%);margin:0 auto;display:grid;place-items:center}
+  .orbit-ring{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(232,228,216,.2)}
+  .orbit-ring.a{animation:spin 96s linear infinite}
+  .orbit-ring.b{inset:14%;border-color:rgba(127,185,201,.26);animation:spin 64s linear infinite reverse}
+  .orbit-ring.c{inset:28%;border-color:rgba(214,162,74,.24);animation:spin 44s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .orbit-core{position:relative;width:32%;height:32%;border-radius:50%;background:
+    radial-gradient(circle at 38% 32%,rgba(255,244,224,.92) 0%,rgba(214,162,74,.52) 32%,rgba(198,85,61,.2) 62%,transparent 80%);
+    box-shadow:0 0 60px rgba(214,162,74,.35),0 0 120px rgba(198,85,61,.18)}
+  .orbit-reticle{position:absolute;color:var(--hud-cyan);font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+  .orbit-reticle::before{content:"";width:10px;height:10px;border:1px solid currentColor;border-radius:50%}
+  .orbit-reticle.tl{top:2%;left:4%}
+  .orbit-reticle.br{bottom:4%;right:4%;flex-direction:row-reverse}
+  .orbit-reticle.br::before{animation:pulse 2s ease-in-out infinite}
+  .orbit-node{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--hud-cyan);box-shadow:0 0 10px var(--hud-cyan)}
+  .orbit-node.a{top:2%;left:50%}
+  .orbit-node.b{bottom:12%;right:12%}
+
+  /* Section heading */
+  .section{padding:88px 0 0;position:relative}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid var(--line-hair);padding-top:22px;margin-bottom:30px}
+  .section-head .num{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink-muted);text-transform:uppercase}
+  .section-head h2{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(28px,3.2vw,46px);letter-spacing:-.01em;line-height:1.02;margin-top:10px;color:var(--ink-primary)}
+  .section-head h2 em{font-style:italic;color:#c8c1b0}
+  .section-head .coord{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-muted);text-transform:uppercase;text-align:right}
+  .tick-ruler{height:8px;margin-bottom:8px;background-image:linear-gradient(to right,var(--line-rule) 1px,transparent 1px);background-size:40px 8px;-webkit-mask-image:linear-gradient(to bottom,#000 0 2px,transparent 2px);mask-image:linear-gradient(to bottom,#000 0 2px,transparent 2px);opacity:.7}
+
+  /* Constellation */
+  .constellation{position:relative;border:1px solid var(--line-hair);background:linear-gradient(180deg,rgba(13,16,20,.85),rgba(10,12,16,.92));padding:34px;min-height:520px;overflow:hidden}
+  .constellation::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line-hair) 1px,transparent 1px),linear-gradient(90deg,var(--line-hair) 1px,transparent 1px);background-size:80px 80px;opacity:.4;pointer-events:none}
+  .constellation svg.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .star{position:absolute;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);background:var(--film-glow,var(--hud-cyan));box-shadow:0 0 14px var(--film-glow,var(--hud-cyan)),0 0 28px color-mix(in srgb,var(--film-glow,var(--hud-cyan)) 40%,transparent);cursor:crosshair;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+  .star::after{content:attr(data-code);position:absolute;top:14px;left:16px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:var(--ink-secondary);white-space:nowrap;text-transform:uppercase}
+  .star:hover{transform:translate(-50%,-50%) scale(1.6)}
+  .coord-label{position:absolute;transform:translate(-50%,14px);font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:var(--ink-muted);text-transform:uppercase;pointer-events:none}
+  .constellation-legend{position:absolute;right:22px;top:22px;font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-muted);letter-spacing:.2em;text-transform:uppercase;text-align:right;line-height:1.8}
+  .constellation-legend b{color:var(--ink-primary);font-weight:500}
+
+  /* Dossier rail */
+  .dossier{display:grid;grid-template-columns:180px 1fr;gap:1px;border:1px solid var(--line-hair);background:var(--line-hair);min-height:540px}
+  .dossier-films{background:var(--bg-panel);padding:0;display:flex;flex-direction:column}
+  .df-tab{text-align:left;padding:16px 18px;border-bottom:1px solid var(--line-hair);color:var(--ink-secondary);transition:.2s}
+  .df-tab:hover{background:var(--bg-panel-hi);color:var(--ink-primary)}
+  .df-tab.active{background:var(--bg-panel-hi);color:var(--ink-primary);box-shadow:inset 2px 0 0 var(--film-glow,var(--hud-cyan))}
+  .df-tab .code{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--ink-muted);text-transform:uppercase}
+  .df-tab .title{font-family:"Fraunces",serif;font-size:14px;margin-top:3px;line-height:1.2}
+  .df-tab .year{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-muted);margin-top:2px;letter-spacing:.16em}
+  .dossier-pane{background:var(--bg-panel);padding:28px}
+  .layers{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line-hair);padding-bottom:10px}
+  .layer-tab{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-secondary);padding:8px 12px;border:1px solid transparent;display:flex;flex-direction:column;gap:4px}
+  .layer-tab .meter{display:flex;gap:2px}
+  .layer-tab .meter span{width:14px;height:2px;background:var(--ink-dim)}
+  .layer-tab.active{color:var(--ink-primary);border-color:var(--line-hair);background:var(--bg-panel-hi)}
+  .layer-tab.active.l1 .meter span:nth-child(1){background:var(--signal-green)}
+  .layer-tab.active.l2 .meter span:nth-child(-n+2){background:var(--signal-amber)}
+  .layer-tab.active.l3 .meter span{background:var(--signal-red)}
+  .dossier-pane h3{font-family:"Fraunces",serif;font-size:30px;font-weight:500;margin-bottom:8px;line-height:1.1}
+  .dossier-pane .tagline{font-family:"Fraunces",serif;font-style:italic;color:var(--ink-secondary);font-size:16px;margin-bottom:18px}
+  .dossier-pane p{font-size:14.5px;line-height:1.72;color:var(--ink-secondary);max-width:72ch}
+  .dossier-pane p + p{margin-top:14px}
+  .dossier-meta{display:flex;gap:18px;margin-bottom:18px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-muted);text-transform:uppercase}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+  .tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-secondary);border:1px solid var(--line-hair);padding:6px 8px}
+  .tag::before{content:"+ ";color:var(--ink-muted)}
+
+  /* Corridor timeline */
+  .corridor{position:relative;border:1px solid var(--line-hair);background:var(--bg-panel);padding:44px 30px 34px}
+  .corridor-rail{position:relative;height:140px;margin-top:22px}
+  .corridor-line{position:absolute;left:0;right:0;top:70px;height:1px;background:var(--line-rule)}
+  .corridor-band{position:absolute;top:52px;bottom:52px;border-left:1px dashed var(--line-hair);border-right:1px dashed var(--line-hair);opacity:.6}
+  .corridor-band .lbl{position:absolute;top:-20px;left:8px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:var(--ink-muted);text-transform:uppercase}
+  .corridor-node{position:absolute;top:70px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:crosshair}
+  .corridor-node .dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--film-glow);background:transparent;box-shadow:0 0 8px color-mix(in srgb,var(--film-glow) 50%,transparent);transition:.2s}
+  .corridor-node:hover .dot,.corridor-node.active .dot{background:var(--film-glow);box-shadow:0 0 18px var(--film-glow)}
+  .corridor-node .label-above{position:absolute;bottom:18px;font-family:"Fraunces",serif;font-size:13px;color:var(--ink-primary);white-space:nowrap;line-height:1.1;text-align:center}
+  .corridor-node .label-above span{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:var(--ink-muted);text-transform:uppercase;margin-top:2px}
+  .corridor-node .label-below{position:absolute;top:18px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-secondary);letter-spacing:.14em}
+
+  /* Layer navigator */
+  .layers-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .layer-deck{border:1px solid var(--line-hair);padding:24px;position:relative;background:var(--bg-panel);overflow:hidden}
+  .layer-deck::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,color-mix(in srgb,var(--layer-color) 10%,transparent),transparent 40%)}
+  .layer-deck .num{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--layer-color);text-transform:uppercase}
+  .layer-deck h4{font-family:"Fraunces",serif;font-size:22px;margin-top:6px;line-height:1.15}
+  .layer-deck p{font-size:13px;line-height:1.65;color:var(--ink-secondary);margin-top:10px}
+  .layer-deck .depth{display:flex;gap:3px;margin-top:18px}
+  .layer-deck .depth span{flex:1;height:4px;background:var(--ink-dim)}
+
+  /* Transmission */
+  .transmission{position:relative;border:1px solid var(--line-rule);padding:44px;background:
+    radial-gradient(ellipse at 80% -20%,rgba(127,185,201,.14),transparent 55%),
+    linear-gradient(160deg,rgba(19,23,36,.95),rgba(12,14,24,.95))}
+  .transmission .eyebrow{margin-bottom:16px}
+  .transmission h3{font-family:"Fraunces",serif;font-size:clamp(32px,4vw,54px);font-weight:500;line-height:1.02;margin-bottom:14px;color:var(--ink-primary)}
+  .transmission h3 em{font-style:italic}
+  .transmission .byline{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:22px}
+  .transmission .body{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr;gap:36px;align-items:start}
+  .transmission .body p{font-size:15px;line-height:1.72;color:var(--ink-secondary)}
+  .transmission .body p + p{margin-top:12px}
+  .waveform{display:flex;gap:3px;align-items:end;height:100px;padding:16px;border:1px solid var(--line-hair);background:rgba(10,12,16,.82)}
+  .waveform span{flex:1;background:linear-gradient(0deg,var(--hud-cyan),transparent);animation:wave 1.2s ease-in-out infinite;opacity:.8}
+  @keyframes wave{0%,100%{height:20%}50%{height:90%}}
+  .waveform span:nth-child(2){animation-delay:-.2s}
+  .waveform span:nth-child(3){animation-delay:-.4s}
+  .waveform span:nth-child(4){animation-delay:-.6s}
+  .waveform span:nth-child(5){animation-delay:-.8s}
+
+  /* Feed */
+  .feed{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .log{border:1px solid var(--line-hair);padding:20px;background:var(--bg-panel);position:relative}
+  .log::before{content:"";position:absolute;top:0;left:0;width:3px;height:34px;background:var(--signal-amber)}
+  .log-meta{display:flex;gap:16px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:10px}
+  .log h4{font-family:"Fraunces",serif;font-size:17px;line-height:1.2;margin-bottom:10px}
+  .log p{font-size:13.5px;line-height:1.7;color:var(--ink-secondary)}
+
+  /* Ephemera */
+  .ephemera{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .relic{border:1px solid var(--line-hair);background:var(--bg-panel);padding:14px;min-height:220px;display:flex;flex-direction:column;gap:10px}
+  .relic-art{height:120px;border:1px solid var(--line-hair);background:var(--bg-panel-hi);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--ink-muted)}
+  .relic-art svg{width:60%;height:60%;opacity:.78}
+  .relic-meta{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:var(--ink-muted);text-transform:uppercase}
+  .relic h5{font-family:"Fraunces",serif;font-size:13px;line-height:1.3}
+  .relic p{font-size:12px;line-height:1.55;color:var(--ink-secondary)}
+
+  /* Subsurface */
+  .subsurface{margin-top:80px;padding-top:24px;border-top:1px solid var(--line-rule);display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .subsurface .col h6{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:8px}
+  .subsurface .col p,.subsurface .col a{font-size:12px;color:var(--ink-secondary);line-height:1.7;display:block}
+  .subsurface .closing{font-family:"Fraunces",serif;font-style:italic;color:#cbc4b2;font-size:14px;line-height:1.6;grid-column:span 3;border-top:1px solid var(--line-hair);padding-top:20px;margin-top:10px;max-width:72ch}
+
+  /* ========= CATHEDRAL ========= */
+  .cath{position:relative;min-height:100vh;color:var(--ivory);font-family:"Inter Tight",sans-serif;background:
+    radial-gradient(ellipse 120% 80% at 50% 0%,rgba(214,155,116,.12),transparent 60%),
+    radial-gradient(ellipse 90% 60% at 50% 100%,rgba(122,92,158,.08),transparent 65%),
+    linear-gradient(180deg,#0A0A0C,#0D0D10 50%,#0A0A0C)}
+  .cath .grain{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:.04;mix-blend-mode:overlay;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .cath .stain{position:fixed;pointer-events:none;z-index:0;filter:blur(70px);opacity:.26;mix-blend-mode:screen}
+  .cath .stain.a{top:-120px;left:-80px;width:520px;height:520px;background:radial-gradient(circle,var(--amber),transparent 70%)}
+  .cath .stain.b{top:160px;right:-120px;width:540px;height:540px;background:radial-gradient(circle,var(--cyan),transparent 70%)}
+  .cath .stain.c{bottom:220px;left:10%;width:420px;height:420px;background:radial-gradient(circle,var(--stain-violet),transparent 70%)}
+  .cath .stain.d{bottom:-120px;right:14%;width:460px;height:460px;background:radial-gradient(circle,var(--stain-rust),transparent 70%)}
+  .cath .vignette{position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at center,transparent 40%,rgba(10,10,12,.55) 100%)}
+
+  .cath-wrap{position:relative;z-index:10;max-width:1280px;margin:0 auto;padding:0 40px 120px}
+
+  /* Chrome */
+  .chrome{position:sticky;top:0;z-index:200;display:grid;grid-template-columns:1fr 1.4fr 1fr;align-items:center;gap:18px;padding:16px 0;border-bottom:1px solid rgba(201,162,74,.26);background:rgba(10,10,12,.78);backdrop-filter:blur(14px)}
+  .chrome-brand{display:flex;align-items:center;gap:10px;font-family:"Bodoni Moda",serif;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--ivory)}
+  .chrome-brand svg{width:18px;height:18px;color:var(--gold)}
+  .chrome-nav{display:flex;justify-content:center;gap:20px}
+  .chrome-nav a{font-family:"Inter Tight",sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ivory-dim);border-bottom:2px solid transparent;padding:6px 0;transition:.2s}
+  .chrome-nav a:hover,.chrome-nav a.active{color:var(--ivory);border-bottom-color:var(--gold)}
+  .chrome-clock{justify-self:end;text-align:right;font-family:"JetBrains Mono",monospace;font-size:10px;line-height:1.5;color:var(--ivory-mute);letter-spacing:.14em}
+  .chrome-clock em{font-style:normal;color:var(--ivory);display:block}
+  .chrome-clock .nom{color:var(--gold-hi)}
+
+  /* Nave hero */
+  .nave{position:relative;min-height:94vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 0}
+  .rose-bg{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:min(720px,90%);aspect-ratio:1;opacity:.28;z-index:0;pointer-events:none;color:var(--gold)}
+  .rose-bg svg{width:100%;height:100%;animation:spin 240s linear infinite}
+  .nave-eyebrow{position:relative;z-index:2;font-family:"Inter Tight",sans-serif;font-weight:500;font-size:11px;letter-spacing:.28em;color:var(--ivory-dim);text-transform:uppercase;padding:10px 28px;border-top:1px solid rgba(201,162,74,.58);border-bottom:1px solid rgba(201,162,74,.58);margin-bottom:26px}
+  .nave h1{position:relative;z-index:2;font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(62px,11vw,148px);line-height:.9;letter-spacing:-.02em;color:var(--ivory);margin-bottom:24px}
+  .nave-sub{position:relative;z-index:2;font-family:"Bodoni Moda",serif;font-style:italic;font-size:clamp(18px,1.8vw,26px);line-height:1.55;color:var(--ivory-dim);max-width:720px;margin-bottom:28px}
+  .nave-cta{position:relative;z-index:2;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
+  .btn-hair{border:1px solid var(--gold);background:transparent;color:var(--ivory);padding:13px 24px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;transition:.28s;font-family:"Inter Tight",sans-serif;font-weight:500}
+  .btn-hair:hover{background:rgba(232,199,114,.09);box-shadow:0 0 24px rgba(232,199,114,.2);letter-spacing:.24em}
+  .btn-hair.ghost{border-color:rgba(201,162,74,.4);color:var(--ivory-dim)}
+  .btn-hair.ghost:hover{color:var(--ivory)}
+  .nave-ticker{position:relative;z-index:2;max-width:640px;border-top:1px solid rgba(201,162,74,.3);border-bottom:1px solid rgba(201,162,74,.3);padding:8px 16px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;overflow:hidden;white-space:nowrap}
+
+  /* Cathedral section */
+  .cath-section{padding:120px 0 0;position:relative}
+  .cath-head{display:flex;gap:24px;align-items:baseline;margin-bottom:36px}
+  .cath-head .numeral{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(64px,8vw,128px);color:var(--gold);line-height:1;letter-spacing:-.02em}
+  .cath-head .meta{flex:1}
+  .cath-head .eyebrow{font-family:"Inter Tight",sans-serif;font-size:11px;letter-spacing:.28em;color:var(--ivory-mute);text-transform:uppercase;margin-bottom:8px}
+  .cath-head h2{font-family:"Bodoni Moda",serif;font-weight:700;font-size:clamp(32px,4vw,54px);line-height:1;color:var(--ivory);letter-spacing:-.01em}
+  .hair-divider{height:1px;background:rgba(201,162,74,.38);position:relative;margin:22px 0}
+  .hair-divider::after{content:"◇";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--gold);background:var(--obsidian);padding:0 8px;font-size:10px}
+
+  /* Premiere rail */
+  .premiere{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .premiere-card{position:relative;border:1px solid rgba(201,162,74,.28);background:var(--obsidian-2);padding:22px;min-height:500px;display:flex;flex-direction:column;justify-content:space-between;transition:.35s cubic-bezier(.22,1,.36,1)}
+  .premiere-card.focused{border-color:var(--gold);box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 40px rgba(232,199,114,.18);transform:scale(1.04);z-index:5}
+  .premiere-card:not(.focused){transform:scale(.94);filter:saturate(.45)}
+  .premiere-card:hover:not(.focused){filter:saturate(.85);transform:scale(.97)}
+  .premiere-head{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px}
+  .premiere-poster{height:200px;position:relative;overflow:hidden;border:1px solid rgba(201,162,74,.18);background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 18%,var(--obsidian)),var(--obsidian))}
+  .premiere-poster::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 70%,rgba(201,162,74,.12),transparent 60%)}
+  .premiere-poster svg{position:absolute;bottom:6px;right:6px;width:52px;height:52px;color:rgba(201,162,74,.48)}
+  .premiere-poster .poster-title{position:absolute;left:14px;bottom:14px;font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;color:var(--ivory);font-size:30px;line-height:.95;letter-spacing:-.02em}
+  .premiere-card h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:28px;margin-top:16px;color:var(--ivory)}
+  .premiere-card .year{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--gold-hi);letter-spacing:.18em;margin-top:4px}
+  .premiere-card .tagline{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;color:var(--ivory-dim);line-height:1.5;margin-top:8px}
+  .plates{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+  .plate{border:1px solid rgba(201,162,74,.5);padding:5px 10px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-hi)}
+  .premiere-cta{margin-top:16px;display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(201,162,74,.22);font-family:"Inter Tight",sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-hi)}
+
+  /* Vaults */
+  .vaults{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .vault{position:relative;border:1px solid rgba(201,162,74,.22);background:var(--charcoal);padding:28px 24px 24px;min-height:240px;overflow:hidden;transition:.3s}
+  .vault::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  .vault:hover{border-color:var(--gold);background:linear-gradient(180deg,rgba(201,162,74,.05),var(--charcoal))}
+  .vault .roman{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:84px;color:var(--gold);line-height:1;letter-spacing:-.02em;opacity:.55;transition:.3s}
+  .vault:hover .roman{opacity:1}
+  .vault h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:22px;margin-top:10px;color:var(--ivory)}
+  .vault p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:14px;color:var(--ivory-dim);line-height:1.55;margin-top:8px}
+  .vault .foot{margin-top:18px;display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+
+  /* Chapel */
+  .chapel{display:grid;grid-template-columns:minmax(280px,360px) 1fr;gap:44px;align-items:start}
+  .chapel-portrait{position:relative;padding:14px;border:1px solid rgba(201,162,74,.32)}
+  .chapel-portrait svg{width:100%;display:block}
+  .chapel-plaque{margin-top:14px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ivory-dim);text-transform:uppercase}
+  .chapel-body p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:17px;line-height:1.72;color:var(--ivory);margin-bottom:14px}
+  .chapel-body .lead{font-family:"Bodoni Moda",serif;font-weight:700;font-style:italic;font-size:22px;line-height:1.45;color:var(--ivory-dim);border-left:2px solid var(--gold);padding-left:18px;margin-bottom:18px}
+  .chapel-body h4{font-family:"Bodoni Moda",serif;font-weight:700;font-style:normal;font-size:15px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-hi);margin:18px 0 6px}
+  .chapel-body h4 span{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ivory-mute);margin-right:10px}
+  .colophon{text-align:center;color:var(--gold);font-size:14px;margin-top:18px}
+
+  /* Chronicle */
+  .chronicle-rail{position:relative;overflow-x:auto;padding:50px 10px 50px}
+  .chronicle-line{position:relative;height:2px;background:rgba(201,162,74,.28);min-width:1080px}
+  .chronicle-marker{position:absolute;top:-40px;display:flex;flex-direction:column;align-items:center;gap:8px;width:160px;transform:translateX(-50%)}
+  .chronicle-marker .hour{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold-hi);text-transform:uppercase}
+  .chronicle-marker .hour.tech{color:var(--cyan)}
+  .chronicle-marker .year{font-family:"Bodoni Moda",serif;font-weight:700;font-size:34px;color:var(--ivory);line-height:1}
+  .chronicle-marker .film{font-family:"Inter Tight",sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory-dim)}
+  .chronicle-marker .aside{font-family:"Bodoni Moda",serif;font-style:italic;font-size:12.5px;color:var(--ivory-mute);line-height:1.4;text-align:center;max-width:140px}
+  .chronicle-dot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--gold);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--gold)}
+  .chronicle-dot.tech{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+
+  /* Calendar */
+  .calendar{border:1px solid rgba(201,162,74,.32);background:linear-gradient(180deg,var(--charcoal),var(--obsidian))}
+  .calendar-top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-dim);text-transform:uppercase}
+  .calendar-top em{font-style:normal;color:var(--gold-hi)}
+  .calendar-top .lamp{display:inline-block;width:7px;height:7px;background:var(--amber);border-radius:50%;box-shadow:0 0 6px var(--amber);margin-right:8px;animation:pulse 2.4s ease-in-out infinite}
+  .ticket{display:grid;grid-template-columns:140px 1fr 200px 140px 140px 80px;gap:16px;align-items:center;padding:18px 20px;border-bottom:1px solid rgba(201,162,74,.15)}
+  .ticket:last-child{border-bottom:0}
+  .ticket:hover{background:rgba(201,162,74,.04)}
+  .ticket-date{font-family:"Bodoni Moda",serif;font-weight:700;font-size:32px;color:var(--gold);line-height:1}
+  .ticket-date span{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ivory-mute);letter-spacing:.22em;margin-top:4px}
+  .ticket-film{font-family:"Bodoni Moda",serif;font-weight:700;font-size:22px;color:var(--ivory)}
+  .ticket-film span{display:block;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ivory-mute);letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+  .ticket-venue{font-family:"Inter Tight",sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ivory-dim)}
+  .ticket-format{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--gold-hi);text-transform:uppercase;border:1px solid rgba(201,162,74,.42);padding:6px 8px;text-align:center}
+  .ticket-seats{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ivory-dim);letter-spacing:.12em;text-transform:uppercase}
+  .ticket-status{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;text-align:right}
+  .ticket-status.open{color:var(--gold-hi)} .ticket-status.sold{color:var(--crimson)} .ticket-status.wait{color:var(--cyan)}
+  .calendar-tear{height:14px;background:
+    linear-gradient(45deg,var(--obsidian) 33%,transparent 33%,transparent 66%,var(--obsidian) 66%) 0 0/12px 14px,
+    linear-gradient(-45deg,var(--obsidian) 33%,transparent 33%,transparent 66%,var(--obsidian) 66%) 6px 0/12px 14px;background-color:rgba(201,162,74,.25)}
+
+  /* Pulpit */
+  .pulpit{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:18px}
+  .essay{border:1px solid rgba(201,162,74,.24);background:var(--obsidian-2);padding:26px}
+  .essay .tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold-hi);text-transform:uppercase;margin-bottom:10px;border:0;padding:0}
+  .essay h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:26px;color:var(--ivory);line-height:1.15;margin-bottom:14px}
+  .essay.sermon h3{font-size:32px}
+  .essay p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15.5px;line-height:1.72;color:var(--ivory-dim)}
+  .essay p + p{margin-top:10px}
+  .essay .drop::first-letter{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:54px;color:var(--gold);float:left;line-height:.85;padding:4px 8px 0 0}
+  .essay .byline{margin-top:16px;padding-top:10px;border-top:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-mute);text-transform:uppercase}
+  .pullquote{text-align:center;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:700;font-size:clamp(24px,3vw,42px);line-height:1.28;color:var(--ivory);max-width:820px;margin:64px auto 0;padding:20px 30px;position:relative}
+  .pullquote::before,.pullquote::after{content:"";position:absolute;left:50%;width:60px;height:1px;background:var(--gold);transform:translateX(-50%)}
+  .pullquote::before{top:0} .pullquote::after{bottom:0}
+  .pullquote em{color:var(--crimson);font-style:italic}
+
+  /* Patrons */
+  .patrons{display:grid;grid-template-columns:1fr 1.2fr;gap:36px;border:1px solid rgba(201,162,74,.44);padding:36px;background:linear-gradient(180deg,rgba(35,29,18,.6),rgba(13,11,9,.92));box-shadow:0 0 40px rgba(201,162,74,.1),inset 0 0 60px rgba(201,162,74,.04)}
+  .patrons h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:30px;margin-bottom:14px}
+  .patrons p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;line-height:1.72;color:var(--ivory-dim);margin-bottom:20px}
+  .patron-row{display:grid;grid-template-columns:44px 1fr 200px;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(201,162,74,.2)}
+  .patron-row:last-child{border-bottom:0}
+  .patron-row .n{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:26px;color:var(--gold)}
+  .patron-row .t{font-family:"Bodoni Moda",serif;font-weight:700;font-size:17px}
+  .patron-row .o{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-mute);text-transform:uppercase;text-align:right}
+
+  /* Crypt footer */
+  .crypt{margin-top:100px;padding:44px 0 0;border-top:1px solid rgba(201,162,74,.3)}
+  .crypt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
+  .crypt h6{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+  .crypt a,.crypt p{display:block;font-size:12px;line-height:1.75;color:var(--ivory-dim)}
+  .crypt .inscr{font-family:"Bodoni Moda",serif;font-style:italic;color:var(--ivory)}
+  .crypt-colophon{margin-top:38px;padding-top:18px;border-top:1px solid rgba(201,162,74,.22);text-align:center;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ivory-mute);text-transform:uppercase}
+  .crypt-mark{text-align:center;font-size:16px;color:var(--gold);margin-top:20px}
+
+  /* Responsive */
+  @media (max-width:1100px){
+    .aperture{grid-template-columns:1fr}
+    .dossier{grid-template-columns:140px 1fr}
+    .transmission .body{grid-template-columns:1fr}
+    .feed,.ephemera,.vaults,.premiere{grid-template-columns:repeat(2,1fr)}
+    .pulpit{grid-template-columns:1fr}
+    .chapel{grid-template-columns:1fr}
+    .patrons{grid-template-columns:1fr}
+    .ticket{grid-template-columns:100px 1fr 90px}
+    .ticket-venue,.ticket-format{display:none}
+    .subsurface,.crypt-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:700px){
+    .ephemera,.feed,.vaults,.premiere,.layers-nav{grid-template-columns:1fr}
+    .dossier{grid-template-columns:1fr}
+    .dossier-films{flex-direction:row;overflow-x:auto}
+    .df-tab{min-width:120px;border-bottom:0;border-right:1px solid var(--line-hair)}
+    .bridge{grid-template-columns:1fr}
+    .chrome{grid-template-columns:1fr}
+    .chrome-clock{justify-self:start;text-align:left}
+    .nave h1{font-size:clamp(42px,15vw,80px)}
+    .subsurface,.crypt-grid{grid-template-columns:1fr}
+    .chronicle-rail{padding:30px 4px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTER SWITCHER -->
+<header class="master">
+  <div class="master-brand">The Endurance Logs <em>//</em> Concept Renderer v2.0 <em>//</em> Vol. VII</div>
+  <nav class="master-tabs" role="tablist">
+    <button id="mt-observatory" role="tab" aria-selected="true" aria-controls="observatory">I · Temporal Observatory</button>
+    <button id="mt-cathedral"   role="tab" aria-selected="false" aria-controls="cathedral">II · IMAX Cathedral</button>
+  </nav>
+</header>
+
+<!-- ============================================================= -->
+<!-- OBSERVATORY                                                   -->
+<!-- ============================================================= -->
+<section id="observatory" class="view obs active" role="tabpanel">
+  <div class="nebula"></div>
+  <div class="grain"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <div class="obs-wrap">
+
+    <!-- Bridge chrome -->
+    <div class="bridge">
+      <div class="bridge-brand">
+        <span class="bridge-brand-dot"></span>
+        <span class="bridge-brand-mark">Temporal Observatory // Archive Node 001</span>
+      </div>
+      <nav class="bridge-nav">
+        <a href="#aperture">Aperture</a>
+        <a href="#constellation">Constellation</a>
+        <a href="#dossier">Dossier</a>
+        <a href="#corridor">Corridor</a>
+        <a href="#layers">Layers</a>
+        <a href="#transmission">Transmission</a>
+        <a href="#feed">Log</a>
+        <a href="#ephemera">Ephemera</a>
+      </nav>
+      <div class="bridge-status">
+        <span>LOC <em>02:14</em></span>
+        <span>COORD <em>124.7° / 42.1°</em></span>
+        <span>SIG <em>NOMINAL</em></span>
+      </div>
+    </div>
+
+    <!-- Aperture hero -->
+    <section id="aperture" class="aperture aperture-brackets">
+      <div>
+        <p class="eyebrow">Orbital Node <span class="mono">//</span> Section 01 <span class="mono">//</span> Aperture Open</p>
+        <h1>The signal is cinema.<br/>The instrument is attention.<br/><em>We track films like celestial bodies.</em></h1>
+        <p class="lede">The Temporal Observatory is a working archive. We do not rank. We do not review. We observe the eight films of Christopher Nolan the way an observatory observes slow-moving phenomena — patiently, with calibration, returning to the same coordinates at different hours to see what the light has done.</p>
+        <p class="manifesto">Every film is stratified into three dream layers. Layer 1 is the transmission as received. Layer 2 is the production archive: how it was actually built, in what country, with what weight of metal. Layer 3 is the deep cuts: the signals most viewers never surface, recovered from the frame itself.</p>
+
+        <div class="cta-row">
+          <button class="btn primary">Enter the Constellation <span class="arrow">→</span></button>
+          <button class="btn">Scan Temporal Corridor <span class="arrow">↓</span></button>
+        </div>
+
+        <div class="hud-row">
+          <div class="hud-tile">
+            <div class="lbl">Signal Strength</div>
+            <div class="val">0.86 <span class="mono" style="font-size:11px;color:var(--ink-muted)">NOM</span></div>
+            <div class="signal-bar" aria-hidden="true">
+              <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="hud-tile">
+            <div class="lbl">Tracked Bodies</div>
+            <div class="val">8</div>
+            <div class="sub"><span class="led"></span>LAST INGEST · OPP-2023</div>
+          </div>
+          <div class="hud-tile">
+            <div class="lbl">Archive Depth</div>
+            <div class="val">L1 · L2 · L3</div>
+            <div class="sub"><span class="led amber"></span>LAYER 02 ACTIVE · 37%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="orbit" aria-hidden="true">
+        <div class="orbit-ring a"></div>
+        <div class="orbit-ring b"></div>
+        <div class="orbit-ring c"></div>
+        <div class="orbit-core"></div>
+        <div class="orbit-reticle tl">OBS // 124.7°</div>
+        <div class="orbit-reticle br">LIVE</div>
+        <div class="orbit-node a"></div>
+        <div class="orbit-node b"></div>
+      </div>
+    </section>
+
+    <!-- Constellation -->
+    <section id="constellation" class="section">
+      <div class="tick-ruler"></div>
+      <div class="section-head">
+        <div>
+          <p class="num">Section 02 <span class="mono">//</span> Constellation Grid</p>
+          <h2>Eight tracked bodies. <em>One extended signal.</em></h2>
+        </div>
+        <div class="coord">
+          COORD LOCK · 124.7° / 42.1°<br/>
+          FR 24/s · APERTURE OPEN
+        </div>
+      </div>
+      <div class="constellation">
+        <div class="constellation-legend">
+          <b>Constellation Read</b><br/>
+          Origin · MEM-2000<br/>
+          Gotham Cluster · BB/TDK/TDKR<br/>
+          Deep Field · INT / TEN / OPP
+        </div>
+
+        <!-- stars positioned by x/y -->
+        <div class="star" style="--film-glow:#6adc8c;top:78%;left:12%" data-code="MEM-2000"></div>
+        <div class="star" style="--film-glow:#9ca3b0;top:62%;left:34%" data-code="BB-2005"></div>
+        <div class="star" style="--film-glow:#88a9d6;top:70%;left:46%" data-code="TDK-2008"></div>
+        <div class="star" style="--film-glow:#c9a27f;top:64%;left:58%" data-code="TDKR-2012"></div>
+        <div class="star" style="--film-glow:#b08cdc;top:34%;left:52%" data-code="INC-2010"></div>
+        <div class="star" style="--film-glow:#6ab4dc;top:22%;left:72%" data-code="INT-2014"></div>
+        <div class="star" style="--film-glow:#dc8c6a;top:18%;left:86%" data-code="TEN-2020"></div>
+        <div class="star" style="--film-glow:#d69b74;top:40%;left:90%" data-code="OPP-2023"></div>
+
+        <!-- coordinate labels at edges -->
+        <div class="coord-label" style="top:calc(78% + 20px);left:12%">64 / 28</div>
+        <div class="coord-label" style="top:calc(22% + 20px);left:72%">ENDURANCE</div>
+        <div class="coord-label" style="top:calc(18% + 20px);left:86%">ENTROPY</div>
+        <div class="coord-label" style="top:calc(40% + 20px);left:90%">CRITICAL MASS</div>
+      </div>
+    </section>
+
+    <!-- Dossier rail -->
+    <section id="dossier" class="section">
+      <div class="section-head">
+        <div>
+          <p class="num">Section 03 <span class="mono">//</span> Dossier Rail</p>
+          <h2>Stratified dossier. <em>Depth-selectable.</em></h2>
+        </div>
+        <div class="coord">FILM LOCK · INT-2014<br/>LAYER · 01 LIVE SIGNAL</div>
+      </div>
+      <div class="dossier">
+        <div class="dossier-films" role="tablist">
+          <button class="df-tab active" style="--film-glow:#6ab4dc" aria-selected="true">
+            <div class="code">INT-2014</div>
+            <div class="title">Interstellar</div>
+            <div class="year">2014 · 169 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#b08cdc">
+            <div class="code">INC-2010</div>
+            <div class="title">Inception</div>
+            <div class="year">2010 · 148 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#dc8c6a">
+            <div class="code">TEN-2020</div>
+            <div class="title">Tenet</div>
+            <div class="year">2020 · 150 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#6adc8c">
+            <div class="code">MEM-2000</div>
+            <div class="title">Memento</div>
+            <div class="year">2000 · 113 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#9ca3b0">
+            <div class="code">BB-2005</div>
+            <div class="title">Batman Begins</div>
+            <div class="year">2005 · 140 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#88a9d6">
+            <div class="code">TDK-2008</div>
+            <div class="title">The Dark Knight</div>
+            <div class="year">2008 · 152 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#c9a27f">
+            <div class="code">TDKR-2012</div>
+            <div class="title">Dark Knight Rises</div>
+            <div class="year">2012 · 165 MIN</div>
+          </button>
+          <button class="df-tab" style="--film-glow:#d69b74">
+            <div class="code">OPP-2023</div>
+            <div class="title">Oppenheimer</div>
+            <div class="year">2023 · 180 MIN</div>
+          </button>
+        </div>
+
+        <div class="dossier-pane">
+          <div class="layers">
+            <button class="layer-tab active l1">LIVE SIGNAL<div class="meter"><span></span><span></span><span></span></div></button>
+            <button class="layer-tab l2">PRODUCTION ARCHIVE<div class="meter"><span></span><span></span><span></span></div></button>
+            <button class="layer-tab l3">DEEP CUTS<div class="meter"><span></span><span></span><span></span></div></button>
+          </div>
+
+          <div class="dossier-meta">
+            <span>TRANSMISSION · ENDURANCE-LOG-7A</span>
+            <span>COORD · 124.7° / 42.1°</span>
+            <span>DEPTH · LAYER 01</span>
+          </div>
+
+          <h3>Interstellar</h3>
+          <div class="tagline">"Refuse the fade. Push deeper."</div>
+
+          <p>This transmission concerns the most radical proposition embedded in Cooper Station's founding narrative: that love is not a sentiment, but a quantifiable force — a vector capable of transcending spacetime.</p>
+          <p>Brand's speech in the second act is often dismissed as emotional compromise in a film otherwise committed to hard science. This reading is superficial. The film's final reveal — that Cooper communicates with Murph across decades via gravitational anomalies — retroactively validates Brand's thesis. Love, here, functions as the only mechanism capable of navigating a tesseract. The beings who constructed the dimensional shortcut did not do so with logic. They did so by following a signal that logic cannot explain.</p>
+          <p>Cooper finds the correct moment in spacetime not through calculation, but through recognition. The watch. The dust. His daughter's room. Love is the index.</p>
+
+          <div class="tags">
+            <span class="tag">Love as Dimension</span>
+            <span class="tag">Time Dilation</span>
+            <span class="tag">Gravity</span>
+            <span class="tag">Survival</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Temporal Corridor -->
+    <section id="corridor" class="section">
+      <div class="section-head">
+        <div>
+          <p class="num">Section 04 <span class="mono">//</span> Temporal Corridor</p>
+          <h2>Chronology as a <em>pressure system.</em></h2>
+        </div>
+        <div class="coord">RANGE 2000 – 2023 · SPAN 23Y</div>
+      </div>
+      <div class="corridor">
+        <div class="corridor-rail">
+          <div class="corridor-band" style="left:0;width:22%"><span class="lbl">Early Signal</span></div>
+          <div class="corridor-band" style="left:22%;width:30%"><span class="lbl">Gotham Cycle</span></div>
+          <div class="corridor-band" style="left:52%;width:48%"><span class="lbl">Deep Field</span></div>
+          <div class="corridor-line"></div>
+
+          <div class="corridor-node" style="--film-glow:#6adc8c;left:2%">
+            <div class="label-above">Memento<span>MEM-2000</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2000</div>
+          </div>
+          <div class="corridor-node" style="--film-glow:#9ca3b0;left:22%">
+            <div class="label-above">Batman Begins<span>BB-2005</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2005</div>
+          </div>
+          <div class="corridor-node" style="--film-glow:#88a9d6;left:35%">
+            <div class="label-above">The Dark Knight<span>TDK-2008</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2008</div>
+          </div>
+          <div class="corridor-node" style="--film-glow:#b08cdc;left:44%">
+            <div class="label-above">Inception<span>INC-2010</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2010</div>
+          </div>
+          <div class="corridor-node" style="--film-glow:#c9a27f;left:52%">
+            <div class="label-above">TDKR<span>TDKR-2012</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2012</div>
+          </div>
+          <div class="corridor-node active" style="--film-glow:#6ab4dc;left:61%">
+            <div class="label-above">Interstellar<span>INT-2014</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2014</div>
+          </div>
+          <div class="corridor-node" style="--film-glow:#dc8c6a;left:87%">
+            <div class="label-above">Tenet<span>TEN-2020</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2020</div>
+          </div>
+          <div class="corridor-node" style="--film-glow:#d69b74;left:100%">
+            <div class="label-above">Oppenheimer<span>OPP-2023</span></div>
+            <div class="dot"></div>
+            <div class="label-below">2023</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layer navigator -->
+    <section id="layers" class="section">
+      <div class="section-head">
+        <div>
+          <p class="num">Section 05 <span class="mono">//</span> Dream Layer Navigator</p>
+          <h2>Three strata. <em>One signal, read at depth.</em></h2>
+        </div>
+        <div class="coord">LAYER MODE · STACK</div>
+      </div>
+      <div class="layers-nav">
+        <div class="layer-deck" style="--layer-color:var(--signal-green)">
+          <div class="num">Layer 01 · Live Signal</div>
+          <h4>The transmission as received.</h4>
+          <p>What the film argues, on screen, in public. Thematic structure, moral argument, narrative architecture. Default reading depth.</p>
+          <div class="depth"><span style="background:var(--signal-green)"></span><span></span><span></span></div>
+        </div>
+        <div class="layer-deck" style="--layer-color:var(--signal-amber)">
+          <div class="num">Layer 02 · Production Archive</div>
+          <h4>How it was actually built.</h4>
+          <p>Construction logs, director transmissions, field notes. 500 acres of corn. A real 747. Six countries, sixty days. The image had to have weight because it was real weight.</p>
+          <div class="depth"><span style="background:var(--signal-amber)"></span><span style="background:var(--signal-amber)"></span><span></span></div>
+        </div>
+        <div class="layer-deck" style="--layer-color:var(--signal-red)">
+          <div class="num">Layer 03 · Deep Cuts</div>
+          <h4>Signals most viewers never surface.</h4>
+          <p>Recovered from the frame itself. The ticking you never noticed. The crew spelling D.R.E.A.M.S. The 2,000-year-old palindrome. Hidden in plain sight for 20 years.</p>
+          <div class="depth"><span style="background:var(--signal-red)"></span><span style="background:var(--signal-red)"></span><span style="background:var(--signal-red)"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured transmission -->
+    <section id="transmission" class="section">
+      <div class="section-head">
+        <div>
+          <p class="num">Section 06 <span class="mono">//</span> Featured Transmission</p>
+          <h2>Transmission of the cycle.</h2>
+        </div>
+        <div class="coord">LAYER 03 · SIGNAL DEPTH CRITICAL</div>
+      </div>
+      <div class="transmission">
+        <p class="eyebrow">Transmission 047 <span class="mono">//</span> Layer 03 <span class="mono">//</span> INT-2014</p>
+        <h3>The equation <em>Brand already solved.</em></h3>
+        <div class="byline">Archivist on duty · 02:14 LOCAL · INT-2014 / LAYER 03 / DEEP CUTS</div>
+        <div class="body">
+          <div>
+            <p>Professor Brand solved his own equation decades before the events of <em>Interstellar</em> begin. He knew the answer. He knew, more importantly, what the answer required — data that could only be retrieved from inside a singularity, and therefore data that could not be retrieved at all. He kept the solution to himself.</p>
+            <p>Every rocket the film fires, every death it accepts, every small hopeful thing Cooper does in the cornfield — all of it runs downstream of a calculation a single man had already finished and chose to bury. The gravity equation is not a physics problem. It is a story about how institutions maintain hope by manufacturing it, and how they decide, on our behalf, which lies are load-bearing.</p>
+            <p>This is the observatory's position: the film is not cruel for telling you. The film is exact. The only difference between Plan A and Plan B is how many people had to believe in a false one for the real one to survive the night.</p>
+          </div>
+          <div>
+            <div class="waveform"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="hud-tile" style="margin-top:16px">
+              <div class="lbl">Related Coordinates</div>
+              <div class="sub" style="flex-direction:column;align-items:flex-start;gap:4px;margin-top:8px">
+                <span>INT-2014 · GRAVITY EQUATION</span>
+                <span>INT-2014 · BRAND PROOF</span>
+                <span>OPP-2023 · NECESSARY LIES</span>
+              </div>
+            </div>
+            <button class="btn" style="margin-top:14px;width:100%">Open full dossier <span class="arrow">→</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Observer Log Feed -->
+    <section id="feed" class="section">
+      <div class="section-head">
+        <div>
+          <p class="num">Section 07 <span class="mono">//</span> Observer Log Feed</p>
+          <h2>Entries from the shift.</h2>
+        </div>
+        <div class="coord">LAST 4 · REFRESH 40s</div>
+      </div>
+      <div class="feed">
+        <article class="log">
+          <div class="log-meta"><span>LOG // 0412</span><span>COORD 43 / 91</span><span>MEM-2000</span></div>
+          <h4>Polaroid recovered · Emma's Tattoos, Los Angeles, 2000.</h4>
+          <p>Behind Leonard's Jaguar, a white Honda Civic holds position in frame for eleven seconds across three cuts. Plate visible. Owner on record: Nolan, C. The director parked his own car inside the film about forgetting.</p>
+        </article>
+        <article class="log">
+          <div class="log-meta"><span>LOG // 0977</span><span>COORD 186 / 44</span><span>INT-2014</span></div>
+          <h4>Audio tick · Miller's planet.</h4>
+          <p>Waveform analysis of the surf bed confirms a 1.25-second periodic pulse buried under the wash. Each pulse equals one full Earth rotation aboard the Endurance. The ocean is keeping time for the ship above it.</p>
+        </article>
+        <article class="log">
+          <div class="log-meta"><span>LOG // 1143</span><span>COORD 72 / 30</span><span>INC-2010</span></div>
+          <h4>License plate · Paris chase.</h4>
+          <p>Freeze-frame at 0:41:22 during the arterial chase. All visible registration plates read <em>THE ALTERNATE STATE</em> in place of the region field. Plates remain legible for less than two seconds. No line of dialogue references this.</p>
+        </article>
+        <article class="log">
+          <div class="log-meta"><span>LOG // 1508</span><span>COORD 204 / 12</span><span>TEN-2020</span></div>
+          <h4>Red thread · Siberian gate.</h4>
+          <p>Final battle, rear-guard approach. A single operator with a red thread looped through the top strap of their pack moves forward through fire, opens a sealed gate, and dies against it. On re-entry, the thread reconciles: it is Neil's pack.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Ephemera -->
+    <section id="ephemera" class="section">
+      <div class="section-head">
+        <div>
+          <p class="num">Section 08 <span class="mono">//</span> Ephemera Wall</p>
+          <h2>Recovered artifacts.</h2>
+        </div>
+        <div class="coord">8 ARTIFACTS · CATALOG OPEN</div>
+      </div>
+      <div class="ephemera">
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><rect x="10" y="12" width="60" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="16" width="52" height="36" fill="currentColor" opacity=".18"/><rect x="18" y="56" width="44" height="4" fill="currentColor" opacity=".45"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-0412 · MEM-2000</div>
+          <h5>The Polaroid</h5>
+          <p>Found shaking in reverse. Image fading, not developing. The film is running backwards.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="40" cy="40" r="3" fill="currentColor"/><path d="M40 40 L40 20 M40 40 L54 40" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-0977 · INT-2014</div>
+          <h5>The Tick</h5>
+          <p>1.25s between waves. One tick, one Earth day above. A clock disguised as an ocean.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><rect x="8" y="28" width="64" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="40" y="45" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="currentColor">ALT STATE</text></svg>
+          </div>
+          <div class="relic-meta">ARCH-1143 · INC-2010</div>
+          <h5>The Plate</h5>
+          <p>Paris chase. "THE ALTERNATE STATE" printed in traffic. Name of the world, on the road.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="40" cy="40" r="8" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-1201 · INC-2010</div>
+          <h5>The Ring</h5>
+          <p>Cobb wears it only in dreams. The real totem was never the top.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><path d="M40 12 L46 36 L70 36 L52 52 L58 76 L40 62 L22 76 L28 52 L10 36 L34 36 Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-1420 · INT-2014</div>
+          <h5>The Watch</h5>
+          <p>Murph's, ticking on her desk. A gravitational signal from the fifth dimension, decoded in Morse.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><polygon points="40,12 62,32 40,68 18,32" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="40" cy="32" r="3" fill="currentColor"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-1477 · INC-2010</div>
+          <h5>The Top</h5>
+          <p>Cut to black. It never falls. It never doesn't fall. That's not the question.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><path d="M10 40 Q40 10 70 40 T40 70" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="68" cy="42" r="3" fill="var(--signal-red)"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-1508 · TEN-2020</div>
+          <h5>The Red Thread</h5>
+          <p>Backpack. Siberian gate. Neil, saving the Protagonist from a future he hasn't written yet.</p>
+        </article>
+        <article class="relic">
+          <div class="relic-art">
+            <svg viewBox="0 0 80 80"><rect x="14" y="20" width="52" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="14" y1="32" x2="66" y2="32" stroke="currentColor" stroke-width="1"/><line x1="14" y1="48" x2="66" y2="48" stroke="currentColor" stroke-width="1"/><line x1="30" y1="20" x2="30" y2="60" stroke="currentColor" stroke-width="1"/><line x1="50" y1="20" x2="50" y2="60" stroke="currentColor" stroke-width="1"/></svg>
+          </div>
+          <div class="relic-meta">ARCH-1699 · TEN-2020</div>
+          <h5>The Sator Square</h5>
+          <p>First-century Roman palindrome. Five words. Reads the same in four directions. Nolan built a film on a rock.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Subsurface footer -->
+    <footer class="subsurface">
+      <div class="col">
+        <h6>Archive</h6>
+        <a href="#">Current transmissions</a>
+        <a href="#">Full catalog</a>
+        <a href="#">Source references</a>
+      </div>
+      <div class="col">
+        <h6>Facility</h6>
+        <p>Temporal Observatory Node 001<br/>Build 2026.04 · Vol. VII<br/>Archive integrity 99.7%</p>
+      </div>
+      <div class="col">
+        <h6>Contact</h6>
+        <a href="#">theendurancelogs@gmail.com</a>
+        <p>Fair use. Commentary and criticism.</p>
+      </div>
+      <p class="closing">The telescope cannot know what it is looking at. It can only hold still long enough for the light to arrive.</p>
+    </footer>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- CATHEDRAL                                                     -->
+<!-- ============================================================= -->
+<section id="cathedral" class="view cath" role="tabpanel">
+  <div class="stain a"></div>
+  <div class="stain b"></div>
+  <div class="stain c"></div>
+  <div class="stain d"></div>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+
+  <div class="cath-wrap">
+
+    <!-- Chrome bar -->
+    <header class="chrome">
+      <div class="chrome-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+        IMAX · Cathedral
+      </div>
+      <nav class="chrome-nav">
+        <a href="#nave" class="active">Nave</a>
+        <a href="#vaults">Vaults</a>
+        <a href="#chapel">Chapel</a>
+        <a href="#chronicle">Chronicle</a>
+        <a href="#calendar">Calendar</a>
+        <a href="#pulpit">Pulpit</a>
+        <a href="#patrons">Patrons</a>
+      </nav>
+      <div class="chrome-clock">
+        <em>23 : 41 GMT</em>
+        Section I — Nave
+        <span class="nom">Signal · Nominal</span>
+      </div>
+    </header>
+
+    <!-- Nave hero -->
+    <section id="nave" class="nave">
+      <div class="rose-bg" aria-hidden="true">
+        <!-- rose window SVG -->
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width=".8">
+          <circle cx="200" cy="200" r="196"/>
+          <circle cx="200" cy="200" r="160"/>
+          <circle cx="200" cy="200" r="118"/>
+          <circle cx="200" cy="200" r="76"/>
+          <circle cx="200" cy="200" r="34"/>
+          <!-- 12 petals outer -->
+          <g>
+            <!-- use grouped elliptical petals around circle -->
+            <g id="petals">
+              <ellipse cx="200" cy="120" rx="18" ry="56"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(30 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(60 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(90 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(120 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(150 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(180 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(210 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(240 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(270 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(300 200 200)"/>
+              <ellipse cx="200" cy="120" rx="18" ry="56" transform="rotate(330 200 200)"/>
+            </g>
+            <!-- 8 inner quatrefoil -->
+            <g stroke-width="1">
+              <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z"/>
+              <path d="M234 154 A34 34 0 0 1 246 200 L200 200 Z" transform="rotate(45 200 200)"/>
+              <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(90 200 200)"/>
+              <path d="M234 154 A34 34 0 0 1 246 200 L200 200 Z" transform="rotate(135 200 200)"/>
+              <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(180 200 200)"/>
+              <path d="M234 154 A34 34 0 0 1 246 200 L200 200 Z" transform="rotate(225 200 200)"/>
+              <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(270 200 200)"/>
+              <path d="M234 154 A34 34 0 0 1 246 200 L200 200 Z" transform="rotate(315 200 200)"/>
+            </g>
+            <!-- central cross -->
+            <path d="M200 170 v60 M170 200 h60" stroke-width="1.2"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="nave-eyebrow">MMXXVI · Canonical Edition · Volume VII</div>
+      <h1>The IMAX<br/>Cathedral.</h1>
+      <p class="nave-sub">An archive in 70mm. A congregation of frames.<br/>Kneel if the projector demands it.</p>
+      <div class="nave-cta">
+        <button class="btn-hair">Enter the Nave →</button>
+        <button class="btn-hair ghost">View Programme</button>
+      </div>
+      <div class="nave-ticker">Transmission Open · Endurance-Log-7A · Gargantua Stable · Next Liturgy 04:00 · Vigil</div>
+    </section>
+
+    <!-- Premiere rail -->
+    <section id="premiere" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">I</span>
+        <div class="meta">
+          <p class="eyebrow">Premiere Restorations · Featured</p>
+          <h2>The altar. Three films lit tonight.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+
+      <div class="premiere">
+        <article class="premiere-card" style="--accent:#6ab4dc">
+          <div>
+            <div class="premiere-head">Restoration 01 / 03 · IMAX 70MM</div>
+            <div class="premiere-poster">
+              <svg viewBox="0 0 60 60" fill="none" stroke="currentColor"><circle cx="30" cy="30" r="24" stroke-width="1"/><circle cx="30" cy="30" r="12" stroke-width=".7"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+              <div class="poster-title">INT.</div>
+            </div>
+            <h3>Interstellar</h3>
+            <div class="year">2014 · 169 MIN · INT-2014</div>
+            <p class="tagline">"A love letter photographed on two formats at once, because one format could not contain both the wheat and the wormhole."</p>
+            <div class="plates"><span class="plate">IMAX 70MM</span><span class="plate">Dolby Atmos</span></div>
+          </div>
+          <div class="premiere-cta"><span>Reserve</span><span>→</span></div>
+        </article>
+
+        <article class="premiere-card focused" style="--accent:#d69b74">
+          <div>
+            <div class="premiere-head">Restoration 02 / 03 · 70MM B&amp;W · IMAX</div>
+            <div class="premiere-poster">
+              <svg viewBox="0 0 60 60" fill="none" stroke="currentColor"><circle cx="30" cy="30" r="20" stroke-width="1"/><path d="M10 30 A20 20 0 0 1 50 30" stroke-width=".7"/><path d="M10 30 A20 20 0 0 0 50 30" stroke-width=".7"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+              <div class="poster-title">OPP.</div>
+            </div>
+            <h3>Oppenheimer</h3>
+            <div class="year">2023 · 180 MIN · OPP-2023</div>
+            <p class="tagline">"The first feature ever to burn black-and-white into IMAX 65MM stock. The hearings have documentary weight. The blast has cognitive lag."</p>
+            <div class="plates"><span class="plate">IMAX 65MM B&amp;W</span><span class="plate">Dolby Atmos</span></div>
+          </div>
+          <div class="premiere-cta"><span>Reserve</span><span>→</span></div>
+        </article>
+
+        <article class="premiere-card" style="--accent:#dc8c6a">
+          <div>
+            <div class="premiere-head">Restoration 03 / 03 · 70MM ANAMORPHIC</div>
+            <div class="premiere-poster">
+              <svg viewBox="0 0 60 60" fill="none" stroke="currentColor"><rect x="10" y="18" width="40" height="24" rx="1" stroke-width="1"/><path d="M14 30 L46 30 M30 22 L30 38" stroke-width=".6"/></svg>
+              <div class="poster-title">TEN.</div>
+            </div>
+            <h3>Tenet</h3>
+            <div class="year">2020 · 150 MIN · TEN-2020</div>
+            <p class="tagline">"Bought a 747 rather than render one, and choreographed every punch in two directions so the tape ran the same either way."</p>
+            <div class="plates"><span class="plate">70MM ANA.</span><span class="plate">Palindrome Score</span></div>
+          </div>
+          <div class="premiere-cta"><span>Reserve</span><span>→</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Vaults -->
+    <section id="vaults" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">II</span>
+        <div class="meta">
+          <p class="eyebrow">The Vaults · Numbered Chapters</p>
+          <h2>Six chapels. Six arguments.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+      <div class="vaults">
+        <article class="vault">
+          <div class="roman">I</div>
+          <h3>The Endurance Wing</h3>
+          <p>Films where love is load-bearing infrastructure.</p>
+          <div class="foot"><span>Ch. I · 2 transmissions</span><span>Open →</span></div>
+        </article>
+        <article class="vault">
+          <div class="roman">II</div>
+          <h3>The Dream Architecture</h3>
+          <p>Heists of the subconscious; cities that fold in daylight.</p>
+          <div class="foot"><span>Ch. II · 1 transmission</span><span>Open →</span></div>
+        </article>
+        <article class="vault">
+          <div class="roman">III</div>
+          <h3>The Gotham Crypts</h3>
+          <p>Three volumes on fear as civic technology.</p>
+          <div class="foot"><span>Ch. III · 3 transmissions</span><span>Open →</span></div>
+        </article>
+        <article class="vault">
+          <div class="roman">IV</div>
+          <h3>The Palindrome Chapel</h3>
+          <p>Entries that read identically from either end of time.</p>
+          <div class="foot"><span>Ch. IV · 1 transmission</span><span>Open →</span></div>
+        </article>
+        <article class="vault">
+          <div class="roman">V</div>
+          <h3>The Memory Reliquary</h3>
+          <p>Polaroids, tattoos, and the tyranny of external record-keeping.</p>
+          <div class="foot"><span>Ch. V · 1 transmission</span><span>Open →</span></div>
+        </article>
+        <article class="vault">
+          <div class="roman">VI</div>
+          <h3>The Atomic Sacristy</h3>
+          <p>The audit of consequence. The hearing after the blast.</p>
+          <div class="foot"><span>Ch. VI · 1 transmission</span><span>Open →</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Chapel (director) -->
+    <section id="chapel" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">III</span>
+        <div class="meta">
+          <p class="eyebrow">The Chapel · Director in Residence</p>
+          <h2>Architect of the house.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+      <div class="chapel">
+        <div>
+          <div class="chapel-portrait">
+            <svg viewBox="0 0 240 300" fill="none">
+              <!-- stylized silhouette -->
+              <rect width="240" height="300" fill="#1a1a1c"/>
+              <path d="M60 290 L60 190 Q60 150 110 150 Q130 150 140 130 Q150 110 145 90 Q140 60 120 55 Q90 52 78 78 Q70 98 85 120 Q92 130 85 140 Q74 152 60 170 Q42 195 40 230 L40 290 Z" fill="#e8dfc8" opacity=".88"/>
+              <path d="M118 70 Q135 74 142 90 Q145 102 138 114 L132 112 Q136 98 132 90 Q128 82 116 80 Z" fill="#c9a24a" opacity=".22"/>
+              <rect x="10" y="10" width="220" height="280" fill="none" stroke="#c9a24a" stroke-width=".6" opacity=".38"/>
+              <rect x="16" y="16" width="208" height="268" fill="none" stroke="#c9a24a" stroke-width=".4" opacity=".22"/>
+            </svg>
+          </div>
+          <div class="chapel-plaque">Christopher Edward Nolan · b. 1970 · Architect</div>
+        </div>
+        <div class="chapel-body">
+          <p class="lead">"He shoots the corn because the corn must actually exist. He buys the 747 because the 747 must actually combust. The camera is a witness, and a witness lies when you hand it anything synthetic. This is the doctrine of the house."</p>
+
+          <h4><span>§ I</span>Signal</h4>
+          <p>Nolan's governing instinct is weight. A film must feel heavy because it was heavy. 500 acres of Alberta corn. A real Boeing 747 in Victorville. A rotating hallway built at 100 feet on a gimbal rig. Spectacle earned by construction, not synthesis.</p>
+
+          <h4><span>§ II</span>Method</h4>
+          <p>Practical first. Digital only where necessary. The Gargantua render produced real astrophysics papers. TARS and CASE are performers inside rigs. The result is not realism; it is persuasion. The audience believes because the camera had something to witness.</p>
+
+          <h4><span>§ III</span>Argument</h4>
+          <p>Every film is a structural argument disguised as a genre exercise. Memento is a thesis on memory as self-administered evidence. Inception is a film about what cinema actually does. Tenet is an essay on fatalism told as a pincer movement. Oppenheimer is an audit of consequence shot on stock that did not exist until the film demanded it.</p>
+
+          <div class="colophon">✠</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chronicle -->
+    <section id="chronicle" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">IV</span>
+        <div class="meta">
+          <p class="eyebrow">The Chronicle · Liturgical Calendar</p>
+          <h2>Hours of the canon.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+      <div class="chronicle-rail">
+        <div class="chronicle-line">
+          <div class="chronicle-marker" style="left:2%">
+            <div class="hour">Matins</div>
+            <div class="year">1998</div>
+            <div class="film">Following</div>
+            <div class="aside"><em>Before the house. £6,000. Weekends only.</em></div>
+          </div>
+          <div class="chronicle-dot tech" style="left:2%"></div>
+
+          <div class="chronicle-marker" style="left:14%">
+            <div class="hour tech">Lauds · Technical</div>
+            <div class="year">2000</div>
+            <div class="film">Memento</div>
+            <div class="aside"><em>113 jumps in chronology. 25 days of shoot.</em></div>
+          </div>
+          <div class="chronicle-dot tech" style="left:14%"></div>
+
+          <div class="chronicle-marker" style="left:28%">
+            <div class="hour">Prime</div>
+            <div class="year">2005</div>
+            <div class="film">Batman Begins</div>
+            <div class="aside"><em>A reboot treated as first-principles engineering.</em></div>
+          </div>
+          <div class="chronicle-dot" style="left:28%"></div>
+
+          <div class="chronicle-marker" style="left:40%">
+            <div class="hour">Terce</div>
+            <div class="year">2008</div>
+            <div class="film">The Dark Knight</div>
+            <div class="aside"><em>IMAX in sustained use. A truck, flipped for real.</em></div>
+          </div>
+          <div class="chronicle-dot" style="left:40%"></div>
+
+          <div class="chronicle-marker" style="left:50%">
+            <div class="hour">Sext</div>
+            <div class="year">2010</div>
+            <div class="film">Inception</div>
+            <div class="aside"><em>The rotating hallway. Six countries. Sixty days.</em></div>
+          </div>
+          <div class="chronicle-dot" style="left:50%"></div>
+
+          <div class="chronicle-marker" style="left:60%">
+            <div class="hour">None</div>
+            <div class="year">2012</div>
+            <div class="film">TDK Rises</div>
+            <div class="aside"><em>The Dent Act detonates on schedule.</em></div>
+          </div>
+          <div class="chronicle-dot" style="left:60%"></div>
+
+          <div class="chronicle-marker" style="left:72%">
+            <div class="hour tech">Vespers · Technical</div>
+            <div class="year">2014</div>
+            <div class="film">Interstellar</div>
+            <div class="aside"><em>Kip Thorne's two rules. Gargantua, rendered accurately.</em></div>
+          </div>
+          <div class="chronicle-dot tech" style="left:72%"></div>
+
+          <div class="chronicle-marker" style="left:86%">
+            <div class="hour">Compline</div>
+            <div class="year">2020</div>
+            <div class="film">Tenet</div>
+            <div class="aside"><em>A 747, bought and detonated. Zero green screen.</em></div>
+          </div>
+          <div class="chronicle-dot" style="left:86%"></div>
+
+          <div class="chronicle-marker" style="left:100%">
+            <div class="hour tech">Vigil · Technical</div>
+            <div class="year">2023</div>
+            <div class="film">Oppenheimer</div>
+            <div class="aside"><em>First feature burned on IMAX 65mm B&amp;W stock.</em></div>
+          </div>
+          <div class="chronicle-dot tech" style="left:100%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calendar -->
+    <section id="calendar" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">V</span>
+        <div class="meta">
+          <p class="eyebrow">The Ritual Calendar · Programme of the Faithful</p>
+          <h2>Six screenings. One house.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+      <div class="calendar">
+        <div class="calendar-top">
+          <span><span class="lamp"></span>Board last updated · 23·APR·MMXXVI · 04:17 GMT</span>
+          <span>Capacity · <em>3,660 seats</em></span>
+        </div>
+
+        <div class="ticket">
+          <div class="ticket-date">02<span>MAY · MMXXVI</span></div>
+          <div class="ticket-film">Interstellar<span>ENDURANCE-LOG-7A</span></div>
+          <div class="ticket-venue">Nave I — 900 seats</div>
+          <div class="ticket-format">IMAX 70MM</div>
+          <div class="ticket-seats">S-07 · S-08</div>
+          <div class="ticket-status open">Open</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-date">09<span>MAY · MMXXVI</span></div>
+          <div class="ticket-film">Oppenheimer<span>ENDURANCE-LOG-8E</span></div>
+          <div class="ticket-venue">Apse II — 620 seats</div>
+          <div class="ticket-format">70MM B&amp;W</div>
+          <div class="ticket-seats">House Full</div>
+          <div class="ticket-status sold">Sold</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-date">16<span>MAY · MMXXVI</span></div>
+          <div class="ticket-film">The Dark Knight<span>ENDURANCE-LOG-3C</span></div>
+          <div class="ticket-venue">Narthex — 480 seats</div>
+          <div class="ticket-format">IMAX 70MM</div>
+          <div class="ticket-seats">C-14 · C-15</div>
+          <div class="ticket-status open">Open</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-date">23<span>MAY · MMXXVI</span></div>
+          <div class="ticket-film">Tenet<span>ENDURANCE-LOG-9B</span></div>
+          <div class="ticket-venue">Nave I — 900 seats</div>
+          <div class="ticket-format">70MM ANA.</div>
+          <div class="ticket-seats">Waitlist</div>
+          <div class="ticket-status wait">Wait</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-date">30<span>MAY · MMXXVI</span></div>
+          <div class="ticket-film">Inception<span>ENDURANCE-LOG-4C</span></div>
+          <div class="ticket-venue">Transept — 540 seats</div>
+          <div class="ticket-format">35MM ANA.</div>
+          <div class="ticket-seats">B-03 · B-04</div>
+          <div class="ticket-status open">Open</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-date">06<span>JUN · MMXXVI</span></div>
+          <div class="ticket-film">Memento<span>ENDURANCE-LOG-1A</span></div>
+          <div class="ticket-venue">Crypt IV — 220 seats</div>
+          <div class="ticket-format">35MM REV.</div>
+          <div class="ticket-seats">S-11</div>
+          <div class="ticket-status open">Limited</div>
+        </div>
+
+        <div class="calendar-tear"></div>
+      </div>
+    </section>
+
+    <!-- Pulpit -->
+    <section id="pulpit" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">VI</span>
+        <div class="meta">
+          <p class="eyebrow">The Pulpit · Essays &amp; Field Notes</p>
+          <h2>A sermon and two witnesses.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+      <div class="pulpit">
+        <article class="essay">
+          <div class="tag">Field Note N° 01</div>
+          <h3>The Ticking That Is Physics</h3>
+          <p class="drop">On Miller's planet, the ocean does not hiss — it clicks. A metronome baked into the sound design marks every 1.25 seconds, and each tick is a full Earth day lost on the ship above. The film's score is general relativity compressed into ambient texture.</p>
+          <div class="byline">L. P. Hallsworth · Resident Observer</div>
+        </article>
+
+        <article class="essay sermon">
+          <div class="tag">Sermon · Vol. VII</div>
+          <h3>On Weight: A Sermon on Practical Light</h3>
+          <p class="drop">Nolan builds planets before he films them. Alberta grew five hundred acres of real corn for four months so a single shot could have the physical density of a real harvest. In Victorville, the production bought a decommissioned 747 because buying one was cheaper than pretending to own one.</p>
+          <p>The director insists on what the camera can witness. Gargantua was rendered by a physicist's software that produced actual astrophysics papers. The rotating hallway was built. The zero-gravity was choreographed on wires. Every frame the film shows you was, at some prior moment, a real object in a real place.</p>
+          <p>This is not realism. Realism is a surface effect. What Nolan enforces is <em>weight</em>. A film earned in labor and steel has a tonnage the synthetic version cannot supply. Audiences cannot always articulate the difference, but they feel it. The house believes this is the only legitimate way to photograph a dream.</p>
+          <div class="byline">— S. A. Matthews · Senior Archivist · Vol. VII</div>
+        </article>
+
+        <article class="essay">
+          <div class="tag">Field Note N° 02</div>
+          <h3>The Palindrome Hidden in Pompeii</h3>
+          <p class="drop">Tenet's character roster — Sator, Arepo, Opera, Rotas — is not invention but inheritance. A first-century Roman stone carving supplies the film's complete naming grammar. The villain is a two-thousand-year-old rock turned inside out.</p>
+          <div class="byline">R. Kaganovich · Vault Keeper · Crypt IV</div>
+        </article>
+      </div>
+
+      <div class="pullquote"><em>"</em>The bomb is not the ending. It is the beginning of a system no one can later shut down.<em>"</em></div>
+    </section>
+
+    <!-- Patrons -->
+    <section id="patrons" class="cath-section">
+      <div class="cath-head">
+        <span class="numeral">VII</span>
+        <div class="meta">
+          <p class="eyebrow">The Patrons · A Circle of the Faithful</p>
+          <h2>One thousand seats. No more.</h2>
+        </div>
+      </div>
+      <div class="hair-divider"></div>
+      <div class="patrons">
+        <div>
+          <h3>Take orders, not subscriptions.</h3>
+          <p>Admission buys you a seat in the Nave, a key to the Vaults, and a printed stub for every screening you attend for as long as the building stands. Patrons receive the liturgical calendar by post, twice a year, on uncoated stock.</p>
+          <p>Membership is limited to one thousand names because a cathedral is not a platform. It is a room that can only hold what it was built to hold.</p>
+          <button class="btn-hair">Take Orders →</button>
+        </div>
+        <div>
+          <div class="patron-row"><div class="n">I</div><div class="t">Printed Programme</div><div class="o">Biannual letterpress · mailed</div></div>
+          <div class="patron-row"><div class="n">II</div><div class="t">First-Seating Rights</div><div class="o">Priority 72h · before public</div></div>
+          <div class="patron-row"><div class="n">III</div><div class="t">Restoration Access</div><div class="o">Crypt IV · archive pass</div></div>
+          <div class="patron-row"><div class="n">IV</div><div class="t">Order of the Rose</div><div class="o">Name engraved · Nave rail</div></div>
+          <div class="patron-row"><div class="n">V</div><div class="t">Final Reel Rights</div><div class="o">Standing admission · any night</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Crypt footer -->
+    <footer class="crypt">
+      <div class="crypt-grid">
+        <div>
+          <h6>Archive</h6>
+          <a href="#">Current Programme</a>
+          <a href="#">Full Canon</a>
+          <a href="#">Source References</a>
+        </div>
+        <div>
+          <h6>Orders</h6>
+          <a href="#">Become a Patron</a>
+          <a href="#">Gift Membership</a>
+          <a href="#">Rights &amp; Credits</a>
+        </div>
+        <div>
+          <h6>Contact</h6>
+          <a href="#">theendurancelogs@gmail.com</a>
+          <p>Fair use. Commentary and criticism.</p>
+        </div>
+        <div>
+          <h6>Inscription</h6>
+          <p class="inscr">Let no frame be lost. Let no format be deprecated. Let the projector run past the credits, as the organ runs past the final hymn. The reel ends. The building does not.</p>
+        </div>
+      </div>
+      <div class="crypt-colophon">IMAX Cathedral · Set in Bodoni Moda &amp; Inter Tight · Projected in Obsidian · Amen.</div>
+      <div class="crypt-mark">✠</div>
+    </footer>
+  </div>
+</section>
+
+<script>
+  (function(){
+    var buttons = {
+      observatory: document.getElementById('mt-observatory'),
+      cathedral:   document.getElementById('mt-cathedral')
+    };
+    var views = {
+      observatory: document.getElementById('observatory'),
+      cathedral:   document.getElementById('cathedral')
+    };
+    function setActive(key){
+      Object.keys(views).forEach(function(k){
+        var on = k === key;
+        views[k].classList.toggle('active', on);
+        buttons[k].setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      try{ history.replaceState(null, '', '#' + key); }catch(_){}
+      window.scrollTo({ top:0, behavior:'instant' in window ? 'instant' : 'auto' });
+    }
+    buttons.observatory.addEventListener('click', function(){ setActive('observatory'); });
+    buttons.cathedral.addEventListener('click',   function(){ setActive('cathedral'); });
+    var hash = (location.hash || '').replace('#','');
+    if (hash === 'cathedral' || hash === 'observatory') setActive(hash);
+
+    // Dossier film tab switch (visual only — static copy kept for current active)
+    document.querySelectorAll('.dossier-films .df-tab').forEach(function(tab){
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.dossier-films .df-tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+      });
+    });
+    // Layer tabs
+    document.querySelectorAll('.layers .layer-tab').forEach(function(tab){
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.layers .layer-tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

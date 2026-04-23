@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The IMAX Cathedral // Volume VII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,700;1,6..96,900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+<style>
+/* ============================================================= */
+/* 0 · TOKENS                                                     */
+/* ============================================================= */
+:root{
+  --obsidian:#0A0A0C; --obsidian-2:#111114; --charcoal:#17171D; --charcoal-2:#1f1f26;
+  --ivory:#F4EFE4; --ivory-dim:rgba(244,239,228,.72); --ivory-mute:rgba(244,239,228,.5);
+  --gold:#C9A24A; --gold-hi:#E6C069; --amber:#D69B74; --crimson:#9A2B2B; --cyan:#6AB4DC;
+  --stain-violet:#7A5C9E; --stain-rust:#9E5C4A;
+
+  --t-flash:80ms; --t-xs:180ms; --t-s:320ms; --t-m:520ms; --t-l:840ms; --t-xl:1400ms; --t-reel:4800ms;
+
+  --e-projector:cubic-bezier(.22,.61,.36,1);
+  --e-gravity:cubic-bezier(.6,.04,.98,.34);
+  --e-landing:cubic-bezier(.16,1.2,.3,1);
+  --e-shutter:cubic-bezier(.83,0,.17,1);
+  --e-velvet:cubic-bezier(.77,0,.18,1);
+  --e-ink:cubic-bezier(.2,.8,.2,1);
+  --e-tumbler:cubic-bezier(.6,-0.3,.25,1.6);
+  --e-sacral:cubic-bezier(.2,.7,.1,1);
+
+  --scroll-y:0; --scroll-v:0; --scroll-progress:0; --hero-exit:0;
+  --mx:50%; --my:50%;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--obsidian);color:var(--ivory);font-family:"Inter Tight",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html.has-fine-pointer,html.has-fine-pointer *{cursor:none}
+html.touch,html.touch *{cursor:auto!important}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:transparent;border:0}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;letter-spacing:.04em}
+.bodoni{font-family:"Bodoni Moda",ui-serif,serif}
+
+/* ============================================================= */
+/* 1 · PROJECTOR BOOT                                             */
+/* ============================================================= */
+#boot{position:fixed;inset:0;z-index:9999;background:#0A0A0C;display:grid;place-items:center;overflow:hidden}
+#boot.dissolve{animation:bootDissolve 600ms var(--e-velvet) forwards}
+@keyframes bootDissolve{to{opacity:0;filter:blur(8px);transform:scale(1.04);pointer-events:none}}
+#boot .leader{position:relative;width:min(560px,80vw);aspect-ratio:1}
+#boot .leader svg{position:absolute;inset:0;width:100%;height:100%;color:var(--ivory)}
+#boot .leader .hand{transform-origin:50% 50%;animation:sweep 900ms linear infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+#boot .leader .ring{fill:none;stroke:var(--ivory);stroke-width:.75;opacity:.5}
+#boot .digit{position:absolute;inset:0;display:grid;place-items:center;font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(140px,24vw,280px);color:var(--ivory);line-height:1}
+#boot .certif{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);font-family:"Bodoni Moda",serif;font-weight:700;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--ivory-dim);white-space:nowrap;opacity:0}
+#boot .certif.on{animation:certIn 420ms var(--e-ink) forwards}
+@keyframes certIn{from{opacity:0;transform:translate(-50%,6px);letter-spacing:.12em}to{opacity:1;transform:translate(-50%,0);letter-spacing:.32em}}
+#boot .cue{position:absolute;top:4%;right:4%;width:18px;height:18px;border-radius:50%;background:var(--ivory);opacity:0;box-shadow:0 0 0 rgba(201,162,74,0)}
+#boot .cue.flash{animation:cueFlash 80ms steps(1,end) forwards}
+@keyframes cueFlash{0%{opacity:0}30%{opacity:1;box-shadow:0 0 0 18px rgba(201,162,74,.6)}100%{opacity:0;box-shadow:0 0 0 rgba(201,162,74,0)}}
+#boot .skip{position:absolute;bottom:14px;right:14px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.22em;color:var(--ivory-mute);text-transform:uppercase}
+
+/* ============================================================= */
+/* 2 · CUSTOM CURSOR                                              */
+/* ============================================================= */
+#cursor{position:fixed;left:0;top:0;width:40px;height:40px;margin:-20px 0 0 -20px;z-index:10000;pointer-events:none;color:var(--gold);mix-blend-mode:difference;transform:translate3d(-100px,-100px,0);transition:opacity .2s;will-change:transform;--verb-w:0}
+#cursor .reticle{position:absolute;inset:0;filter:drop-shadow(0 0 4px rgba(201,162,74,.55)) drop-shadow(0 0 10px rgba(201,162,74,.22))}
+#cursor .reticle svg{width:100%;height:100%;display:block}
+#cursor .r-outer,#cursor .r-inner,#cursor .r-ticks{transform-origin:center;transition:transform .6s var(--e-sacral),opacity .2s}
+#cursor.is-press .r-outer{transform:scale(.86)}
+#cursor .verb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--obsidian);background:var(--gold);padding:8px 14px 8px 28px;border-radius:999px;white-space:nowrap;opacity:0;pointer-events:none;box-shadow:0 0 0 1px rgba(244,239,228,.08),0 8px 24px rgba(0,0,0,.35);transition:opacity .12s linear}
+#cursor.is-verb{width:calc(40px + var(--verb-w));mix-blend-mode:normal;transition:width .18s var(--e-sacral)}
+#cursor.is-verb .verb{opacity:1}
+#cursor.is-verb .r-ticks,#cursor.is-verb .r-inner{opacity:0}
+#cursor.is-verb .r-outer{transform:scale(.6);opacity:.85}
+body.aisle-active #cursor{mix-blend-mode:lighten}
+
+/* Aisle spotlight */
+#aisle-spot{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;transition:opacity .45s var(--e-sacral);
+  background:radial-gradient(280px 280px at var(--mx) var(--my),rgba(230,192,105,.28) 0%,rgba(214,155,116,.16) 22%,rgba(201,162,74,.08) 45%,transparent 72%,rgba(10,10,12,.45) 100%);mix-blend-mode:screen}
+body.aisle-active #aisle-spot{opacity:1}
+
+/* ============================================================= */
+/* 3 · PAGE CHROME                                                */
+/* ============================================================= */
+.chrome{position:sticky;top:0;z-index:100;display:grid;grid-template-columns:1fr 1.4fr 1fr;align-items:center;gap:20px;padding:16px 40px;border-bottom:1px solid rgba(201,162,74,.28);background:rgba(10,10,12,.78);backdrop-filter:blur(14px)}
+.chrome-brand{display:flex;align-items:center;gap:12px;font-family:"Bodoni Moda",serif;font-size:14px;letter-spacing:.2em;text-transform:uppercase}
+.chrome-brand svg{width:18px;height:18px;color:var(--gold)}
+.chrome-nav{display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
+.chrome-nav a{font-family:"Inter Tight";font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ivory-dim);padding:6px 0;border-bottom:2px solid transparent;transition:.2s}
+.chrome-nav a:hover,.chrome-nav a.active{color:var(--ivory);border-bottom-color:var(--gold)}
+.chrome-clock{justify-self:end;text-align:right;font-family:"JetBrains Mono",monospace;font-size:10px;line-height:1.55;color:var(--ivory-mute);letter-spacing:.14em}
+.chrome-clock em{font-style:normal;color:var(--ivory);display:block}
+.chrome-clock .nom{color:var(--gold-hi)}
+.chrome-counter{display:inline-block;margin-left:10px;padding:2px 8px;border:1px solid rgba(201,162,74,.35);font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--gold-hi);letter-spacing:.14em}
+
+/* Right rail scroll diamond */
+#rail{position:fixed;top:0;right:20px;bottom:0;width:14px;z-index:30;pointer-events:none}
+#rail .line{position:absolute;top:80px;bottom:80px;left:50%;width:1px;background:rgba(201,162,74,.22)}
+#rail .diamond{position:absolute;top:calc(80px + var(--scroll-progress) * (100% - 160px));left:50%;width:12px;height:12px;transform:translate(-50%,-50%) rotate(45deg);border:1px solid var(--gold);background:var(--obsidian);box-shadow:0 0 8px rgba(201,162,74,.35)}
+#rail .notch{position:absolute;left:50%;width:6px;height:1px;background:var(--gold);transform:translateX(-50%);opacity:.65;animation:notchIn .32s var(--e-landing) forwards}
+@keyframes notchIn{from{opacity:0;transform:translateX(-50%) scale(.4)}to{opacity:.65;transform:translateX(-50%) scale(1)}}
+
+/* Column rules */
+.col-rule{position:fixed;top:0;bottom:0;width:1px;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,rgb(201 162 74 / .6) 0,rgb(201 162 74 / .6) calc(var(--scroll-progress)*100%),rgba(201,162,74,.08) calc(var(--scroll-progress)*100%),rgba(201,162,74,.08) 100%);
+  transform-origin:top;transform:scaleY(0);opacity:.85;transition:transform .9s var(--e-ink)}
+.col-rule.on{transform:scaleY(1)}
+.col-rule.left{left:7%}
+.col-rule.right{right:7%}
+
+/* Stains */
+.stain{position:fixed;pointer-events:none;z-index:0;filter:blur(80px);opacity:.28;mix-blend-mode:screen}
+.stain.a{top:-140px;left:-120px;width:560px;height:560px;background:radial-gradient(circle,var(--amber),transparent 70%)}
+.stain.b{top:200px;right:-140px;width:600px;height:600px;background:radial-gradient(circle,var(--cyan),transparent 70%)}
+.stain.c{bottom:300px;left:8%;width:440px;height:440px;background:radial-gradient(circle,var(--stain-violet),transparent 70%)}
+.stain.d{bottom:-140px;right:12%;width:500px;height:500px;background:radial-gradient(circle,var(--stain-rust),transparent 70%)}
+.vignette-fx{position:fixed;inset:0;pointer-events:none;z-index:3;background:radial-gradient(ellipse at center,transparent 40%,rgba(10,10,12,.55) 100%)}
+.grain-fx{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:.05;mix-blend-mode:overlay;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+/* Main frame */
+.page{position:relative;z-index:5;max-width:1320px;margin:0 auto;padding:0 60px 160px}
+
+/* ============================================================= */
+/* 4 · NAVE HERO                                                  */
+/* ============================================================= */
+.nave{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 0}
+.nave::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 20%,transparent 0%,#0A0A0C 75%);opacity:calc(var(--hero-exit) * .85);z-index:5}
+.rose{position:absolute;top:4%;left:50%;width:min(820px,92%);aspect-ratio:1;z-index:0;pointer-events:none;color:var(--gold);transform:translate(calc(-50% + var(--rose-tx,0px)),0) rotate(var(--rose-r,0deg));opacity:0}
+.rose{opacity:.55}
+.rose.on{opacity:.55;transition:opacity 1.6s var(--e-landing)}
+html.reduce-motion .rose{opacity:.55!important}
+.rose svg{width:100%;height:100%;animation:roseDrift 240s linear infinite}
+.rose .petal{transform-origin:50% 50%;transform-box:fill-box;transition:transform .35s var(--e-sacral),filter .35s var(--e-sacral);pointer-events:auto}
+.rose .petal:hover{transform:scale(1.035);filter:drop-shadow(0 0 6px rgba(230,192,105,.5))}
+@keyframes roseDrift{to{transform:rotate(360deg)}}
+
+.dust{position:absolute;inset:0;pointer-events:none;z-index:1}
+.dust span{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--ivory);opacity:0;animation:dustDrift var(--dur,60s) linear var(--delay,0s) infinite,dustTwinkle 5s ease-in-out var(--delay,0s) infinite alternate}
+@keyframes dustDrift{from{transform:translate3d(var(--dx,0),0,0)}to{transform:translate3d(var(--dx,0),-120vh,0)}}
+@keyframes dustTwinkle{50%{opacity:var(--op,.1)}}
+
+.eyebrow-plate{position:relative;z-index:2;font-family:"Inter Tight";font-size:11px;letter-spacing:.3em;color:var(--ivory-dim);text-transform:uppercase;padding:10px 32px;border-top:1px solid rgba(201,162,74,.55);border-bottom:1px solid rgba(201,162,74,.55);margin-bottom:30px;opacity:0;transition:opacity .4s var(--e-ink) 1.6s}
+.eyebrow-plate.on,html.reduce-motion .eyebrow-plate{opacity:1}
+
+.nave h1{position:relative;z-index:2;font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(40px,6.8vw,104px);line-height:.9;letter-spacing:-.02em;margin-bottom:26px;text-align:center}
+.nave h1 .line{display:block;white-space:nowrap}
+.nave h1 .line + .line{margin-top:-.08em}
+.nave h1 .line.small{font-size:.6em;letter-spacing:.02em;opacity:.82;margin-bottom:.08em}
+.nave h1 .ch{display:inline-block}
+html.curtain-open:not(.reduce-motion) .nave h1 .ch{opacity:0;transform:translate3d(0,-120%,0) rotateX(-30deg);animation:stoneDrop 620ms var(--e-gravity) both;animation-delay:calc(var(--i) * 46ms + 420ms)}
+html.reduce-motion .nave h1 .ch{opacity:1!important;transform:none!important;animation:none!important}
+@keyframes stoneDrop{
+  0%{transform:translate3d(0,-120%,0) rotateX(-30deg);opacity:0}
+  70%{transform:translate3d(0,6%,0) rotateX(2deg);opacity:1}
+  82%{transform:translate3d(1px,0,0) rotateX(-1deg)}
+  100%{transform:translate3d(0,0,0) rotateX(0)}
+}
+.nave h1.lit::before{content:"";position:absolute;inset:-20% 0;background:linear-gradient(90deg,transparent,rgba(244,239,228,.26) 40%,rgba(201,162,74,.24) 60%,transparent);mix-blend-mode:screen;transform:skewX(-18deg) translateX(-140%);width:40%;animation:shaft 820ms var(--e-shutter) forwards}
+@keyframes shaft{to{transform:skewX(-18deg) translateX(260%)}}
+
+.nave-sub{position:relative;z-index:2;font-family:"Bodoni Moda",serif;font-style:italic;font-size:clamp(17px,1.7vw,24px);line-height:1.55;color:var(--ivory-dim);max-width:720px;margin-bottom:32px;opacity:0;transition:opacity .5s var(--e-ink) 1.4s,transform .5s var(--e-ink) 1.4s;transform:translateY(8px)}
+.nave-sub.on,html.reduce-motion .nave-sub{opacity:1;transform:translateY(0)}
+
+.nave-cta{position:relative;z-index:2;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;opacity:0;transition:opacity .42s var(--e-ink) 1.8s,transform .42s var(--e-ink) 1.8s;transform:scale(.97)}
+.nave-cta.on,html.reduce-motion .nave-cta{opacity:1;transform:scale(1)}
+.btn-hair{border:1px solid var(--gold);background:transparent;color:var(--ivory);padding:14px 28px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;transition:all .3s var(--e-sacral);position:relative;overflow:hidden}
+.btn-hair:hover{background:rgba(232,199,114,.09);box-shadow:0 0 24px rgba(232,199,114,.22);letter-spacing:.24em}
+.btn-hair.ghost{border-color:rgba(201,162,74,.45);color:var(--ivory-dim)}
+.btn-hair.ghost:hover{color:var(--ivory)}
+
+.ticker{position:relative;z-index:2;max-width:640px;border-top:1px solid rgba(201,162,74,.3);border-bottom:1px solid rgba(201,162,74,.3);padding:8px 16px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;overflow:hidden;white-space:nowrap;opacity:0;transition:opacity .4s var(--e-ink) 2s}
+.ticker.on,html.reduce-motion .ticker{opacity:1}
+html.reduce-motion .rose{opacity:.55!important}
+.ticker-track{display:inline-block;animation:tickerRun 55s linear infinite;padding-left:100%}
+@keyframes tickerRun{to{transform:translateX(-100%)}}
+
+/* ============================================================= */
+/* 5 · SECTIONS                                                   */
+/* ============================================================= */
+.section{padding:140px 0 0;position:relative}
+.section::before{content:"";position:absolute;top:24px;right:24px;width:14px;height:14px;border-radius:50%;background:var(--ivory);opacity:0;box-shadow:0 0 18px rgba(201,162,74,.5)}
+.section.reel-fire::before{animation:cueFlash 80ms steps(1,end) 0s 2}
+.section-head{display:grid;grid-template-columns:auto 1fr auto;gap:30px;align-items:baseline;margin-bottom:40px}
+.numeral{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(72px,9vw,144px);color:var(--gold);line-height:1;letter-spacing:-.02em}
+.head-meta .eyebrow{font-family:"Inter Tight";font-size:11px;letter-spacing:.28em;color:var(--ivory-mute);text-transform:uppercase;margin-bottom:10px}
+.head-meta h2{font-family:"Bodoni Moda",serif;font-weight:700;font-size:clamp(36px,4.4vw,60px);line-height:.98;letter-spacing:-.01em;position:relative;display:inline-block;overflow:hidden;padding-bottom:4px}
+.head-meta h2.rack{filter:blur(14px);letter-spacing:.08em;opacity:.4;transition:filter .72s cubic-bezier(.34,.84,.44,1),letter-spacing .72s cubic-bezier(.34,.84,.44,1),opacity .72s cubic-bezier(.34,.84,.44,1)}
+.head-meta h2.rack.focused{filter:blur(0);letter-spacing:-.01em;opacity:1}
+.head-note{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-mute);text-transform:uppercase;text-align:right;line-height:1.6}
+.hair{height:1px;background:rgba(201,162,74,.38);margin:26px 0;position:relative}
+.hair::after{content:"◇";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--gold);background:var(--obsidian);padding:0 10px;font-size:10px}
+
+/* 5.1 Premiere Rail */
+.premiere{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;perspective:1400px}
+.premiere-card{position:relative;border:1px solid rgba(201,162,74,.28);background:linear-gradient(180deg,var(--obsidian-2),#0c0c10);padding:22px;min-height:520px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .42s var(--e-landing),filter .3s,box-shadow .42s var(--e-landing),border-color .3s;transform-style:preserve-3d}
+.premiere-card.focused{border-color:var(--gold);box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 40px rgba(232,199,114,.22);transform:scale(1.04) translateZ(40px)}
+.premiere-card:not(.focused){transform:scale(.94);filter:saturate(.45)}
+.premiere-card:hover:not(.focused){filter:saturate(.9);transform:scale(.98)}
+.premiere-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(400px 300px at var(--pmx,50%) var(--pmy,50%),rgba(232,199,114,.1),transparent 60%);opacity:0;transition:opacity .3s}
+.premiere-card:hover::after{opacity:1}
+.premiere-head{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px}
+.poster{position:relative;height:240px;overflow:hidden;border:1px solid rgba(201,162,74,.18);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 24%,var(--obsidian)),var(--obsidian-2))}
+.poster::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(232,199,114,.14),transparent 62%)}
+.poster svg{position:absolute;bottom:8px;right:8px;width:64px;height:64px;color:rgba(201,162,74,.48)}
+.poster-title{position:absolute;left:16px;bottom:14px;font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;color:var(--ivory);font-size:38px;line-height:.95;letter-spacing:-.02em}
+.poster-vignette{position:absolute;inset:0;box-shadow:inset 0 -80px 120px rgba(0,0,0,.75);transition:box-shadow .35s,opacity .35s;opacity:.9}
+.premiere-card:hover .poster-vignette{box-shadow:inset 0 -60px 140px rgba(0,0,0,.55),inset 0 0 60px rgba(201,162,74,.1);opacity:1}
+.premiere-card h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:30px;margin-top:18px;color:var(--ivory)}
+.premiere-card .year{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--gold-hi);letter-spacing:.2em;margin-top:4px;text-transform:uppercase}
+.premiere-tagline{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;color:var(--ivory-dim);line-height:1.55;margin-top:10px;opacity:0;transform:translateY(2px);transition:opacity .3s var(--e-sacral) 80ms,transform .3s var(--e-sacral) 80ms}
+.premiere-card:hover .premiere-tagline,.premiere-card.focused .premiere-tagline{opacity:1;transform:translateY(0)}
+.plates{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.plate{border:1px solid rgba(201,162,74,.5);padding:5px 10px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-hi)}
+.premiere-cta{margin-top:18px;display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(201,162,74,.22);font-family:"Inter Tight";font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-hi)}
+.lamp{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 10px var(--gold-hi);animation:breathe 2.4s ease-in-out infinite;animation-delay:var(--ph,0s)}
+@keyframes breathe{0%,100%{opacity:.6;box-shadow:0 0 6px currentColor}50%{opacity:1;box-shadow:0 0 16px currentColor}}
+
+/* 5.2 Vaults */
+.vaults{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.vault{position:relative;border:1px solid rgba(201,162,74,.22);background:var(--charcoal);padding:28px 24px 24px;min-height:260px;overflow:hidden;transition:border-color .3s,background .3s}
+.vault::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(244,239,228,.12) 48%,rgba(201,162,74,.08) 58%,transparent 70%);transform:translateX(-120%) skewX(-22deg);pointer-events:none;mix-blend-mode:overlay}
+.vault:hover{border-color:var(--gold);background:linear-gradient(180deg,rgba(201,162,74,.05),var(--charcoal))}
+.vault:hover::before{animation:sheen 720ms var(--e-shutter) forwards}
+@keyframes sheen{to{transform:translateX(180%) skewX(-22deg)}}
+.vault .roman{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:96px;color:var(--gold);line-height:1;letter-spacing:-.02em;opacity:.5;transition:opacity .3s}
+.vault:hover .roman{opacity:1}
+.vault h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:22px;margin-top:12px;color:var(--ivory)}
+.vault p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:14px;color:var(--ivory-dim);line-height:1.55;margin-top:8px}
+.vault .foot{margin-top:20px;display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+
+/* 5.3 Chapel */
+.chapel{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:50px;align-items:start}
+.chapel-portrait{position:relative;padding:14px;border:1px solid rgba(201,162,74,.34)}
+.chapel-portrait svg{width:100%;display:block}
+.chapel-plaque{margin-top:14px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ivory-dim);text-transform:uppercase}
+.chapel-body .lead{font-family:"Bodoni Moda",serif;font-weight:700;font-style:italic;font-size:22px;line-height:1.45;color:var(--ivory-dim);border-left:2px solid var(--gold);padding-left:20px;margin-bottom:20px}
+.chapel-body h4{font-family:"Bodoni Moda",serif;font-weight:700;font-size:15px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-hi);margin:20px 0 8px}
+.chapel-body h4 span{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ivory-mute);margin-right:12px}
+.chapel-body p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:16px;line-height:1.72;color:var(--ivory);margin-bottom:12px}
+.colophon{text-align:center;color:var(--gold);font-size:16px;margin-top:22px}
+
+/* 5.4 Chronicle */
+.chronicle-rail{position:relative;overflow-x:auto;padding:60px 10px 60px;scroll-behavior:smooth}
+.chronicle-rail::-webkit-scrollbar{height:2px}
+.chronicle-rail::-webkit-scrollbar-thumb{background:rgba(201,162,74,.35)}
+.chronicle-line{position:relative;height:2px;background:rgba(201,162,74,.28);min-width:1280px}
+.cm{position:absolute;top:-50px;display:flex;flex-direction:column;align-items:center;gap:8px;width:170px;transform:translateX(-50%);transition:opacity .3s}
+.chronicle:hover .cm{opacity:.5}
+.chronicle:hover .cm:hover{opacity:1}
+.cm .hour{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold-hi);text-transform:uppercase}
+.cm .hour.tech{color:var(--cyan)}
+.cm .year{font-family:"Bodoni Moda",serif;font-weight:700;font-size:36px;color:var(--ivory);line-height:1}
+.cm .film{font-family:"Inter Tight";font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory-dim)}
+.cm .aside{font-family:"Bodoni Moda",serif;font-style:italic;font-size:12.5px;color:var(--ivory-mute);line-height:1.4;text-align:center;max-width:150px}
+.cdot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--gold);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--gold)}
+.cdot.tech{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+
+/* 5.5 Calendar */
+.calendar{border:1px solid rgba(201,162,74,.34);background:linear-gradient(180deg,var(--charcoal),var(--obsidian))}
+.cal-top{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-dim);text-transform:uppercase}
+.cal-top em{font-style:normal;color:var(--gold-hi)}
+.ticket{display:grid;grid-template-columns:140px 1fr 210px 140px 140px 80px;gap:18px;align-items:center;padding:20px 22px;border-bottom:1px solid rgba(201,162,74,.16);transition:background .2s var(--e-sacral)}
+.ticket:last-child{border-bottom:0}
+.ticket:hover{background:var(--charcoal-2)}
+.ticket:hover .t-date{color:var(--gold-hi)}
+.t-date{font-family:"Bodoni Moda",serif;font-weight:700;font-size:34px;color:var(--gold);line-height:1;transition:color .2s,letter-spacing .25s var(--e-sacral)}
+.ticket:hover .t-date{letter-spacing:.02em}
+.t-date span{display:block;font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ivory-mute);letter-spacing:.22em;margin-top:4px}
+.t-film{font-family:"Bodoni Moda",serif;font-weight:700;font-size:22px;color:var(--ivory)}
+.t-film span{display:block;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ivory-mute);letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+.t-venue{font-family:"Inter Tight";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ivory-dim)}
+.t-format{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--gold-hi);text-transform:uppercase;border:1px solid rgba(201,162,74,.42);padding:7px 8px;text-align:center}
+.t-seats{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ivory-dim);letter-spacing:.12em;text-transform:uppercase}
+.t-status{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;text-align:right}
+.t-status.open{color:var(--gold-hi)}.t-status.sold{color:var(--crimson)}.t-status.wait{color:var(--cyan)}
+.cal-tear{height:14px;background:
+  linear-gradient(45deg,var(--obsidian) 33%,transparent 33%,transparent 66%,var(--obsidian) 66%) 0 0/12px 14px,
+  linear-gradient(-45deg,var(--obsidian) 33%,transparent 33%,transparent 66%,var(--obsidian) 66%) 6px 0/12px 14px;background-color:rgba(201,162,74,.25)}
+
+/* 5.6 Pulpit */
+.pulpit{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:20px}
+.essay{border:1px solid rgba(201,162,74,.24);background:var(--obsidian-2);padding:26px}
+.essay .tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold-hi);text-transform:uppercase;margin-bottom:12px}
+.essay h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:26px;color:var(--ivory);line-height:1.15;margin-bottom:16px}
+.essay.sermon h3{font-size:32px}
+.essay p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15.5px;line-height:1.72;color:var(--ivory-dim)}
+.essay p + p{margin-top:12px}
+.essay .drop::first-letter{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:56px;color:var(--gold);float:left;line-height:.85;padding:4px 10px 0 0}
+.essay .byline{margin-top:18px;padding-top:12px;border-top:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-mute);text-transform:uppercase}
+.pullquote{text-align:center;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:700;font-size:clamp(26px,3.2vw,48px);line-height:1.28;color:var(--ivory);max-width:880px;margin:80px auto 0;padding:26px 30px;position:relative;min-height:140px}
+.pullquote::before,.pullquote::after{content:"";position:absolute;left:50%;width:60px;height:1px;background:var(--gold);transform:translateX(-50%)}
+.pullquote::before{top:0}.pullquote::after{bottom:0}
+.pullquote em{color:var(--crimson);font-style:italic}
+.pullquote .type-caret{display:inline-block;width:3px;background:var(--gold);animation:caret 1.1s steps(2,end) infinite;margin-left:4px;vertical-align:baseline}
+@keyframes caret{50%{opacity:0}}
+
+/* 5.7 Patrons */
+.patrons{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;border:1px solid rgba(201,162,74,.5);padding:40px;background:linear-gradient(180deg,rgba(35,29,18,.62),rgba(13,11,9,.92));box-shadow:0 0 50px rgba(201,162,74,.12),inset 0 0 60px rgba(201,162,74,.04);transition:box-shadow .8s var(--e-sacral),border-color .8s var(--e-sacral)}
+.patrons.awake{border-color:var(--gold-hi);box-shadow:0 0 80px rgba(232,199,114,.25),inset 0 0 80px rgba(201,162,74,.08)}
+.patrons h3{font-family:"Bodoni Moda",serif;font-weight:700;font-size:32px;margin-bottom:14px}
+.patrons p{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;line-height:1.72;color:var(--ivory-dim);margin-bottom:22px}
+.patron-row{display:grid;grid-template-columns:48px 1fr 220px;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(201,162,74,.2)}
+.patron-row:last-child{border-bottom:0}
+.patron-row .n{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:28px;color:var(--gold)}
+.patron-row .t{font-family:"Bodoni Moda",serif;font-weight:700;font-size:18px;background:linear-gradient(100deg,var(--ivory) 0%,var(--ivory) 38%,var(--gold-hi) 48%,var(--ivory) 58%,var(--ivory) 100%) 200% 0/200% 100% no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position 1.1s var(--e-reel,var(--e-sacral))}
+.patron-row:hover .t{background-position:0 0}
+.patron-row .o{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:var(--ivory-mute);text-transform:uppercase;text-align:right}
+
+/* 5.8 Crypt */
+.crypt{margin-top:120px;padding:48px 0 0;border-top:1px solid rgba(201,162,74,.3)}
+.crypt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:36px}
+.crypt h6{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.crypt a,.crypt p{display:block;font-size:12px;line-height:1.75;color:var(--ivory-dim)}
+.crypt .inscr{font-family:"Bodoni Moda",serif;font-style:italic;color:var(--ivory)}
+.crypt-pipes{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:50px;align-items:end;height:120px}
+.crypt-pipes span{background:linear-gradient(180deg,var(--gold-hi),#7a5c22);border-radius:3px 3px 0 0;position:relative;cursor:crosshair;transition:filter .3s}
+.crypt-pipes span:hover{filter:brightness(1.3)}
+.crypt-pipes span::after{content:attr(data-label);position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:"Bodoni Moda",serif;font-style:italic;font-size:11px;color:var(--gold-hi);white-space:nowrap;opacity:0;transition:opacity .3s}
+.crypt-pipes span:hover::after{opacity:1}
+.crypt-colophon{margin-top:44px;padding-top:20px;border-top:1px solid rgba(201,162,74,.22);text-align:center;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--ivory-mute);text-transform:uppercase}
+.crypt-mark{text-align:center;font-size:18px;color:var(--gold);margin-top:24px}
+
+/* ============================================================= */
+/* 6 · TOTEM + CHRONOMETER                                        */
+/* ============================================================= */
+#totem{position:fixed;top:18px;right:60px;z-index:50;width:28px;height:28px;pointer-events:none;color:var(--gold-hi)}
+#totem svg{width:100%;height:100%;animation:totemSpin 2s linear infinite,totemWobble 1.2s ease-in-out infinite}
+@keyframes totemSpin{to{transform:rotate(360deg)}}
+@keyframes totemWobble{0%,100%{transform-origin:50% 95%}50%{transform:rotate(0deg) skewX(3deg)}}
+#chronometer{position:fixed;bottom:14px;left:14px;z-index:50;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--gold-hi);letter-spacing:.18em;pointer-events:none;display:flex;flex-direction:column;gap:4px}
+#chronometer .clock{font-weight:500}
+#chronometer .pitch{display:flex;gap:2px;align-items:end;height:12px;width:80px}
+#chronometer .pitch span{flex:1;background:var(--gold);opacity:.55}
+
+/* ============================================================= */
+/* 7 · GLOSSARY                                                   */
+/* ============================================================= */
+#glossary{position:fixed;inset:0 0 0 auto;width:420px;z-index:9998;background:var(--obsidian);border-left:1px solid var(--gold);padding:30px;overflow-y:auto;transform:translateX(100%);transition:transform .24s var(--e-sacral)}
+#glossary.open{transform:translateX(0)}
+#glossary header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(201,162,74,.28)}
+#glossary h2{font-family:"Bodoni Moda",serif;font-weight:700;font-size:22px}
+#glossary dl{display:grid;gap:16px;margin-bottom:24px}
+#glossary dt{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
+#glossary dd{font-size:13.5px;line-height:1.6;color:var(--ivory-dim);font-family:"Bodoni Moda",serif;font-style:italic}
+#glossary footer{padding-top:18px;border-top:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ivory-mute);letter-spacing:.14em;display:grid;gap:6px}
+#glossary-backdrop{position:fixed;inset:0;z-index:9997;background:rgba(10,10,12,.6);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .24s}
+#glossary-backdrop.open{opacity:1;pointer-events:auto}
+
+/* ============================================================= */
+/* 8 · AMEN FLASH                                                 */
+/* ============================================================= */
+#amen-flash{position:fixed;inset:0;background:var(--ivory);z-index:10001;opacity:0;pointer-events:none}
+#amen-flash.fire{animation:amen 2000ms cubic-bezier(.65,.05,.36,1) forwards}
+@keyframes amen{0%{opacity:0}18%{opacity:.95}32%{opacity:.95}100%{opacity:0}}
+#amen-dust{position:fixed;inset:0;z-index:10002;pointer-events:none;opacity:0}
+#amen-dust.fire{animation:amenDust 1800ms linear forwards}
+@keyframes amenDust{0%{opacity:1}100%{opacity:0}}
+
+/* Visually hidden */
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Responsive */
+@media (max-width:1100px){
+  .page{padding:0 30px 120px}
+  .chrome{padding:14px 24px;grid-template-columns:1fr 1fr}
+  .chrome-nav{grid-column:1/-1;justify-content:flex-start;overflow-x:auto}
+  .chrome-clock{grid-row:1}
+  .premiere,.vaults{grid-template-columns:repeat(2,1fr)}
+  .pulpit,.chapel,.patrons{grid-template-columns:1fr}
+  .ticket{grid-template-columns:100px 1fr 90px}
+  .t-venue,.t-format{display:none}
+  .crypt-grid{grid-template-columns:repeat(2,1fr)}
+  #totem{right:30px}
+  .col-rule{display:none}
+}
+@media (max-width:720px){
+  .premiere,.vaults{grid-template-columns:1fr}
+  .nave h1{font-size:clamp(48px,16vw,80px)}
+  .crypt-grid{grid-template-columns:1fr}
+  #glossary{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .nave h1 .ch{opacity:1;transform:none}
+  .rose.on{opacity:.38}
+  .ticker-track{animation:none}
+  #cursor{mix-blend-mode:normal}
+}
+</style>
+</head>
+<body>
+
+<!-- Projector boot -->
+<div id="boot" role="status" aria-live="polite" aria-label="Loading film reel">
+  <div class="leader">
+    <svg viewBox="-300 -300 600 600" aria-hidden="true">
+      <circle class="ring" r="290"/>
+      <circle class="ring" r="220" opacity=".5"/>
+      <circle class="ring" r="140" opacity=".5"/>
+      <circle class="ring" r="60"  opacity=".5"/>
+      <line class="hand" x1="0" y1="0" x2="0" y2="-290" stroke="#F4EFE4" stroke-width="1"/>
+      <line x1="-300" y1="0" x2="300" y2="0" stroke="#F4EFE4" stroke-width=".5" opacity=".5"/>
+      <line x1="0" y1="-300" x2="0" y2="300" stroke="#F4EFE4" stroke-width=".5" opacity=".5"/>
+    </svg>
+    <div class="digit" id="boot-digit">5</div>
+  </div>
+  <div class="certif" id="boot-certif">Certified for Theatrical Exhibition · Vol. VII</div>
+  <div class="cue" id="boot-cue"></div>
+  <button class="skip" id="boot-skip">[ Esc to skip ]</button>
+</div>
+
+<!-- Cursor -->
+<div id="cursor" aria-hidden="true">
+  <div class="reticle">
+    <svg viewBox="-20 -20 40 40">
+      <circle class="r-outer" r="12" fill="none" stroke="currentColor" stroke-width=".75"/>
+      <circle class="r-inner" r="7"  fill="none" stroke="currentColor" stroke-width=".5" opacity=".55"/>
+      <line x1="-14" x2="-5"  y1="0" y2="0" stroke="currentColor" stroke-width=".6"/>
+      <line x1="5"   x2="14"  y1="0" y2="0" stroke="currentColor" stroke-width=".6"/>
+      <line x1="0"   x2="0"   y1="-14" y2="-5" stroke="currentColor" stroke-width=".6"/>
+      <line x1="0"   x2="0"   y1="5"   y2="14" stroke="currentColor" stroke-width=".6"/>
+      <g class="r-ticks" stroke="currentColor" stroke-width=".5" opacity=".7">
+        <line x1="8.5" y1="8.5"   x2="11" y2="11"/>
+        <line x1="-8.5" y1="8.5"  x2="-11" y2="11"/>
+        <line x1="8.5" y1="-8.5"  x2="11" y2="-11"/>
+        <line x1="-8.5" y1="-8.5" x2="-11" y2="-11"/>
+      </g>
+      <circle class="r-dot" r="1.25" fill="currentColor"/>
+    </svg>
+  </div>
+  <span class="verb" id="cursor-verb"></span>
+</div>
+<div id="aisle-spot" aria-hidden="true"></div>
+
+<!-- Persistent HUD -->
+<div id="totem" aria-hidden="true">
+  <svg viewBox="0 0 28 28">
+    <polygon points="14,4 24,12 14,26 4,12" fill="currentColor" opacity=".9"/>
+    <polygon points="14,4 24,12 14,14 4,12" fill="currentColor" opacity=".5"/>
+    <circle cx="14" cy="26" r="1.2" fill="currentColor"/>
+  </svg>
+</div>
+<div id="chronometer" aria-hidden="true">
+  <span class="clock">T-00:00:00</span>
+  <div class="pitch"><span></span><span></span><span></span></div>
+</div>
+<div id="rail" aria-hidden="true">
+  <div class="line"></div>
+  <div class="diamond"></div>
+</div>
+<div class="col-rule left"  id="cr-left"></div>
+<div class="col-rule right" id="cr-right"></div>
+
+<!-- Stained glass atmospherics -->
+<div class="stain a"></div>
+<div class="stain b"></div>
+<div class="stain c"></div>
+<div class="stain d"></div>
+<div class="grain-fx"></div>
+<div class="vignette-fx"></div>
+
+<!-- Chrome -->
+<header class="chrome">
+  <div class="chrome-brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v20M2 12h20M5 5l14 14M19 5 5 19"/></svg>
+    IMAX · Cathedral
+  </div>
+  <nav class="chrome-nav" role="navigation" aria-label="Cathedral sections">
+    <a href="#nave" class="active">Nave</a>
+    <a href="#premiere">Premiere</a>
+    <a href="#vaults">Vaults</a>
+    <a href="#chapel">Chapel</a>
+    <a href="#chronicle">Chronicle</a>
+    <a href="#calendar">Calendar</a>
+    <a href="#pulpit">Pulpit</a>
+    <a href="#patrons">Patrons</a>
+  </nav>
+  <div class="chrome-clock">
+    <em id="clk-time">23 : 41 GMT</em>
+    <span id="clk-section">Section I — Nave</span>
+    <span class="nom">Signal · Nominal</span>
+    <span class="chrome-counter" id="chrome-counter">I / VIII</span>
+  </div>
+</header>
+
+<main id="main" class="page">
+
+  <!-- NAVE HERO -->
+  <section id="nave" class="nave" aria-labelledby="nave-title">
+    <div class="rose" id="rose" aria-hidden="true">
+      <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width=".8">
+        <circle cx="200" cy="200" r="196"/>
+        <circle cx="200" cy="200" r="160"/>
+        <circle cx="200" cy="200" r="118"/>
+        <circle cx="200" cy="200" r="76"/>
+        <circle cx="200" cy="200" r="34"/>
+        <g>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(30 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(60 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(90 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(120 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(150 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(180 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(210 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(240 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(270 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(300 200 200)"/>
+          <ellipse class="petal" cx="200" cy="120" rx="18" ry="56" transform="rotate(330 200 200)"/>
+        </g>
+        <g stroke-width="1">
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(45 200 200)"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(90 200 200)"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(135 200 200)"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(180 200 200)"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(225 200 200)"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(270 200 200)"/>
+          <path d="M200 120 A34 34 0 0 1 234 154 L200 200 Z" transform="rotate(315 200 200)"/>
+        </g>
+        <path d="M200 170 v60 M170 200 h60" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="dust" id="dust" aria-hidden="true"></div>
+
+    <div class="eyebrow-plate" id="eyebrow">MMXXVI · Canonical Edition · Volume VII</div>
+    <h1 id="nave-title" class="bodoni">
+      <span class="line small"><span class="ch" style="--i:0">T</span><span class="ch" style="--i:1">H</span><span class="ch" style="--i:2">E</span><span class="ch" style="--i:3">·</span><span class="ch" style="--i:4">I</span><span class="ch" style="--i:5">M</span><span class="ch" style="--i:6">A</span><span class="ch" style="--i:7">X</span></span>
+      <span class="line"><span class="ch" style="--i:8">C</span><span class="ch" style="--i:9">A</span><span class="ch" style="--i:10">T</span><span class="ch" style="--i:11">H</span><span class="ch" style="--i:12">E</span><span class="ch" style="--i:13">D</span><span class="ch" style="--i:14">R</span><span class="ch" style="--i:15">A</span><span class="ch" style="--i:16">L</span></span>
+    </h1>
+    <p class="nave-sub" id="nave-sub">An archive in 70mm. A congregation of frames.<br/>Kneel if the projector demands it.</p>
+    <div class="nave-cta" id="nave-cta">
+      <button class="btn-hair" data-cursor="RESERVE">Enter the Nave →</button>
+      <button class="btn-hair ghost" data-cursor="OPEN PROGRAMME">View Programme</button>
+    </div>
+    <div class="ticker" id="ticker"><span class="ticker-track">TRANSMISSION OPEN · ENDURANCE-LOG-7A · GARGANTUA STABLE · NEXT LITURGY 04:00 · VIGIL · 70MM 15-PERF LOADED · CUE DOTS ACTIVE ·&nbsp;&nbsp;</span></div>
+  </section>
+
+  <!-- PREMIERE RAIL -->
+  <section id="premiere" class="section" aria-labelledby="premiere-title">
+    <div class="section-head">
+      <span class="numeral">I</span>
+      <div class="head-meta">
+        <p class="eyebrow">Premiere Restorations · Featured</p>
+        <h2 id="premiere-title" class="rack">The altar. Three films lit tonight.</h2>
+      </div>
+      <div class="head-note">LAMP HOURS · 14<br/>APERTURE · 1.43:1</div>
+    </div>
+    <div class="hair"></div>
+
+    <div class="premiere">
+      <article class="premiere-card" data-cursor="RESERVE" style="--accent:#6ab4dc">
+        <div>
+          <div class="premiere-head">Restoration 01 / 03 · IMAX 70MM</div>
+          <div class="poster">
+            <div class="poster-vignette"></div>
+            <svg viewBox="0 0 60 60" fill="none" stroke="currentColor"><circle cx="30" cy="30" r="24" stroke-width="1"/><circle cx="30" cy="30" r="12" stroke-width=".7"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+            <div class="poster-title">INT.</div>
+          </div>
+          <h3>Interstellar</h3>
+          <div class="year">2014 · 169 MIN · INT-2014</div>
+          <p class="premiere-tagline">"A love letter photographed on two formats at once, because one format could not contain both the wheat and the wormhole."</p>
+          <div class="plates"><span class="plate">IMAX 70MM</span><span class="plate">Dolby Atmos</span></div>
+        </div>
+        <div class="premiere-cta"><span>Reserve</span><span class="lamp" style="--ph:0s;background:var(--cyan);color:var(--cyan)"></span><span>→</span></div>
+      </article>
+
+      <article class="premiere-card focused" data-cursor="RESERVE" style="--accent:#d69b74">
+        <div>
+          <div class="premiere-head">Restoration 02 / 03 · 70MM B&amp;W · IMAX</div>
+          <div class="poster">
+            <div class="poster-vignette"></div>
+            <svg viewBox="0 0 60 60" fill="none" stroke="currentColor"><circle cx="30" cy="30" r="20" stroke-width="1"/><path d="M10 30 A20 20 0 0 1 50 30" stroke-width=".7"/><path d="M10 30 A20 20 0 0 0 50 30" stroke-width=".7"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+            <div class="poster-title">OPP.</div>
+          </div>
+          <h3>Oppenheimer</h3>
+          <div class="year">2023 · 180 MIN · OPP-2023</div>
+          <p class="premiere-tagline">"The first feature ever to burn black-and-white into IMAX 65MM stock. The hearings have documentary weight. The blast has cognitive lag."</p>
+          <div class="plates"><span class="plate">IMAX 65MM B&amp;W</span><span class="plate">Dolby Atmos</span></div>
+        </div>
+        <div class="premiere-cta"><span>Reserve</span><span class="lamp" style="--ph:-.6s"></span><span>→</span></div>
+      </article>
+
+      <article class="premiere-card" data-cursor="RESERVE" style="--accent:#dc8c6a">
+        <div>
+          <div class="premiere-head">Restoration 03 / 03 · 70MM ANAMORPHIC</div>
+          <div class="poster">
+            <div class="poster-vignette"></div>
+            <svg viewBox="0 0 60 60" fill="none" stroke="currentColor"><rect x="10" y="18" width="40" height="24" rx="1" stroke-width="1"/><path d="M14 30 L46 30 M30 22 L30 38" stroke-width=".6"/></svg>
+            <div class="poster-title">TEN.</div>
+          </div>
+          <h3>Tenet</h3>
+          <div class="year">2020 · 150 MIN · TEN-2020</div>
+          <p class="premiere-tagline">"Bought a 747 rather than render one, and choreographed every punch in two directions so the tape ran the same either way."</p>
+          <div class="plates"><span class="plate">70MM ANA.</span><span class="plate">Palindrome Score</span></div>
+        </div>
+        <div class="premiere-cta"><span>Reserve</span><span class="lamp" style="--ph:-1.2s;background:var(--amber);color:var(--amber)"></span><span>→</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- VAULTS -->
+  <section id="vaults" class="section" aria-labelledby="vaults-title">
+    <div class="section-head">
+      <span class="numeral">II</span>
+      <div class="head-meta">
+        <p class="eyebrow">The Vaults · Numbered Chapters</p>
+        <h2 id="vaults-title" class="rack">Six chapels. Six arguments.</h2>
+      </div>
+      <div class="head-note">INDEXED · VOL. VII<br/>6 CHAPTERS</div>
+    </div>
+    <div class="hair"></div>
+    <div class="vaults">
+      <article class="vault" data-cursor="OPEN VAULT"><div class="roman">I</div><h3>The Endurance Wing</h3><p>Films where love is load-bearing infrastructure.</p><div class="foot"><span>Ch. I · 2 transmissions</span><span>Open →</span></div></article>
+      <article class="vault" data-cursor="OPEN VAULT"><div class="roman">II</div><h3>The Dream Architecture</h3><p>Heists of the subconscious; cities that fold in daylight.</p><div class="foot"><span>Ch. II · 1 transmission</span><span>Open →</span></div></article>
+      <article class="vault" data-cursor="OPEN VAULT"><div class="roman">III</div><h3>The Gotham Crypts</h3><p>Three volumes on fear as civic technology.</p><div class="foot"><span>Ch. III · 3 transmissions</span><span>Open →</span></div></article>
+      <article class="vault" data-cursor="OPEN VAULT"><div class="roman">IV</div><h3>The Palindrome Chapel</h3><p>Entries that read identically from either end of time.</p><div class="foot"><span>Ch. IV · 1 transmission</span><span>Open →</span></div></article>
+      <article class="vault" data-cursor="OPEN VAULT"><div class="roman">V</div><h3>The Memory Reliquary</h3><p>Polaroids, tattoos, and the tyranny of external record-keeping.</p><div class="foot"><span>Ch. V · 1 transmission</span><span>Open →</span></div></article>
+      <article class="vault" data-cursor="OPEN VAULT"><div class="roman">VI</div><h3>The Atomic Sacristy</h3><p>The audit of consequence. The hearing after the blast.</p><div class="foot"><span>Ch. VI · 1 transmission</span><span>Open →</span></div></article>
+    </div>
+  </section>
+
+  <!-- CHAPEL -->
+  <section id="chapel" class="section aisle" aria-labelledby="chapel-title">
+    <div class="section-head">
+      <span class="numeral">III</span>
+      <div class="head-meta">
+        <p class="eyebrow">The Chapel · Director in Residence</p>
+        <h2 id="chapel-title" class="rack">Architect of the house.</h2>
+      </div>
+      <div class="head-note">AISLE ACTIVE<br/>SPOTLIGHT · ON</div>
+    </div>
+    <div class="hair"></div>
+    <div class="chapel">
+      <div>
+        <div class="chapel-portrait" data-cursor="ENTER CHAPEL">
+          <svg viewBox="0 0 240 300" fill="none">
+            <rect width="240" height="300" fill="#1a1a1c"/>
+            <path d="M60 290 L60 190 Q60 150 110 150 Q130 150 140 130 Q150 110 145 90 Q140 60 120 55 Q90 52 78 78 Q70 98 85 120 Q92 130 85 140 Q74 152 60 170 Q42 195 40 230 L40 290 Z" fill="#e8dfc8" opacity=".88"/>
+            <path d="M118 70 Q135 74 142 90 Q145 102 138 114 L132 112 Q136 98 132 90 Q128 82 116 80 Z" fill="#c9a24a" opacity=".22"/>
+            <rect x="10" y="10" width="220" height="280" fill="none" stroke="#c9a24a" stroke-width=".6" opacity=".38"/>
+            <rect x="16" y="16" width="208" height="268" fill="none" stroke="#c9a24a" stroke-width=".4" opacity=".22"/>
+          </svg>
+        </div>
+        <div class="chapel-plaque">Christopher Edward Nolan · b. 1970 · Architect</div>
+      </div>
+      <div class="chapel-body">
+        <p class="lead">"He shoots the corn because the corn must actually exist. He buys the 747 because the 747 must actually combust. The camera is a witness, and a witness lies when you hand it anything synthetic. This is the doctrine of the house."</p>
+
+        <h4><span>§ I</span>Signal</h4>
+        <p>Nolan's governing instinct is weight. A film must feel heavy because it was heavy. 500 acres of Alberta corn. A real Boeing 747 in Victorville. A rotating hallway built at 100 feet on a gimbal rig. Spectacle earned by construction, not synthesis.</p>
+
+        <h4><span>§ II</span>Method</h4>
+        <p>Practical first. Digital only where necessary. The Gargantua render produced real astrophysics papers. TARS and CASE are performers inside rigs. The result is not realism; it is persuasion. The audience believes because the camera had something to witness.</p>
+
+        <h4><span>§ III</span>Argument</h4>
+        <p>Every film is a structural argument disguised as a genre exercise. Memento is a thesis on memory as self-administered evidence. Inception is a film about what cinema actually does. Tenet is an essay on fatalism told as a pincer movement. Oppenheimer is an audit of consequence shot on stock that did not exist until the film demanded it.</p>
+
+        <div class="colophon">✠</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHRONICLE -->
+  <section id="chronicle" class="section chronicle" aria-labelledby="chronicle-title">
+    <div class="section-head">
+      <span class="numeral">IV</span>
+      <div class="head-meta">
+        <p class="eyebrow">The Chronicle · Liturgical Calendar</p>
+        <h2 id="chronicle-title" class="rack">Hours of the canon.</h2>
+      </div>
+      <div class="head-note">AUTO-REEL · ACTIVE<br/>PAUSE ON HOVER</div>
+    </div>
+    <div class="hair"></div>
+    <div class="chronicle-rail" id="chronicle-rail">
+      <div class="chronicle-line">
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:2%"><div class="hour">Matins</div><div class="year">1998</div><div class="film">Following</div><div class="aside"><em>Before the house. £6,000. Weekends only.</em></div></div>
+        <div class="cdot tech" style="left:2%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:14%"><div class="hour tech">Lauds · Technical</div><div class="year">2000</div><div class="film">Memento</div><div class="aside"><em>113 jumps in chronology. 25 days of shoot.</em></div></div>
+        <div class="cdot tech" style="left:14%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:28%"><div class="hour">Prime</div><div class="year">2005</div><div class="film">Batman Begins</div><div class="aside"><em>A reboot treated as first-principles engineering.</em></div></div>
+        <div class="cdot" style="left:28%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:40%"><div class="hour">Terce</div><div class="year">2008</div><div class="film">The Dark Knight</div><div class="aside"><em>IMAX in sustained use. A truck flipped for real.</em></div></div>
+        <div class="cdot" style="left:40%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:50%"><div class="hour">Sext</div><div class="year">2010</div><div class="film">Inception</div><div class="aside"><em>The rotating hallway. Six countries. Sixty days.</em></div></div>
+        <div class="cdot" style="left:50%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:60%"><div class="hour">None</div><div class="year">2012</div><div class="film">TDK Rises</div><div class="aside"><em>The Dent Act detonates on schedule.</em></div></div>
+        <div class="cdot" style="left:60%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:72%"><div class="hour tech">Vespers · Technical</div><div class="year">2014</div><div class="film">Interstellar</div><div class="aside"><em>Kip Thorne's two rules. Gargantua, rendered accurately.</em></div></div>
+        <div class="cdot tech" style="left:72%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:86%"><div class="hour">Compline</div><div class="year">2020</div><div class="film">Tenet</div><div class="aside"><em>A 747, bought and detonated. Zero green screen.</em></div></div>
+        <div class="cdot" style="left:86%"></div>
+
+        <div class="cm" data-cursor="INSPECT HOUR" style="left:100%"><div class="hour tech">Vigil · Technical</div><div class="year">2023</div><div class="film">Oppenheimer</div><div class="aside"><em>First feature burned on IMAX 65mm B&amp;W stock.</em></div></div>
+        <div class="cdot tech" style="left:100%"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar" class="section" aria-labelledby="calendar-title">
+    <div class="section-head">
+      <span class="numeral">V</span>
+      <div class="head-meta">
+        <p class="eyebrow">The Ritual Calendar · Programme of the Faithful</p>
+        <h2 id="calendar-title" class="rack">Six screenings. One house.</h2>
+      </div>
+      <div class="head-note">BOARD · LIVE<br/>3,660 seats</div>
+    </div>
+    <div class="hair"></div>
+    <div class="calendar">
+      <div class="cal-top">
+        <span><span class="lamp" style="background:var(--amber);color:var(--amber);margin-right:10px;vertical-align:middle"></span>Board last updated · 23·APR·MMXXVI · 04:17 GMT</span>
+        <span>Capacity · <em>3,660 seats</em></span>
+      </div>
+      <div class="ticket" data-cursor="TAKE A SEAT"><div class="t-date">02<span>MAY · MMXXVI</span></div><div class="t-film">Interstellar<span>ENDURANCE-LOG-7A</span></div><div class="t-venue">Nave I — 900 seats</div><div class="t-format">IMAX 70MM</div><div class="t-seats">S-07 · S-08</div><div class="t-status open">Open</div></div>
+      <div class="ticket" data-cursor="JOIN WAITLIST"><div class="t-date">09<span>MAY · MMXXVI</span></div><div class="t-film">Oppenheimer<span>ENDURANCE-LOG-8E</span></div><div class="t-venue">Apse II — 620 seats</div><div class="t-format">70MM B&amp;W</div><div class="t-seats">House Full</div><div class="t-status sold">Sold</div></div>
+      <div class="ticket" data-cursor="TAKE A SEAT"><div class="t-date">16<span>MAY · MMXXVI</span></div><div class="t-film">The Dark Knight<span>ENDURANCE-LOG-3C</span></div><div class="t-venue">Narthex — 480 seats</div><div class="t-format">IMAX 70MM</div><div class="t-seats">C-14 · C-15</div><div class="t-status open">Open</div></div>
+      <div class="ticket" data-cursor="JOIN WAITLIST"><div class="t-date">23<span>MAY · MMXXVI</span></div><div class="t-film">Tenet<span>ENDURANCE-LOG-9B</span></div><div class="t-venue">Nave I — 900 seats</div><div class="t-format">70MM ANA.</div><div class="t-seats">Waitlist</div><div class="t-status wait">Wait</div></div>
+      <div class="ticket" data-cursor="TAKE A SEAT"><div class="t-date">30<span>MAY · MMXXVI</span></div><div class="t-film">Inception<span>ENDURANCE-LOG-4C</span></div><div class="t-venue">Transept — 540 seats</div><div class="t-format">35MM ANA.</div><div class="t-seats">B-03 · B-04</div><div class="t-status open">Open</div></div>
+      <div class="ticket" data-cursor="TAKE A SEAT"><div class="t-date">06<span>JUN · MMXXVI</span></div><div class="t-film">Memento<span>ENDURANCE-LOG-1A</span></div><div class="t-venue">Crypt IV — 220 seats</div><div class="t-format">35MM REV.</div><div class="t-seats">S-11</div><div class="t-status open">Limited</div></div>
+      <div class="cal-tear"></div>
+    </div>
+  </section>
+
+  <!-- PULPIT -->
+  <section id="pulpit" class="section" aria-labelledby="pulpit-title">
+    <div class="section-head">
+      <span class="numeral">VI</span>
+      <div class="head-meta">
+        <p class="eyebrow">The Pulpit · Essays &amp; Field Notes</p>
+        <h2 id="pulpit-title" class="rack">A sermon and two witnesses.</h2>
+      </div>
+      <div class="head-note">VOL. VII · SPRING<br/>3 ENTRIES</div>
+    </div>
+    <div class="hair"></div>
+    <div class="pulpit">
+      <article class="essay" data-cursor="READ SERMON">
+        <div class="tag">Field Note N° 01</div>
+        <h3>The Ticking That Is Physics</h3>
+        <p class="drop">On Miller's planet, the ocean does not hiss — it clicks. A metronome baked into the sound design marks every 1.25 seconds, and each tick is a full Earth day lost on the ship above. The film's score is general relativity compressed into ambient texture.</p>
+        <div class="byline">L. P. Hallsworth · Resident Observer</div>
+      </article>
+
+      <article class="essay sermon" data-cursor="READ SERMON">
+        <div class="tag">Sermon · Vol. VII</div>
+        <h3>On Weight: A Sermon on Practical Light</h3>
+        <p class="drop">Nolan builds planets before he films them. Alberta grew five hundred acres of real corn for four months so a single shot could have the physical density of a real harvest. In Victorville, the production bought a decommissioned 747 because buying one was cheaper than pretending to own one.</p>
+        <p>The director insists on what the camera can witness. Gargantua was rendered by a physicist's software that produced actual astrophysics papers. The rotating hallway was built. The zero-gravity was choreographed on wires. Every frame the film shows you was, at some prior moment, a real object in a real place.</p>
+        <p>This is not realism. Realism is a surface effect. What Nolan enforces is <em>weight</em>. A film earned in labor and steel has a tonnage the synthetic version cannot supply. Audiences cannot always articulate the difference, but they feel it.</p>
+        <div class="byline">— S. A. Matthews · Senior Archivist · Vol. VII</div>
+      </article>
+
+      <article class="essay" data-cursor="READ SERMON">
+        <div class="tag">Field Note N° 02</div>
+        <h3>The Palindrome Hidden in Pompeii</h3>
+        <p class="drop">Tenet's character roster — Sator, Arepo, Opera, Rotas — is not invention but inheritance. A first-century Roman stone carving supplies the film's complete naming grammar. The villain is a two-thousand-year-old rock turned inside out.</p>
+        <div class="byline">R. Kaganovich · Vault Keeper · Crypt IV</div>
+      </article>
+    </div>
+
+    <div class="pullquote" data-quote='"The bomb is not the ending. It is the beginning of a system no one can later shut down."'>
+      <span id="pullquote-text"></span><span class="type-caret" id="pullquote-caret"></span>
+    </div>
+  </section>
+
+  <!-- PATRONS -->
+  <section id="patrons" class="section" aria-labelledby="patrons-title">
+    <div class="section-head">
+      <span class="numeral">VII</span>
+      <div class="head-meta">
+        <p class="eyebrow">The Patrons · A Circle of the Faithful</p>
+        <h2 id="patrons-title" class="rack">One thousand seats. No more.</h2>
+      </div>
+      <div class="head-note">ORDERS · OPEN<br/>937 OF 1,000</div>
+    </div>
+    <div class="hair"></div>
+    <div class="patrons" id="patrons-box">
+      <div>
+        <h3>Take orders, not subscriptions.</h3>
+        <p>Admission buys you a seat in the Nave, a key to the Vaults, and a printed stub for every screening you attend for as long as the building stands. Patrons receive the liturgical calendar by post, twice a year, on uncoated stock.</p>
+        <p>Membership is limited to one thousand names because a cathedral is not a platform. It is a room that can only hold what it was built to hold.</p>
+        <button class="btn-hair" data-cursor="JOIN ORDER">Take Orders →</button>
+      </div>
+      <div>
+        <div class="patron-row" data-cursor="JOIN ORDER"><div class="n">I</div><div class="t">Printed Programme</div><div class="o">Biannual letterpress · mailed</div></div>
+        <div class="patron-row" data-cursor="JOIN ORDER"><div class="n">II</div><div class="t">First-Seating Rights</div><div class="o">Priority 72h · before public</div></div>
+        <div class="patron-row" data-cursor="JOIN ORDER"><div class="n">III</div><div class="t">Restoration Access</div><div class="o">Crypt IV · archive pass</div></div>
+        <div class="patron-row" data-cursor="JOIN ORDER"><div class="n">IV</div><div class="t">Order of the Rose</div><div class="o">Name engraved · Nave rail</div></div>
+        <div class="patron-row" data-cursor="JOIN ORDER"><div class="n">V</div><div class="t">Final Reel Rights</div><div class="o">Standing admission · any night</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRYPT -->
+  <footer id="crypt" class="crypt aisle">
+    <div class="crypt-grid">
+      <div><h6>Archive</h6><a href="#">Current Programme</a><a href="#">Full Canon</a><a href="#">Source References</a></div>
+      <div><h6>Orders</h6><a href="#">Become a Patron</a><a href="#">Gift Membership</a><a href="#">Rights &amp; Credits</a></div>
+      <div><h6>Contact</h6><a href="#">theendurancelogs@gmail.com</a><p>Fair use. Commentary and criticism.</p></div>
+      <div><h6>Inscription</h6><p class="inscr">Let no frame be lost. Let no format be deprecated. Let the projector run past the credits, as the organ runs past the final hymn. The reel ends. The building does not.</p></div>
+    </div>
+
+    <div class="crypt-pipes" aria-hidden="true">
+      <!-- Organ pipes: height ∝ runtime, breathing phase randomized -->
+      <span style="height:48%;--p:4s"   data-label="Following"></span>
+      <span style="height:56%;--p:4.4s" data-label="Memento"></span>
+      <span style="height:62%;--p:5s"   data-label="Insomnia"></span>
+      <span style="height:72%;--p:5.4s" data-label="Batman Begins"></span>
+      <span style="height:78%;--p:6s"   data-label="The Dark Knight"></span>
+      <span style="height:76%;--p:6.4s" data-label="Inception"></span>
+      <span style="height:60%;--p:7s"   data-label="Dunkirk"></span>
+      <span style="height:88%;--p:7.4s" data-label="TDK Rises"></span>
+      <span style="height:84%;--p:8s"   data-label="Interstellar"></span>
+      <span style="height:76%;--p:8.4s" data-label="Tenet"></span>
+      <span style="height:92%;--p:9s"   data-label="Oppenheimer"></span>
+      <span style="height:54%;--p:9.4s" data-label="Odyssey"></span>
+    </div>
+
+    <div class="crypt-colophon">IMAX Cathedral · Set in Bodoni Moda &amp; Inter Tight · Projected in Obsidian · Amen.</div>
+    <div class="crypt-mark">✠</div>
+  </footer>
+
+</main>
+
+<!-- Glossary -->
+<div id="glossary-backdrop" aria-hidden="true"></div>
+<aside id="glossary" role="dialog" aria-modal="true" aria-labelledby="g-title" aria-hidden="true">
+  <header>
+    <h2 id="g-title">Programme Glossary</h2>
+    <button class="btn-hair" id="g-close" aria-label="Close glossary">Close ✕</button>
+  </header>
+  <dl>
+    <dt>Nave</dt><dd>The long reading hall. Opening act.</dd>
+    <dt>Premiere</dt><dd>Reserved first screenings of featured restorations.</dd>
+    <dt>Vault</dt><dd>Numbered chapters of the archive.</dd>
+    <dt>Chapel</dt><dd>A section devoted to the director in residence.</dd>
+    <dt>Chronicle</dt><dd>Liturgical hour-by-hour timeline of the canon.</dd>
+    <dt>Calendar</dt><dd>The ritual screening board.</dd>
+    <dt>Pulpit</dt><dd>Long-form essays and field notes.</dd>
+    <dt>Order</dt><dd>The circle of patrons keeping the cathedral lit.</dd>
+    <dt>Crypt</dt><dd>The colophon footer. Press AMEN for the final reel.</dd>
+  </dl>
+  <footer>
+    <span>↑ ↓ — section navigation</span>
+    <span>? — open / close this glossary</span>
+    <span>Esc — close modals</span>
+    <span>A · M · E · N — final reel</span>
+  </footer>
+</aside>
+
+<!-- AMEN sequence -->
+<div id="amen-flash" aria-hidden="true"></div>
+<canvas id="amen-dust" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+  'use strict';
+  var root = document.documentElement;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine   = matchMedia('(pointer: fine)').matches;
+  if (fine) root.classList.add('has-fine-pointer'); else root.classList.add('touch');
+  if (reduce) root.classList.add('reduce-motion');
+
+  // -------------------- PROJECTOR BOOT --------------------
+  var boot = document.getElementById('boot');
+  var digitEl = document.getElementById('boot-digit');
+  var certif  = document.getElementById('boot-certif');
+  var cueEl   = document.getElementById('boot-cue');
+  var skipBtn = document.getElementById('boot-skip');
+  var bootDone = false;
+
+  function runBoot(){
+    if (bootDone) return; bootDone = true;
+    if (reduce) {
+      // Reduced-motion: skip boot, show hero immediately
+      boot.remove();
+      root.classList.add('curtain-open');
+      startHero();
+      return;
+    }
+    var digits = ['5','4','3','2','1'], i=0;
+    digitEl.textContent = digits[0];
+    var id = setInterval(function(){
+      i++;
+      if (i < digits.length){ digitEl.textContent = digits[i]; }
+      if (i === 4){ certif.classList.add('on'); }
+      if (i === 4){ setTimeout(function(){ cueEl.classList.add('flash'); setTimeout(function(){cueEl.classList.remove('flash')},120); setTimeout(function(){cueEl.classList.add('flash')},260); }, 200); }
+      if (i >= digits.length){ clearInterval(id); setTimeout(endBoot, 600); }
+    }, 900);
+  }
+  function endBoot(){
+    boot.classList.add('dissolve');
+    setTimeout(function(){ boot.remove(); root.classList.add('curtain-open'); startHero(); }, 620);
+  }
+  skipBtn.addEventListener('click', function(){ clearInterval(); endBoot(); });
+  addEventListener('keydown', function(e){ if (e.key==='Escape' && document.getElementById('boot')) endBoot(); });
+  addEventListener('click', function(e){ if (e.target.closest && e.target.closest('#boot') && e.target.id!=='boot-skip') endBoot(); });
+  // kick off
+  if (document.readyState==='loading') addEventListener('DOMContentLoaded', runBoot); else runBoot();
+
+  // -------------------- HERO SEQUENCE --------------------
+  function splitTitle(){
+    // Title is hardcoded in HTML with .ch spans; just return the element
+    return document.getElementById('nave-title');
+  }
+  function startHero(){
+    document.getElementById('rose').classList.add('on');
+    document.getElementById('cr-left').classList.add('on');
+    document.getElementById('cr-right').classList.add('on');
+    var h1 = splitTitle();
+    setTimeout(function(){ h1.classList.add('lit'); }, 1500);
+    document.getElementById('eyebrow').classList.add('on');
+    document.getElementById('nave-sub').classList.add('on');
+    document.getElementById('nave-cta').classList.add('on');
+    document.getElementById('ticker').classList.add('on');
+    // dust
+    var dust = document.getElementById('dust');
+    for (var i=0;i<22;i++){
+      var sp = document.createElement('span');
+      var x = Math.random()*100, dx = (Math.random()*40-20)+'px';
+      var dur = (40 + Math.random()*50)+'s', del = (-Math.random()*60)+'s';
+      var op = (0.06 + Math.random()*0.1).toFixed(2);
+      sp.style.left = x+'%'; sp.style.bottom='-20px';
+      sp.style.setProperty('--dx', dx);
+      sp.style.setProperty('--dur', dur);
+      sp.style.setProperty('--delay', del);
+      sp.style.setProperty('--op', op);
+      dust.appendChild(sp);
+    }
+  }
+
+  // -------------------- CURSOR --------------------
+  var cur = document.getElementById('cursor');
+  var verbEl = document.getElementById('cursor-verb');
+  var tx=-100,ty=-100,cx=-100,cy=-100, craf=0;
+  var LERP = reduce ? 1 : 0.22;
+  if (fine){
+    addEventListener('pointermove', function(e){
+      if (e.pointerType!=='mouse') return;
+      tx = e.clientX; ty = e.clientY;
+      document.body.style.setProperty('--mx', e.clientX+'px');
+      document.body.style.setProperty('--my', e.clientY+'px');
+      if (!craf) craf = requestAnimationFrame(cursorTick);
+    }, {passive:true});
+    function cursorTick(){
+      cx += (tx-cx)*LERP; cy += (ty-cy)*LERP;
+      cur.style.transform = 'translate3d('+cx+'px,'+cy+'px,0)';
+      if (Math.hypot(tx-cx,ty-cy) > 0.3) craf = requestAnimationFrame(cursorTick);
+      else craf = 0;
+    }
+    addEventListener('pointerdown', function(){ cur.classList.add('is-press'); });
+    addEventListener('pointerup',   function(){ cur.classList.remove('is-press'); });
+    document.addEventListener('mouseleave', function(){ cur.style.opacity='0'; });
+    document.addEventListener('mouseenter', function(){ cur.style.opacity='1'; });
+
+    // Verb capsule
+    document.addEventListener('pointerover', function(e){
+      var t = e.target.closest('[data-cursor]');
+      if (!t) return;
+      var v = (t.getAttribute('data-cursor')||'').toUpperCase().trim();
+      if (!v) return;
+      verbEl.textContent = v.endsWith('→') ? v : v + ' →';
+      verbEl.style.visibility='hidden';
+      cur.classList.add('is-verb');
+      requestAnimationFrame(function(){
+        cur.style.setProperty('--verb-w', verbEl.offsetWidth + 'px');
+        verbEl.style.visibility='';
+      });
+    });
+    document.addEventListener('pointerout', function(e){
+      var t = e.target.closest && e.target.closest('[data-cursor]');
+      if (!t) return;
+      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('[data-cursor]')) return;
+      cur.classList.remove('is-verb');
+      cur.style.setProperty('--verb-w','0px');
+    });
+
+    // Premiere card 3D tilt + pointer vignette position
+    document.querySelectorAll('.premiere-card').forEach(function(card){
+      card.addEventListener('pointermove', function(e){
+        if (reduce) return;
+        var r = card.getBoundingClientRect();
+        var mx = (e.clientX-r.left)/r.width, my = (e.clientY-r.top)/r.height;
+        card.style.setProperty('--pmx', (mx*100).toFixed(1)+'%');
+        card.style.setProperty('--pmy', (my*100).toFixed(1)+'%');
+        var rx = (0.5-my) * 4, ry = (mx-0.5) * 4;
+        card.style.transform = 'scale('+(card.classList.contains('focused')?1.04:0.98)+') rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)';
+      });
+      card.addEventListener('pointerleave', function(){
+        card.style.transform='';
+      });
+    });
+  }
+
+  // -------------------- SCROLL LOOP --------------------
+  var lastY=0, v=0, lastSet=0;
+  function scrollTick(){
+    var y = scrollY;
+    v = v*0.85 + (y-lastY)*0.15; lastY = y;
+    var max = document.body.scrollHeight - innerHeight;
+    var p = max>0 ? Math.min(1, y/max) : 0;
+    root.style.setProperty('--scroll-y', y);
+    root.style.setProperty('--scroll-v', v.toFixed(2));
+    root.style.setProperty('--scroll-progress', p.toFixed(4));
+    // Rose scroll-spin
+    if (!reduce){
+      var rose = document.getElementById('rose');
+      if (rose) rose.style.setProperty('--rose-r', (y*0.04).toFixed(2)+'deg');
+    }
+    // Hero exit
+    var hero = document.getElementById('nave');
+    var hb = hero.getBoundingClientRect();
+    var exit = Math.max(0, Math.min(1, 1 - (hb.bottom/innerHeight)));
+    root.style.setProperty('--hero-exit', exit.toFixed(3));
+    requestAnimationFrame(scrollTick);
+  }
+  scrollTick();
+
+  // -------------------- INTERSECTION OBSERVERS --------------------
+  // Rack-focus headlines
+  var rackIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) e.target.classList.add('focused');
+    });
+  }, {threshold:0.35});
+  document.querySelectorAll('.rack').forEach(function(h){ rackIO.observe(h); });
+
+  // Reel cue flash on sections
+  var cueIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting && !e.target.dataset.firedCue){
+        e.target.classList.add('reel-fire');
+        e.target.dataset.firedCue = '1';
+      }
+    });
+  }, {threshold:0.2});
+  document.querySelectorAll('.section').forEach(function(s){ cueIO.observe(s); });
+
+  // Section chrome label + counter
+  var sectionLabels = {
+    nave:'Section I — Nave', premiere:'Section II — Premiere', vaults:'Section III — Vaults',
+    chapel:'Section IV — Chapel', chronicle:'Section V — Chronicle', calendar:'Section VI — Calendar',
+    pulpit:'Section VII — Pulpit', patrons:'Section VIII — Patrons'
+  };
+  var sectionNumerals = {nave:'I / VIII',premiere:'II / VIII',vaults:'III / VIII',chapel:'IV / VIII',chronicle:'V / VIII',calendar:'VI / VIII',pulpit:'VII / VIII',patrons:'VIII / VIII'};
+  var labelIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting && e.intersectionRatio>0.4){
+        var id = e.target.id;
+        var label = sectionLabels[id]; var num = sectionNumerals[id];
+        if (label) document.getElementById('clk-section').textContent = label;
+        if (num)   document.getElementById('chrome-counter').textContent = num;
+        // Nav active state
+        document.querySelectorAll('.chrome-nav a').forEach(function(a){
+          a.classList.toggle('active', a.getAttribute('href')==='#'+id);
+        });
+        // Right rail notch
+        var d = document.querySelector('#rail .diamond');
+        if (d && !e.target.dataset.notched){
+          var n = document.createElement('div');
+          n.className='notch';
+          n.style.top = d.style.top || getComputedStyle(d).top;
+          document.getElementById('rail').appendChild(n);
+          e.target.dataset.notched='1';
+        }
+      }
+    });
+  }, {threshold:[0,.4,.7,1]});
+  Object.keys(sectionLabels).forEach(function(id){
+    var el = document.getElementById(id); if (el) labelIO.observe(el);
+  });
+
+  // Aisle spotlight IO
+  var aisleIO = new IntersectionObserver(function(entries){
+    var active = entries.some(function(e){ return e.isIntersecting && e.intersectionRatio>0.35; });
+    document.body.classList.toggle('aisle-active', active);
+  }, {threshold:[0,.35,.6,1]});
+  document.querySelectorAll('section.aisle, footer.aisle').forEach(function(s){ aisleIO.observe(s); });
+
+  // Patrons awake
+  var patronsIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ document.getElementById('patrons-box').classList.toggle('awake', e.isIntersecting); });
+  }, {threshold:0.4});
+  var pb = document.getElementById('patrons-box'); if (pb) patronsIO.observe(pb);
+
+  // Pullquote typewriter
+  var pq = document.querySelector('.pullquote');
+  var pqText = pq && pq.getAttribute('data-quote') || '';
+  var pqFired = false;
+  var pqIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting && !pqFired && pqText){
+        pqFired = true; typeOut(pqText);
+      }
+    });
+  }, {threshold:0.4});
+  if (pq) pqIO.observe(pq);
+  function typeOut(txt){
+    var out = document.getElementById('pullquote-text');
+    var caret = document.getElementById('pullquote-caret');
+    if (reduce){ out.textContent = txt; caret.style.display='none'; return; }
+    var i = 0;
+    (function step(){
+      if (i>=txt.length){ setTimeout(function(){ caret.style.display='none'; }, 900); return; }
+      var ch = txt[i++]; out.textContent += ch;
+      var delay = ch==='.' ? 260 : ch===' ' ? 10 : 22;
+      setTimeout(step, delay);
+    })();
+  }
+
+  // Chronicle auto-scroll
+  var cRail = document.getElementById('chronicle-rail');
+  var cRAF = 0, cHover = false;
+  if (cRail){
+    cRail.addEventListener('pointerenter', function(){ cHover = true; });
+    cRail.addEventListener('pointerleave', function(){ cHover = false; });
+    var chronIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting && e.intersectionRatio>0.5 && !reduce){
+          if (!cRAF) cRAF = requestAnimationFrame(chronTick);
+        } else {
+          if (cRAF){ cancelAnimationFrame(cRAF); cRAF=0; }
+        }
+      });
+    }, {threshold:[0,.5,.8]});
+    chronIO.observe(cRail);
+    function chronTick(){
+      if (!cHover){
+        cRail.scrollLeft += 0.4;
+        if (cRail.scrollLeft >= cRail.scrollWidth - cRail.clientWidth - 2){
+          cRail.scrollTo({left:0, behavior:'smooth'});
+        }
+      }
+      cRAF = requestAnimationFrame(chronTick);
+    }
+  }
+
+  // -------------------- KEYBOARD --------------------
+  var glossary = document.getElementById('glossary');
+  var glossBack= document.getElementById('glossary-backdrop');
+  var gCloseBtn= document.getElementById('g-close');
+  function openGlossary(){
+    glossary.classList.add('open'); glossary.setAttribute('aria-hidden','false');
+    glossBack.classList.add('open');
+    gCloseBtn.focus();
+  }
+  function closeGlossary(){
+    glossary.classList.remove('open'); glossary.setAttribute('aria-hidden','true');
+    glossBack.classList.remove('open');
+  }
+  gCloseBtn.addEventListener('click', closeGlossary);
+  glossBack.addEventListener('click', closeGlossary);
+
+  // AMEN buffer
+  var amenBuf = [], WORD='AMEN', lastK=0;
+  addEventListener('keydown', function(e){
+    var tag = (document.activeElement||{}).tagName||'';
+    if (/INPUT|TEXTAREA|SELECT/.test(tag) || (document.activeElement && document.activeElement.isContentEditable)) return;
+    if (e.key==='Escape'){ closeGlossary(); return; }
+    if (e.key==='?'){ e.preventDefault(); openGlossary(); return; }
+    if (e.key==='ArrowDown' || e.key==='PageDown'){ e.preventDefault(); navSection(1); return; }
+    if (e.key==='ArrowUp' || e.key==='PageUp'){ e.preventDefault(); navSection(-1); return; }
+    if (e.key==='Home'){ e.preventDefault(); scrollTo({top:0, behavior:'smooth'}); return; }
+    if (e.key==='End'){ e.preventDefault(); scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); return; }
+    var now = performance.now();
+    if (now-lastK>1400) amenBuf.length=0;
+    lastK = now;
+    amenBuf.push((e.key||'').toUpperCase());
+    if (amenBuf.length > WORD.length) amenBuf.shift();
+    if (amenBuf.join('')===WORD){ amenBuf.length=0; triggerAmen(); }
+  });
+  function navSection(dir){
+    var ids = Object.keys(sectionLabels);
+    var els = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+    var idx = 0, best = Infinity;
+    els.forEach(function(el, i){
+      var t = Math.abs(el.getBoundingClientRect().top - 120);
+      if (t<best){ best=t; idx=i; }
+    });
+    var next = Math.max(0, Math.min(els.length-1, idx+dir));
+    els[next].scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
+  }
+
+  // -------------------- AMEN SEQUENCE --------------------
+  var aFlash = document.getElementById('amen-flash');
+  var aDust  = document.getElementById('amen-dust');
+  function triggerAmen(){
+    if (reduce){
+      aFlash.style.opacity='.45';
+      setTimeout(function(){ aFlash.style.opacity='0'; }, 200);
+      return;
+    }
+    aFlash.classList.add('fire');
+    aDust.classList.add('fire');
+    setTimeout(function(){
+      aFlash.classList.remove('fire'); aDust.classList.remove('fire');
+    }, 2100);
+    // Dust particles
+    var ctx = aDust.getContext('2d');
+    aDust.width = innerWidth * devicePixelRatio;
+    aDust.height = innerHeight * devicePixelRatio;
+    aDust.style.width = innerWidth+'px'; aDust.style.height = innerHeight+'px';
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    var particles = [];
+    for (var i=0;i<70;i++){
+      particles.push({
+        x: innerWidth/2 + (Math.random()-0.5)*120,
+        y: innerHeight/2 + (Math.random()-0.5)*60,
+        vx: (Math.random()-0.5)*0.6,
+        vy: -0.4 - Math.random()*0.8,
+        life: 1400 + Math.random()*600,
+        born: performance.now()
+      });
+    }
+    (function render(){
+      var now = performance.now();
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      var alive = false;
+      particles.forEach(function(p){
+        var age = now-p.born;
+        if (age<p.life){
+          alive = true;
+          p.x += p.vx; p.y += p.vy;
+          var a = Math.max(0, 1 - age/p.life);
+          ctx.fillStyle = 'rgba(214,155,116,'+ (a*0.7).toFixed(2) +')';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.4, 0, Math.PI*2);
+          ctx.fill();
+        }
+      });
+      if (alive) requestAnimationFrame(render); else ctx.clearRect(0,0,innerWidth,innerHeight);
+    })();
+  }
+
+  // -------------------- MISC --------------------
+  // Clock + chronometer
+  function updateClock(){
+    var d = new Date();
+    var h = String(d.getUTCHours()).padStart(2,'0');
+    var m = String(d.getUTCMinutes()).padStart(2,'0');
+    document.getElementById('clk-time').textContent = h+' : '+m+' GMT';
+  }
+  updateClock(); setInterval(updateClock, 30000);
+  var tStart = performance.now();
+  setInterval(function(){
+    var s = (performance.now() - tStart)/1000;
+    var hh = String(Math.floor(s/3600)).padStart(2,'0');
+    var mm = String(Math.floor((s%3600)/60)).padStart(2,'0');
+    var ss = String(Math.floor(s%60)).padStart(2,'0');
+    var el = document.querySelector('#chronometer .clock');
+    if (el) el.textContent = 'T-'+hh+':'+mm+':'+ss;
+  }, 1000);
+
+  // Hero mouse parallax for rose
+  if (fine && !reduce){
+    var hero = document.getElementById('nave');
+    hero.addEventListener('pointermove', function(e){
+      var r = hero.getBoundingClientRect();
+      var nx = ((e.clientX-r.left)/r.width - 0.5);
+      var ny = ((e.clientY-r.top)/r.height - 0.5);
+      var rose = document.getElementById('rose');
+      if (rose) rose.style.setProperty('--rose-tx', (nx*12).toFixed(1)+'px');
+    });
+  }
+
+  // Smooth scroll for nav anchors
+  document.querySelectorAll('.chrome-nav a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var href = a.getAttribute('href'); if (!href || href.charAt(0)!=='#') return;
+      var t = document.querySelector(href); if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
+    });
+  });
+})();
+</script>
+</body>
+</html>

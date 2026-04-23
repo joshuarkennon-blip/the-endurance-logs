@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Concept Mockups // The Endurance Logs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#07080a;color:#e8e4d8;font-family:"Inter Tight",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .wrap{max-width:980px;margin:0 auto;padding:80px 40px 120px;position:relative}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.28em;color:#8a8372;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:32px;height:1px;background:#C9A24A;opacity:.6}
+  h1{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:clamp(48px,7vw,96px);line-height:.92;letter-spacing:-.02em;color:#F4EFE4;margin-bottom:18px}
+  h1 em{color:#C9A24A;font-style:italic}
+  .lede{font-family:"Bodoni Moda",serif;font-style:italic;font-size:19px;line-height:1.6;color:#a8a297;max-width:62ch;margin-bottom:50px}
+  .rule{height:1px;background:rgba(201,162,74,.3);margin:40px 0 32px;position:relative}
+  .rule::after{content:"◇";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#C9A24A;background:#07080a;padding:0 10px;font-size:10px}
+  .grid{display:grid;gap:18px}
+  .card{display:block;text-decoration:none;color:inherit;border:1px solid rgba(201,162,74,.24);background:linear-gradient(180deg,#111114,#0c0c10);padding:26px 28px;transition:all .3s cubic-bezier(.2,.7,.1,1);position:relative;overflow:hidden}
+  .card:hover{border-color:#C9A24A;transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 32px rgba(201,162,74,.12)}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#C9A24A,#D69B74);opacity:.6}
+  .card-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:10px}
+  .num{font-family:"Bodoni Moda",serif;font-weight:900;font-style:italic;font-size:42px;color:#C9A24A;line-height:1;letter-spacing:-.02em}
+  .tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:#E6C069;text-transform:uppercase;border:1px solid rgba(201,162,74,.4);padding:5px 9px}
+  .card h2{font-family:"Bodoni Moda",serif;font-weight:700;font-size:26px;color:#F4EFE4;letter-spacing:-.01em;margin-bottom:6px}
+  .card .sub{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;color:#a8a297;line-height:1.5;margin-bottom:14px;max-width:64ch}
+  .card .meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;color:#6b6459;text-transform:uppercase;display:flex;gap:18px;flex-wrap:wrap}
+  .card .open{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;color:#E6C069;text-transform:uppercase;margin-top:14px;display:inline-flex;align-items:center;gap:10px}
+  .card .open::after{content:"→";transition:transform .24s cubic-bezier(.2,.7,.1,1)}
+  .card:hover .open::after{transform:translateX(6px)}
+  .v3{border-color:rgba(201,162,74,.55);background:linear-gradient(180deg,#15140e,#0a0a0c)}
+  .v3::before{opacity:1;width:4px}
+  footer{margin-top:60px;padding-top:26px;border-top:1px solid rgba(201,162,74,.22);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;color:#6b6459;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  footer a{color:#8a8372}
+  footer a:hover{color:#E6C069}
+  @media (max-width:640px){.wrap{padding:50px 22px 80px}.card-head{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">MMXXVI · Concept Renderer · Volume VII</p>
+  <h1>Three fidelity passes.<br/><em>One monumental direction.</em></h1>
+  <p class="lede">The Endurance Logs, reimagined as a working archive of Christopher Nolan cinema. These three mockups chart a single direction — the IMAX Cathedral — through its simple, production, and deep-cinema revisions. Each opens as a standalone experience.</p>
+
+  <div class="rule"></div>
+
+  <div class="grid">
+    <a class="card v3" href="/mockups-static/cathedral-v3.html">
+      <div class="card-head">
+        <span class="num">III</span>
+        <span class="tag">Deep Fidelity · Latest</span>
+      </div>
+      <h2>Cathedral v3 — full cinema</h2>
+      <p class="sub">Projector-boot countdown, custom film-reticle cursor with contextual verbs, aisle spotlight, monumental gravity-drop title, organ pipes in the crypt, and the AMEN keyboard easter egg. The full working piece.</p>
+      <div class="meta">
+        <span>Projector boot · 5·4·3·2·1</span>
+        <span>Custom cursor HUD</span>
+        <span>Type AMEN for final reel</span>
+        <span>Press ? for glossary</span>
+      </div>
+      <span class="open">Open Cathedral v3</span>
+    </a>
+
+    <a class="card" href="/mockups-static/local-mockups-v2.html#cathedral">
+      <div class="card-head">
+        <span class="num">II</span>
+        <span class="tag">Production Pass</span>
+      </div>
+      <h2>Cathedral v2 — production grade</h2>
+      <p class="sub">Rose window, eight Roman-numeral sections, ritual calendar ticket-board, director chapel with silhouette, drop-cap essays, patron circle, crypt footer with inscription. Also includes Observatory v2 via the toggle.</p>
+      <div class="meta">
+        <span>Real film data</span>
+        <span>Custom SVG ornaments</span>
+        <span>Toggle Observatory ↔ Cathedral</span>
+      </div>
+      <span class="open">Open Cathedral v2</span>
+    </a>
+
+    <a class="card" href="/mockups-static/local-mockups.html#cathedral">
+      <div class="card-head">
+        <span class="num">I</span>
+        <span class="tag">First Pass · Archival</span>
+      </div>
+      <h2>Cathedral v1 — initial concept</h2>
+      <p class="sub">The first full-page concept. Hero, vaults, ritual calendar, editorial pulpit, patron block, footer. Kept for lineage and comparison.</p>
+      <div class="meta"><span>Simple layout</span><span>Legacy reference</span></div>
+      <span class="open">Open Cathedral v1</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>Endurance Logs // Concept Renderer</span>
+    <a href="/">← Return to live archive</a>
+  </footer>
+</div>
+</body>
+</html>
