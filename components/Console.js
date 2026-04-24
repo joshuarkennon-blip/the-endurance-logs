@@ -1,10 +1,10 @@
 'use client'
 import { useState, useCallback, useEffect, useRef, useId } from 'react'
-import Link from 'next/link'
 import DiscShelf from './DiscShelf'
 import DiscInsertFlight from './DiscInsertFlight'
 import LogScreen from './LogScreen'
 import CaseChat from './CaseChat'
+import DossierOverlays from './DossierOverlays'
 import CursorGlowTrail from './CursorGlowTrail'
 import { useAudioEngine } from './AudioEngine'
 import { filmCursorCssValue } from '../lib/cursorFilm'
@@ -75,6 +75,7 @@ export default function Console({ films, registerStopAll }) {
     motionMode: 'full',   // full | reduced
     contrastMode: 'normal', // normal | high
   })
+  const [dossierLayer, setDossierLayer] = useState(null)
 
   const {
     playLoadTrigger,
@@ -368,12 +369,26 @@ export default function Console({ films, registerStopAll }) {
     return () => document.body.classList.remove('mobile-log-immersive')
   }, [isMobileImmersive])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const syncHash = () => {
+      const h = window.location.hash.replace(/^#/, '')
+      if (h === 'sources') setDossierLayer('sources')
+      else if (h === 'acquire') setDossierLayer('acquire')
+      else setDossierLayer(null)
+    }
+    syncHash()
+    window.addEventListener('hashchange', syncHash)
+    return () => window.removeEventListener('hashchange', syncHash)
+  }, [])
+
   return (
     <div
       className={`relative w-full h-full flex flex-col${filmCursorAccent ? ' console-film-cursor' : ''}`}
       onClick={unlockAudio}
       style={shellStyle}
     >
+      <DossierOverlays open={dossierLayer} onClose={() => setDossierLayer(null)} playUI={playUI} />
       <CursorGlowTrail accentHex={filmCursorAccent} fxMode={fxMode} />
       {insertFlight ? (
         <DiscInsertFlight
@@ -421,19 +436,19 @@ export default function Console({ films, registerStopAll }) {
       ) : (
         <>
       {/* ── TOP BAR ── */}
-      <div className="panel border-b-0 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shrink-0">
+      <div className="panel dossier-top-rail border-b-0 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3 md:gap-4">
-          <div className="flex gap-1.5">
-            <div className="led" />
-            <div className="led amber" style={{ animationDelay: '1s' }} />
-            <div className="led green" style={{ animationDelay: '2s' }} />
+          <div className="flex gap-1.5 dossier-led-rack">
+            <div className="led led-neon-cyan" />
+            <div className="led led-neon-amber led-delay-1" />
+            <div className="led led-neon-mint led-delay-2" />
           </div>
           <div>
-            <p className="text-[13px] md:text-[15px] tracking-[0.25em] md:tracking-[0.3em] text-console-glow uppercase font-bold">
+            <p className="dossier-wordmark text-[13px] md:text-[15px] tracking-[0.25em] md:tracking-[0.3em] text-console-glow uppercase font-bold">
               THE ENDURANCE
             </p>
-            <p className="hidden md:block text-[11px] text-console-muted tracking-widest">
-              FILM ARCHIVE // DOSSIER TERMINAL
+            <p className="hidden md:block text-[11px] text-console-muted tracking-widest dossier-subline-glow">
+              CLASSIFIED DOSSIER // NEON TERMINAL
             </p>
           </div>
         </div>
@@ -644,12 +659,26 @@ export default function Console({ films, registerStopAll }) {
         <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>
           <span className="md:hidden">TAP DISC TO LOAD</span>
-          <Link href="/info" className="hover:text-console-glow transition-colors tracking-widest">
+          <button
+            type="button"
+            onClick={() => {
+              playUI('tick')
+              setDossierLayer('sources')
+            }}
+            className="dossier-foot-link dossier-foot-link--cyan"
+          >
             SOURCES & INFO
-          </Link>
-          <Link href="/collect" className="hover:text-console-amber transition-colors tracking-widest text-console-amber opacity-60 hover:opacity-100">
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              playUI('tick')
+              setDossierLayer('acquire')
+            }}
+            className="dossier-foot-link dossier-foot-link--amber"
+          >
             ACQUIRE ◈
-          </Link>
+          </button>
           <span className="text-console-glow">◈ NOMINAL</span>
         </div>
       </div>
