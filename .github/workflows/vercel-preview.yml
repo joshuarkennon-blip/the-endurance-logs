@@ -1,0 +1,44 @@
+# Preview deployments for pull requests (and manual runs).
+# Uses amondnet/vercel-action — more reliable than hand-rolled `vercel deploy` + URL grep.
+#
+# Required repo secrets (same as production workflow):
+#   VERCEL_TOKEN, VERCEL_PROJECT_ID, VERCEL_ORG_ID  (or VERCEL_TEAM_ID as org id)
+#
+# We do NOT use `on: push` here: every PR sync already fires `pull_request: synchronize`;
+# pairing push + pull_request caused duplicate deployments and flaky comments.
+#
+# This agent environment cannot call Vercel’s API with your account — only GitHub Actions
+# on your repo can, using the secrets above.
+name: Vercel Preview Deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-preview-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    # No secrets on fork PRs — skip instead of failing mysteriously
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy preview to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID || secrets.VERCEL_TEAM_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Omit vercel-args → preview deployment (not --prod)

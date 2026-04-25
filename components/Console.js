@@ -1,10 +1,10 @@
 'use client'
 import { useState, useCallback, useEffect, useRef, useId } from 'react'
-import Link from 'next/link'
 import DiscShelf from './DiscShelf'
 import DiscInsertFlight from './DiscInsertFlight'
 import LogScreen from './LogScreen'
 import CaseChat from './CaseChat'
+import DossierOverlays from './DossierOverlays'
 import CursorGlowTrail from './CursorGlowTrail'
 import { useAudioEngine } from './AudioEngine'
 import { filmCursorCssValue } from '../lib/cursorFilm'
@@ -75,6 +75,7 @@ export default function Console({ films, registerStopAll }) {
     motionMode: 'full',   // full | reduced
     contrastMode: 'normal', // normal | high
   })
+  const [dossierLayer, setDossierLayer] = useState(null)
 
   const {
     playLoadTrigger,
@@ -368,12 +369,26 @@ export default function Console({ films, registerStopAll }) {
     return () => document.body.classList.remove('mobile-log-immersive')
   }, [isMobileImmersive])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const syncHash = () => {
+      const h = window.location.hash.replace(/^#/, '')
+      if (h === 'sources') setDossierLayer('sources')
+      else if (h === 'acquire') setDossierLayer('acquire')
+      else setDossierLayer(null)
+    }
+    syncHash()
+    window.addEventListener('hashchange', syncHash)
+    return () => window.removeEventListener('hashchange', syncHash)
+  }, [])
+
   return (
     <div
-      className={`relative w-full h-full flex flex-col${filmCursorAccent ? ' console-film-cursor' : ''}`}
+      className={`dossier-console relative w-full h-full flex flex-col${filmCursorAccent ? ' console-film-cursor' : ''}`}
       onClick={unlockAudio}
       style={shellStyle}
     >
+      <DossierOverlays open={dossierLayer} onClose={() => setDossierLayer(null)} playUI={playUI} />
       <CursorGlowTrail accentHex={filmCursorAccent} fxMode={fxMode} />
       {insertFlight ? (
         <DiscInsertFlight
@@ -421,19 +436,24 @@ export default function Console({ films, registerStopAll }) {
       ) : (
         <>
       {/* ── TOP BAR ── */}
-      <div className="panel border-b-0 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shrink-0">
+      <div className="panel dossier-top-rail border-b-0 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3 md:gap-4">
-          <div className="flex gap-1.5">
-            <div className="led" />
-            <div className="led amber" style={{ animationDelay: '1s' }} />
-            <div className="led green" style={{ animationDelay: '2s' }} />
+          <div className="flex gap-1.5 dossier-led-rack">
+            <div className="led led-neon-cyan" />
+            <div className="led led-neon-amber led-delay-1" />
+            <div className="led led-neon-mint led-delay-2" />
           </div>
-          <div>
-            <p className="text-[13px] md:text-[15px] tracking-[0.25em] md:tracking-[0.3em] text-console-glow uppercase font-bold">
-              THE ENDURANCE
-            </p>
-            <p className="hidden md:block text-[11px] text-console-muted tracking-widest">
-              FILM ARCHIVE // DOSSIER TERMINAL
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 md:gap-3">
+              <p className="dossier-wordmark text-[13px] md:text-[15px] tracking-[0.25em] md:tracking-[0.3em] text-console-glow uppercase font-bold">
+                THE ENDURANCE
+              </p>
+              <span className="dossier-release-pill shrink-0" title="This skin is not on legacy production">
+                DOSSIER NEON
+              </span>
+            </div>
+            <p className="hidden md:block text-[11px] text-console-muted tracking-widest dossier-subline-glow mt-0.5">
+              DECLASSIFIED ARCHIVE // ULTRA TERMINAL
             </p>
           </div>
         </div>
@@ -457,7 +477,7 @@ export default function Console({ films, registerStopAll }) {
 
           <div className="hidden md:block text-right">
             <p className="tracking-widest">LOADED: <span className="text-console-text">{loadedFilm?.code || '—'}</span></p>
-            <p className="tracking-widest">STATUS: <span className={loadedFilm ? 'text-green-400' : 'text-console-muted'}>
+            <p className="tracking-widest">STATUS: <span className={loadedFilm ? 'dossier-status-active' : 'text-console-muted'}>
               {isLoading ? 'MOUNTING' : loadedFilm ? 'ACTIVE' : 'STANDBY'}
             </span></p>
           </div>
@@ -508,12 +528,12 @@ export default function Console({ films, registerStopAll }) {
           ) : null}
         </div>
 
-        <div className="hidden md:block w-px bg-console-border shrink-0" />
+        <div className="hidden md:block w-px dossier-chrome-rule shrink-0" aria-hidden />
 
         {/* ── LOG SCREEN — full width on mobile when viewing screen ── */}
         <div
           className={`${mobileView === 'shelf' ? 'hidden' : 'flex'} md:flex flex-1 flex-col transition-all duration-300 ${dropActive ? 'drop-active' : ''}`}
-          style={dropActive ? { borderColor: '#6ab4dc', boxShadow: '0 0 30px rgba(106,180,220,0.2) inset' } : {}}
+          style={dropActive ? { borderColor: 'rgba(0,245,255,0.55)', boxShadow: '0 0 36px rgba(0,245,255,0.18) inset' } : {}}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -522,7 +542,7 @@ export default function Console({ films, registerStopAll }) {
         </div>
 
         {/* ── RIGHT INSTRUMENTS — desktop only ── */}
-        <div className="hidden md:block w-px bg-console-border shrink-0" />
+        <div className="hidden md:block w-px dossier-chrome-rule shrink-0" aria-hidden />
         <div className="hidden md:flex panel flex-col gap-3 p-3 shrink-0 min-w-0" style={{ width: 124, maxWidth: 'min(124px, 22vw)' }}>
           <div className="border-b border-console-border pb-2">
             <p className="text-[10px] tracking-widest text-console-muted uppercase">Instruments</p>
@@ -531,8 +551,11 @@ export default function Console({ films, registerStopAll }) {
             <p className="text-[10px] text-console-muted mb-1 tracking-wider">SIG STR</p>
             <div className="space-y-0.5">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-[3px] w-full rounded-sm"
-                  style={{ backgroundColor: i < 6 ? '#4a7c9e' : '#1a1a25', opacity: i < 6 ? (1 - i * 0.08) : 0.3 }}
+                <div key={i} className="h-[3px] w-full rounded-sm dossier-meter-seg"
+                  style={{
+                    opacity: i < 6 ? (1 - i * 0.08) : 0.35,
+                    backgroundColor: i < 6 ? undefined : 'rgba(6, 18, 24, 0.9)',
+                  }}
                 />
               ))}
             </div>
@@ -541,8 +564,11 @@ export default function Console({ films, registerStopAll }) {
             <p className="text-[10px] text-console-muted mb-1 tracking-wider">PWR CELL</p>
             <div className="grid grid-cols-2 gap-0.5">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-3 w-full"
-                  style={{ backgroundColor: i < 5 ? '#c8922a30' : '#1a1a25', border: '1px solid #2a2a3a' }}
+                <div key={i} className="h-3 w-full dossier-pwr-cell"
+                  style={{
+                    backgroundColor: i < 5 ? 'rgba(255, 176, 32, 0.22)' : 'rgba(6, 18, 24, 0.95)',
+                    border: '1px solid rgba(0, 245, 255, 0.15)',
+                  }}
                 />
               ))}
             </div>
@@ -644,12 +670,26 @@ export default function Console({ films, registerStopAll }) {
         <div className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] text-console-muted">
           <span className="hidden md:inline">DRAG DISC TO LOAD</span>
           <span className="md:hidden">TAP DISC TO LOAD</span>
-          <Link href="/info" className="hover:text-console-glow transition-colors tracking-widest">
+          <button
+            type="button"
+            onClick={() => {
+              playUI('tick')
+              setDossierLayer('sources')
+            }}
+            className="dossier-foot-link dossier-foot-link--cyan"
+          >
             SOURCES & INFO
-          </Link>
-          <Link href="/collect" className="hover:text-console-amber transition-colors tracking-widest text-console-amber opacity-60 hover:opacity-100">
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              playUI('tick')
+              setDossierLayer('acquire')
+            }}
+            className="dossier-foot-link dossier-foot-link--amber"
+          >
             ACQUIRE ◈
-          </Link>
+          </button>
           <span className="text-console-glow">◈ NOMINAL</span>
         </div>
       </div>
