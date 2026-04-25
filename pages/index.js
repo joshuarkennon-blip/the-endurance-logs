@@ -10,7 +10,7 @@ export default function Home() {
         <title>The Endurance Logs // Declassified Terminal</title>
         <meta name="description" content="An immersive digital museum dedicated to the filmography of Christopher Nolan — dossier terminal interface." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="x-endurance-build" content="2026-04-24-dossier-neon-v1" />
+        <meta name="x-endurance-build" content="2026-04-25-dossier-neon-v2-console-reskin" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

@@ -9,20 +9,20 @@ module.exports = {
     extend: {
       colors: {
         console: {
-          bg: '#0a0a0f',
-          panel: '#111118',
-          border: '#2a2a3a',
-          dim: '#1a1a25',
-          accent: '#4a7c9e',
-          glow: '#6ab4dc',
-          amber: '#c8922a',
-          text: '#b8d8e8',   // was #8ab8cc — brighter for legibility
-          muted: '#5a7888',  // was #445566 — more readable on dark bg
+          bg: '#030508',
+          panel: '#060d14',
+          border: 'rgba(0, 245, 255, 0.22)',
+          dim: '#0a1218',
+          accent: '#00c8e8',
+          glow: '#00f5ff',
+          amber: '#ffb020',
+          text: '#c8f4ff',
+          muted: '#5a8a9e',
         }
       },
       fontFamily: {
-        mono: ['Courier New', 'Courier', 'monospace'],
-        display: ['Courier New', 'monospace'],
+        mono: ['IBM Plex Mono', 'Share Tech Mono', 'Courier New', 'Courier', 'monospace'],
+        display: ['IBM Plex Mono', 'Share Tech Mono', 'Courier New', 'monospace'],
       },
       keyframes: {
         scanline: {
